@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
+@theme {
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-display: var(--font-cinzel), Georgia, serif;
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --color-sea-950: #040d13;
+  --color-sea-900: #071722;
+  --color-sea-850: #0b2131;
+  --color-sea-800: #102e44;
+  --color-gold-400: #e0be82;
+  --color-gold-500: #c99f5a;
+  --color-gold-600: #9e7836;
+  --color-canvas-bg: #061118;
+  --color-canvas-card: #0a1b26;
+  --color-canvas-border: rgba(201, 159, 90, 0.2);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #061118;
+  --foreground: #f4efe6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  background-color: #061118;
+  color: #f4efe6;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #061118;
+  color: #f4efe6;
+  overflow-x: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Custom editorial scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #061118;
+}
+::-webkit-scrollbar-thumb {
+  background: #19384c;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c99f5a;
+}
+
+/* Subtle grain overlay for authentic vintage maritime feel */
+.vintage-grain {
+  background-image: radial-gradient(rgba(201, 159, 90, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Custom text selection */
+::selection {
+  background: #c99f5a;
+  color: #040d13;
 }
