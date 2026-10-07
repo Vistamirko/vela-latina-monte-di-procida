@@ -219,144 +219,162 @@ const DEFAULT_COURSES: CourseSession[] = [
    INIZIALIZZAZIONE SCHEMA TABELLE POSTGRESQL (NEON / VERCEL)
 ============================================================== */
 
+let dbInitPromise: Promise<void> | null = null;
+
 export async function initDb(): Promise<void> {
-  if (!DB_URL) {
-    // Inizializza file locali di default
-    readLocalJson<EventItem[]>("eventi.json", DEFAULT_EVENTS);
-    readLocalJson<BlogPost[]>("blog.json", DEFAULT_BLOG_POSTS);
-    readLocalJson<CourseSession[]>("corsi.json", DEFAULT_COURSES);
-    const users = readLocalJson<AdminUser[]>("users.json", []);
-    if (users.length === 0) {
-      const defaultAdmin: AdminUser = {
-        id: "admin-root",
-        email: "admin@velalatinamontediprocida.it",
-        passwordHash: hashPassword(process.env.ADMIN_INIT_PASSWORD || "velalatina2026!"),
-        name: "Amministratore Vela Latina",
-        role: "superadmin",
-        createdAt: new Date().toISOString(),
-      };
-      writeLocalJson<AdminUser[]>("users.json", [defaultAdmin]);
+  if (dbInitPromise) return dbInitPromise;
+
+  dbInitPromise = (async () => {
+    if (!DB_URL) {
+      // Inizializza file locali di default
+      readLocalJson<EventItem[]>("eventi.json", DEFAULT_EVENTS);
+      readLocalJson<BlogPost[]>("blog.json", DEFAULT_BLOG_POSTS);
+      readLocalJson<CourseSession[]>("corsi.json", DEFAULT_COURSES);
+      const users = readLocalJson<AdminUser[]>("users.json", []);
+      if (users.length === 0) {
+        const defaultAdmin: AdminUser = {
+          id: "admin-root",
+          email: "admin@velalatinamontediprocida.it",
+          passwordHash: hashPassword(process.env.ADMIN_INIT_PASSWORD || "velalatina2026!"),
+          name: "Amministratore Vela Latina",
+          role: "superadmin",
+          createdAt: new Date().toISOString(),
+        };
+        writeLocalJson<AdminUser[]>("users.json", [defaultAdmin]);
+      }
+      return;
     }
-    return;
-  }
 
-  const sql = neon(DB_URL);
+    try {
+      const sql = neon(DB_URL);
 
-  // Tabella Utenti Admin
-  await sql`
-    CREATE TABLE IF NOT EXISTS admin_users (
-      id VARCHAR(64) PRIMARY KEY,
-      email VARCHAR(255) UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
-      name VARCHAR(255) NOT NULL,
-      role VARCHAR(32) NOT NULL DEFAULT 'admin',
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-    );
-  `;
-
-  // Tabella Eventi & Palmarès
-  await sql`
-    CREATE TABLE IF NOT EXISTS eventi (
-      id VARCHAR(64) PRIMARY KEY,
-      title VARCHAR(255) NOT NULL,
-      date VARCHAR(100) NOT NULL,
-      location VARCHAR(255) NOT NULL,
-      category VARCHAR(64) NOT NULL DEFAULT 'regata',
-      badge VARCHAR(100),
-      description TEXT NOT NULL,
-      image_url TEXT,
-      result VARCHAR(100),
-      article_slug VARCHAR(255),
-      published BOOLEAN NOT NULL DEFAULT true,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-    );
-    ALTER TABLE eventi ADD COLUMN IF NOT EXISTS article_slug VARCHAR(255);
-  `;
-
-  // Tabella Articoli Blog / News
-  await sql`
-    CREATE TABLE IF NOT EXISTS blog_posts (
-      id VARCHAR(64) PRIMARY KEY,
-      slug VARCHAR(255) UNIQUE NOT NULL,
-      title VARCHAR(255) NOT NULL,
-      excerpt TEXT NOT NULL,
-      content TEXT NOT NULL,
-      cover_image TEXT,
-      author VARCHAR(255) NOT NULL,
-      category VARCHAR(100) NOT NULL DEFAULT 'Cultura & Mare',
-      published BOOLEAN NOT NULL DEFAULT true,
-      published_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-    );
-  `;
-
-  // Tabella Calendario Corsi
-  await sql`
-    CREATE TABLE IF NOT EXISTS corsi_calendar (
-      id VARCHAR(64) PRIMARY KEY,
-      course_key VARCHAR(64) NOT NULL,
-      course_title VARCHAR(255) NOT NULL,
-      start_date VARCHAR(64) NOT NULL,
-      end_date VARCHAR(64),
-      schedule VARCHAR(255) NOT NULL,
-      total_seats INT NOT NULL DEFAULT 10,
-      available_seats INT NOT NULL DEFAULT 10,
-      status VARCHAR(64) NOT NULL DEFAULT 'aperte',
-      instructor VARCHAR(255) NOT NULL,
-      notes TEXT,
-      price VARCHAR(100),
-      published BOOLEAN NOT NULL DEFAULT true,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-    );
-  `;
-
-  // Controlla se esiste admin iniziale
-  const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
-  if (parseInt(existingUsers[0].count) === 0) {
-    const adminId = "admin-root";
-    const email = "admin@velalatinamontediprocida.it";
-    const pwdHash = hashPassword(process.env.ADMIN_INIT_PASSWORD || "velalatina2026!");
-    await sql`
-      INSERT INTO admin_users (id, email, password_hash, name, role)
-      VALUES (${adminId}, ${email}, ${pwdHash}, 'Amministratore Vela Latina', 'superadmin');
-    `;
-  }
-
-  // Seed Eventi se vuota
-  const existingEvents = await sql`SELECT count(*) FROM eventi;`;
-  if (parseInt(existingEvents[0].count) === 0) {
-    for (const evt of DEFAULT_EVENTS) {
+      // Tabella Utenti Admin
       await sql`
-        INSERT INTO eventi (id, title, date, location, category, badge, description, image_url, result, published)
-        VALUES (${evt.id}, ${evt.title}, ${evt.date}, ${evt.location}, ${evt.category}, ${evt.badge || null}, ${evt.description}, ${evt.imageUrl || null}, ${evt.result || null}, ${evt.published});
+        CREATE TABLE IF NOT EXISTS admin_users (
+          id VARCHAR(64) PRIMARY KEY,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password_hash TEXT NOT NULL,
+          name VARCHAR(255) NOT NULL,
+          role VARCHAR(32) NOT NULL DEFAULT 'admin',
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
       `;
-    }
-  }
 
-  // Seed Blog se vuota
-  const existingPosts = await sql`SELECT count(*) FROM blog_posts;`;
-  if (parseInt(existingPosts[0].count) === 0) {
-    for (const p of DEFAULT_BLOG_POSTS) {
+      // Tabella Eventi & Palmarès
       await sql`
-        INSERT INTO blog_posts (id, slug, title, excerpt, content, cover_image, author, category, published, published_at)
-        VALUES (${p.id}, ${p.slug}, ${p.title}, ${p.excerpt}, ${p.content}, ${p.coverImage || null}, ${p.author}, ${p.category}, ${p.published}, ${p.publishedAt});
+        CREATE TABLE IF NOT EXISTS eventi (
+          id VARCHAR(64) PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          date VARCHAR(100) NOT NULL,
+          location VARCHAR(255) NOT NULL,
+          category VARCHAR(64) NOT NULL DEFAULT 'regata',
+          badge VARCHAR(100),
+          description TEXT NOT NULL,
+          image_url TEXT,
+          result VARCHAR(100),
+          article_slug VARCHAR(255),
+          published BOOLEAN NOT NULL DEFAULT true,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
       `;
-    }
-  }
 
-  // Seed Corsi se vuota
-  const existingCourses = await sql`SELECT count(*) FROM corsi_calendar;`;
-  if (parseInt(existingCourses[0].count) === 0) {
-    for (const c of DEFAULT_COURSES) {
+      // Retrocompatibilità colonna article_slug su tabelle già esistenti
+      try {
+        await sql`ALTER TABLE eventi ADD COLUMN IF NOT EXISTS article_slug VARCHAR(255);`;
+      } catch {
+        // Ignora se la colonna esiste già
+      }
+
+      // Tabella Articoli Blog / News
       await sql`
-        INSERT INTO corsi_calendar (id, course_key, course_title, start_date, end_date, schedule, total_seats, available_seats, status, instructor, notes, price, published)
-        VALUES (${c.id}, ${c.courseKey}, ${c.courseTitle}, ${c.startDate}, ${c.endDate || null}, ${c.schedule}, ${c.totalSeats}, ${c.availableSeats}, ${c.status}, ${c.instructor}, ${c.notes || null}, ${c.price || null}, ${c.published});
+        CREATE TABLE IF NOT EXISTS blog_posts (
+          id VARCHAR(64) PRIMARY KEY,
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          title VARCHAR(255) NOT NULL,
+          excerpt TEXT NOT NULL,
+          content TEXT NOT NULL,
+          cover_image TEXT,
+          author VARCHAR(255) NOT NULL,
+          category VARCHAR(100) NOT NULL DEFAULT 'Cultura & Mare',
+          published BOOLEAN NOT NULL DEFAULT true,
+          published_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
       `;
+
+      // Tabella Calendario Corsi
+      await sql`
+        CREATE TABLE IF NOT EXISTS corsi_calendar (
+          id VARCHAR(64) PRIMARY KEY,
+          course_key VARCHAR(64) NOT NULL,
+          course_title VARCHAR(255) NOT NULL,
+          start_date VARCHAR(64) NOT NULL,
+          end_date VARCHAR(64),
+          schedule VARCHAR(255) NOT NULL,
+          total_seats INT NOT NULL DEFAULT 10,
+          available_seats INT NOT NULL DEFAULT 10,
+          status VARCHAR(64) NOT NULL DEFAULT 'aperte',
+          instructor VARCHAR(255) NOT NULL,
+          notes TEXT,
+          price VARCHAR(100),
+          published BOOLEAN NOT NULL DEFAULT true,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+      `;
+
+      // Controlla se esiste admin iniziale
+      const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
+      if (parseInt(existingUsers[0].count) === 0) {
+        const adminId = "admin-root";
+        const email = "admin@velalatinamontediprocida.it";
+        const pwdHash = hashPassword(process.env.ADMIN_INIT_PASSWORD || "velalatina2026!");
+        await sql`
+          INSERT INTO admin_users (id, email, password_hash, name, role)
+          VALUES (${adminId}, ${email}, ${pwdHash}, 'Amministratore Vela Latina', 'superadmin');
+        `;
+      }
+
+      // Seed Eventi se vuota
+      const existingEvents = await sql`SELECT count(*) FROM eventi;`;
+      if (parseInt(existingEvents[0].count) === 0) {
+        for (const evt of DEFAULT_EVENTS) {
+          await sql`
+            INSERT INTO eventi (id, title, date, location, category, badge, description, image_url, result, published)
+            VALUES (${evt.id}, ${evt.title}, ${evt.date}, ${evt.location}, ${evt.category}, ${evt.badge || null}, ${evt.description}, ${evt.imageUrl || null}, ${evt.result || null}, ${evt.published});
+          `;
+        }
+      }
+
+      // Seed Blog se vuota
+      const existingPosts = await sql`SELECT count(*) FROM blog_posts;`;
+      if (parseInt(existingPosts[0].count) === 0) {
+        for (const p of DEFAULT_BLOG_POSTS) {
+          await sql`
+            INSERT INTO blog_posts (id, slug, title, excerpt, content, cover_image, author, category, published, published_at)
+            VALUES (${p.id}, ${p.slug}, ${p.title}, ${p.excerpt}, ${p.content}, ${p.coverImage || null}, ${p.author}, ${p.category}, ${p.published}, ${p.publishedAt});
+          `;
+        }
+      }
+
+      // Seed Corsi se vuota
+      const existingCourses = await sql`SELECT count(*) FROM corsi_calendar;`;
+      if (parseInt(existingCourses[0].count) === 0) {
+        for (const c of DEFAULT_COURSES) {
+          await sql`
+            INSERT INTO corsi_calendar (id, course_key, course_title, start_date, end_date, schedule, total_seats, available_seats, status, instructor, notes, price, published)
+            VALUES (${c.id}, ${c.courseKey}, ${c.courseTitle}, ${c.startDate}, ${c.endDate || null}, ${c.schedule}, ${c.totalSeats}, ${c.availableSeats}, ${c.status}, ${c.instructor}, ${c.notes || null}, ${c.price || null}, ${c.published});
+          `;
+        }
+      }
+    } catch (err) {
+      console.error("[initDb] Avviso: connessione database durante build/avvio:", err);
     }
-  }
+  })();
+
+  return dbInitPromise;
 }
 
 /* ==============================================================
@@ -370,26 +388,32 @@ export const EventsRepo = {
       const items = readLocalJson<EventItem[]>("eventi.json", DEFAULT_EVENTS);
       return publishedOnly ? items.filter((i) => i.published) : items;
     }
-    const sql = neon(DB_URL);
-    const rows = publishedOnly
-      ? await sql`SELECT * FROM eventi WHERE published = true ORDER BY created_at DESC;`
-      : await sql`SELECT * FROM eventi ORDER BY created_at DESC;`;
+    try {
+      const sql = neon(DB_URL);
+      const rows = publishedOnly
+        ? await sql`SELECT * FROM eventi WHERE published = true ORDER BY created_at DESC;`
+        : await sql`SELECT * FROM eventi ORDER BY created_at DESC;`;
 
-    return rows.map((r) => ({
-      id: r.id,
-      title: r.title,
-      date: r.date,
-      location: r.location,
-      category: r.category,
-      badge: r.badge || undefined,
-      description: r.description,
-      imageUrl: r.image_url || undefined,
-      result: r.result || undefined,
-      articleSlug: r.article_slug || undefined,
-      published: Boolean(r.published),
-      createdAt: r.created_at,
-      updatedAt: r.updated_at,
-    }));
+      return rows.map((r) => ({
+        id: r.id,
+        title: r.title,
+        date: r.date,
+        location: r.location,
+        category: r.category,
+        badge: r.badge || undefined,
+        description: r.description,
+        imageUrl: r.image_url || undefined,
+        result: r.result || undefined,
+        articleSlug: r.article_slug || undefined,
+        published: Boolean(r.published),
+        createdAt: r.created_at,
+        updatedAt: r.updated_at,
+      }));
+    } catch (err) {
+      console.error("[EventsRepo.getAll] Errore DB Neon, uso fallback statico:", err);
+      const items = DEFAULT_EVENTS;
+      return publishedOnly ? items.filter((i) => i.published) : items;
+    }
   },
 
   async getById(id: string): Promise<EventItem | null> {
@@ -474,25 +498,31 @@ export const BlogRepo = {
       const items = readLocalJson<BlogPost[]>("blog.json", DEFAULT_BLOG_POSTS);
       return publishedOnly ? items.filter((i) => i.published) : items;
     }
-    const sql = neon(DB_URL);
-    const rows = publishedOnly
-      ? await sql`SELECT * FROM blog_posts WHERE published = true ORDER BY published_at DESC;`
-      : await sql`SELECT * FROM blog_posts ORDER BY created_at DESC;`;
+    try {
+      const sql = neon(DB_URL);
+      const rows = publishedOnly
+        ? await sql`SELECT * FROM blog_posts WHERE published = true ORDER BY published_at DESC;`
+        : await sql`SELECT * FROM blog_posts ORDER BY created_at DESC;`;
 
-    return rows.map((r) => ({
-      id: r.id,
-      slug: r.slug,
-      title: r.title,
-      excerpt: r.excerpt,
-      content: r.content,
-      coverImage: r.cover_image || undefined,
-      author: r.author,
-      category: r.category,
-      published: Boolean(r.published),
-      publishedAt: r.published_at,
-      createdAt: r.created_at,
-      updatedAt: r.updated_at,
-    }));
+      return rows.map((r) => ({
+        id: r.id,
+        slug: r.slug,
+        title: r.title,
+        excerpt: r.excerpt,
+        content: r.content,
+        coverImage: r.cover_image || undefined,
+        author: r.author,
+        category: r.category,
+        published: Boolean(r.published),
+        publishedAt: r.published_at,
+        createdAt: r.created_at,
+        updatedAt: r.updated_at,
+      }));
+    } catch (err) {
+      console.error("[BlogRepo.getAll] Errore DB Neon, uso fallback statico:", err);
+      const items = DEFAULT_BLOG_POSTS;
+      return publishedOnly ? items.filter((i) => i.published) : items;
+    }
   },
 
   async getBySlug(slug: string): Promise<BlogPost | null> {
@@ -574,28 +604,34 @@ export const CoursesRepo = {
       const items = readLocalJson<CourseSession[]>("corsi.json", DEFAULT_COURSES);
       return publishedOnly ? items.filter((i) => i.published) : items;
     }
-    const sql = neon(DB_URL);
-    const rows = publishedOnly
-      ? await sql`SELECT * FROM corsi_calendar WHERE published = true ORDER BY start_date ASC;`
-      : await sql`SELECT * FROM corsi_calendar ORDER BY start_date ASC;`;
+    try {
+      const sql = neon(DB_URL);
+      const rows = publishedOnly
+        ? await sql`SELECT * FROM corsi_calendar WHERE published = true ORDER BY start_date ASC;`
+        : await sql`SELECT * FROM corsi_calendar ORDER BY start_date ASC;`;
 
-    return rows.map((r) => ({
-      id: r.id,
-      courseKey: r.course_key,
-      courseTitle: r.course_title,
-      startDate: r.start_date,
-      endDate: r.end_date || undefined,
-      schedule: r.schedule,
-      totalSeats: r.total_seats,
-      availableSeats: r.available_seats,
-      status: r.status,
-      instructor: r.instructor,
-      notes: r.notes || undefined,
-      price: r.price || undefined,
-      published: Boolean(r.published),
-      createdAt: r.created_at,
-      updatedAt: r.updated_at,
-    }));
+      return rows.map((r) => ({
+        id: r.id,
+        courseKey: r.course_key,
+        courseTitle: r.course_title,
+        startDate: r.start_date,
+        endDate: r.end_date || undefined,
+        schedule: r.schedule,
+        totalSeats: r.total_seats,
+        availableSeats: r.available_seats,
+        status: r.status,
+        instructor: r.instructor,
+        notes: r.notes || undefined,
+        price: r.price || undefined,
+        published: Boolean(r.published),
+        createdAt: r.created_at,
+        updatedAt: r.updated_at,
+      }));
+    } catch (err) {
+      console.error("[CoursesRepo.getAll] Errore DB Neon, uso fallback statico:", err);
+      const items = DEFAULT_COURSES;
+      return publishedOnly ? items.filter((i) => i.published) : items;
+    }
   },
 
   async save(session: Omit<CourseSession, "createdAt" | "updatedAt">): Promise<CourseSession> {
