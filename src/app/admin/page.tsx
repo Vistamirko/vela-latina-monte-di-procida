@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import ImageUploader from "@/components/ImageUploader";
 import {
   Calendar,
   BookOpen,
@@ -991,18 +992,12 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Immagine (Percorso o URL)
-                </label>
-                <input
-                  type="text"
-                  value={currentEvent.imageUrl || ""}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, imageUrl: e.target.value })}
-                  placeholder="/images/hero-sailing.webp"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono"
-                />
-              </div>
+              <ImageUploader
+                label="Immagine dell'Evento"
+                value={currentEvent.imageUrl || ""}
+                onChange={(url) => setCurrentEvent({ ...currentEvent, imageUrl: url })}
+                placeholder="/images/hero-sailing.webp"
+              />
 
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
@@ -1174,18 +1169,12 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Immagine di Copertina (URL)
-                </label>
-                <input
-                  type="text"
-                  value={currentBlogPost.coverImage || ""}
-                  onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, coverImage: e.target.value })}
-                  placeholder="/images/janara-regatta.jpeg"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono"
-                />
-              </div>
+              <ImageUploader
+                label="Immagine di Copertina"
+                value={currentBlogPost.coverImage || ""}
+                onChange={(url) => setCurrentBlogPost({ ...currentBlogPost, coverImage: url })}
+                placeholder="/images/janara-regatta.jpeg"
+              />
 
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
