@@ -21,6 +21,7 @@ import {
   NauticalCartouche,
   NauticalCrosshair,
 } from "@/components/NauticalChartElements";
+import SponsorsSection from "@/components/SponsorsSection";
 
 interface MuseoPhoto {
   src: string;
@@ -678,6 +679,11 @@ export default function EmotionalStory() {
           </div>
         </div>
       </section>
+
+      {/* ============================================================== */}
+      {/* SEZIONE PARTNER & SPONSOR */}
+      {/* ============================================================== */}
+      <SponsorsSection />
 
       {/* ============================================================== */}
       {/* EPILOGO — IL PORTICCIOLO (SALI A BORDO) */}

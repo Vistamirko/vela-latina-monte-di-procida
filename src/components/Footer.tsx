@@ -53,6 +53,11 @@ export default function Footer() {
               Giornale di Bordo & Blog
             </Link>
           </div>
+          <div>
+            <Link href="/associazione#sponsor" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
+              Partner & Sponsor
+            </Link>
+          </div>
         </div>
 
         <div className="md:col-span-4 space-y-3 font-mono text-xs text-slate-700">
