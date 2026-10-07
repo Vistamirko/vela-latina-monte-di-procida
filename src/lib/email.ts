@@ -12,45 +12,27 @@ interface BookingNotificationData {
 }
 
 export async function sendBookingNotification(data: BookingNotificationData) {
+  const resendApiKey = process.env.RESEND_API_KEY;
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS ? process.env.SMTP_PASS.replace(/\s+/g, "") : undefined;
   const port = parseInt(process.env.SMTP_PORT || "465", 10);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
-  const from = process.env.SMTP_FROM || `"Vela Latina Monte di Procida" <${user || "vistamirko@gmail.com"}>`;
+  const from = process.env.SMTP_FROM || (resendApiKey ? "Vela Latina <onboarding@resend.dev>" : `"Vela Latina Monte di Procida" <${user || "vistamirko@gmail.com"}>`);
   const notificationRecipient = process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com";
 
-  if (!host || !user || !pass) {
-    console.warn(
-      `[EMAIL NOTIFICATION] SMTP non configurato. Nuova richiesta salvata nel Database per ${data.name} (${data.email}) - ${data.itemTitle}.`
-    );
-    return {
-      sent: false,
-      reason: "SMTP_NOT_CONFIGURED",
-      info: "Dati salvati con successo nel database e visibili nel pannello admin.",
-    };
-  }
+  const isCorso = data.type === "corso";
+  const subjectPrefix = isCorso ? "⛵ Nuova Iscrizione Corso" : "🏛️ Nuova Richiesta Tesseramento Socio";
+  const subject = `${subjectPrefix}: ${data.name} — ${data.itemTitle}`;
 
-  try {
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure,
-      auth: { user, pass },
-    });
+  const cleanPhone = data.phone ? data.phone.replace(/[^0-9+]/g, "") : "";
+  const waLink = cleanPhone
+    ? `https://wa.me/${cleanPhone.replace("+", "")}?text=${encodeURIComponent(
+        `Buongiorno ${data.name}, ti contatto dall'Associazione Vela Latina Monte di Procida in merito alla tua richiesta per "${data.itemTitle}".`
+      )}`
+    : "";
 
-    const isCorso = data.type === "corso";
-    const subjectPrefix = isCorso ? "⛵ Nuova Iscrizione Corso" : "🏛️ Nuova Richiesta Tesseramento Socio";
-    const subject = `${subjectPrefix}: ${data.name} — ${data.itemTitle}`;
-
-    const cleanPhone = data.phone ? data.phone.replace(/[^0-9+]/g, "") : "";
-    const waLink = cleanPhone
-      ? `https://wa.me/${cleanPhone.replace("+", "")}?text=${encodeURIComponent(
-          `Buongiorno ${data.name}, ti contatto dall'Associazione Vela Latina Monte di Procida in merito alla tua richiesta per "${data.itemTitle}".`
-        )}`
-      : "";
-
-    const html = `
+  const html = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -150,20 +132,70 @@ export async function sendBookingNotification(data: BookingNotificationData) {
   </div>
 </body>
 </html>
-    `;
+  `;
 
-    const info = await transporter.sendMail({
-      from,
-      to: notificationRecipient,
-      replyTo: data.email,
-      subject,
-      html,
-    });
+  // 1. Invio prioritario via RESEND REST API
+  if (resendApiKey) {
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from,
+          to: [notificationRecipient],
+          reply_to: data.email,
+          subject,
+          html,
+        }),
+      });
 
-    console.log(`[EMAIL NOTIFICATION] Inviata con successo a ${notificationRecipient}: ${info.messageId}`);
-    return { sent: true, messageId: info.messageId };
-  } catch (err: any) {
-    console.error(`[EMAIL NOTIFICATION ERROR]`, err);
-    return { sent: false, error: err.message };
+      const resendData = await res.json();
+      if (!res.ok) {
+        throw new Error(resendData.message || "Errore API Resend");
+      }
+
+      console.log(`[RESEND NOTIFICATION] Inviata a ${notificationRecipient}: ${resendData.id}`);
+      return { sent: true, provider: "resend", messageId: resendData.id };
+    } catch (err: any) {
+      console.error(`[RESEND ERROR]`, err);
+    }
   }
+
+  // 2. Invio fallback via SMTP
+  if (host && user && pass) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host,
+        port,
+        secure,
+        auth: { user, pass },
+      });
+
+      const info = await transporter.sendMail({
+        from,
+        to: notificationRecipient,
+        replyTo: data.email,
+        subject,
+        html,
+      });
+
+      console.log(`[SMTP NOTIFICATION] Inviata con successo a ${notificationRecipient}: ${info.messageId}`);
+      return { sent: true, provider: "smtp", messageId: info.messageId };
+    } catch (err: any) {
+      console.error(`[SMTP ERROR]`, err);
+      return { sent: false, error: err.message };
+    }
+  }
+
+  console.warn(
+    `[EMAIL NOTIFICATION] Nessun provider email attivo (Resend/SMTP non configurati). Richiesta salvata nel DB.`
+  );
+  return {
+    sent: false,
+    reason: "EMAIL_NOT_CONFIGURED",
+    info: "Dati salvati con successo nel database e visibili nel pannello admin.",
+  };
 }
