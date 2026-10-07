@@ -10,14 +10,14 @@ export default function Footer() {
             <span className="font-['Cinzel'] text-sm tracking-[0.28em] uppercase font-semibold text-[#0a1c2a]">
               Vela Latina Monte di Procida
             </span>
-            <span className="block text-[9px] tracking-[0.32em] text-slate-500 uppercase mt-0.5 font-mono">
+            <span className="block text-[10px] tracking-[0.32em] text-slate-700 uppercase mt-0.5 font-mono font-semibold">
               Associazione di Promozione Sociale · RUNTS
             </span>
           </Link>
-          <p className="font-['Cormorant_Garamond'] text-2xl italic text-slate-700 leading-snug max-w-sm">
+          <p className="font-['Cormorant_Garamond'] text-2xl italic text-[#0a1c2a] leading-snug max-w-sm">
             “Un punto cospicuo sul Mediterraneo.”
           </p>
-          <p className="text-xs text-slate-600 font-light leading-relaxed max-w-md">
+          <p className="text-xs text-slate-700 font-light leading-relaxed max-w-md">
             Tutela e trasmissione dei saperi della marineria flegrea. Costruzione,
             manutenzione e conduzione del gozzo a remi e a vela latina riconosciuti
             come Patrimonio Culturale Immateriale della Campania (D.D. n. 239/2020).
@@ -25,55 +25,55 @@ export default function Footer() {
         </div>
 
         <div className="md:col-span-3 space-y-3 font-mono text-xs">
-          <span className="text-[10px] uppercase tracking-widest text-slate-400 block mb-2 font-sans font-semibold">
+          <span className="text-[11px] uppercase tracking-widest text-[#0a1c2a] block mb-3 font-sans font-bold">
             Navigazione
           </span>
           <div>
-            <Link href="/progetti" className="text-slate-600 hover:text-[#0a1c2a] transition-colors">
+            <Link href="/progetti" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
               Progetti & Cantieri 2027
             </Link>
           </div>
           <div>
-            <Link href="/associazione" className="text-slate-600 hover:text-[#0a1c2a] transition-colors">
+            <Link href="/associazione" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
               L'Associazione & La Flotta
             </Link>
           </div>
           <div>
-            <Link href="/eventi" className="text-slate-600 hover:text-[#0a1c2a] transition-colors">
+            <Link href="/eventi" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
               Eventi & Palmarès
             </Link>
           </div>
           <div>
-            <Link href="/corsi" className="text-slate-600 hover:text-[#0a1c2a] transition-colors">
+            <Link href="/corsi" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
               Scuola di Voga & Vela
             </Link>
           </div>
         </div>
 
-        <div className="md:col-span-4 space-y-3 font-mono text-xs text-slate-600">
-          <span className="text-[10px] uppercase tracking-widest text-slate-400 block mb-2 font-sans font-semibold">
+        <div className="md:col-span-4 space-y-3 font-mono text-xs text-slate-700">
+          <span className="text-[11px] uppercase tracking-widest text-[#0a1c2a] block mb-3 font-sans font-bold">
             Approdo & Contatti
           </span>
           <div className="flex items-start gap-2">
-            <MapPin className="w-3.5 h-3.5 text-slate-400 mt-0.5 shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-[#0a1c2a] mt-0.5 shrink-0" />
             <span>Via Guglielmo Marconi snc, Porticciolo di Monte di Procida (NA)</span>
           </div>
           <div className="flex items-center gap-2">
-            <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <a href="tel:+393387633350" className="hover:text-[#0a1c2a] transition-colors">
+            <Phone className="w-3.5 h-3.5 text-[#0a1c2a] shrink-0" />
+            <a href="tel:+393387633350" className="hover:text-[#0a1c2a] font-medium transition-colors">
               +39 338 763 3350 (Pres. Antonio Pugliese)
             </a>
           </div>
           <div className="flex items-center gap-2">
-            <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <a href="mailto:velalatinamontediprocida@gmail.com" className="hover:text-[#0a1c2a] transition-colors">
+            <Mail className="w-3.5 h-3.5 text-[#0a1c2a] shrink-0" />
+            <a href="mailto:velalatinamontediprocida@gmail.com" className="hover:text-[#0a1c2a] font-medium transition-colors">
               velalatinamontediprocida@gmail.com
             </a>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto w-full pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] uppercase tracking-widest text-slate-500 font-mono">
+      <div className="max-w-7xl mx-auto w-full pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-[#0a1c2a] font-mono font-bold">
         <div>© 2008–{new Date().getFullYear()} APS Vela Latina Monte di Procida</div>
         <div>40° 47′ 42″ N · 14° 03′ 05″ E · Campi Flegrei</div>
       </div>

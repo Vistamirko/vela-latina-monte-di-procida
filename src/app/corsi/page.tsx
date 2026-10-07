@@ -24,7 +24,7 @@ export default function CorsiPage() {
       {/* Hero Corsi */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
             <GraduationCap className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>Scuola di Mare · Voga Tradizionale · Vela Latina</span>
           </div>
@@ -50,7 +50,7 @@ export default function CorsiPage() {
             {/* 01 · Voga in Piedi */}
             <div className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between">
               <div>
-                <span className="font-mono text-xs text-slate-400 block mb-2">
+                <span className="font-mono text-xs text-[#0a1c2a] font-semibold block mb-2">
                   01 · SCUOLA DI VOGA
                 </span>
                 <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
@@ -62,13 +62,13 @@ export default function CorsiPage() {
                   scuole, giovani allievi marittimi e aspiranti al libretto di
                   navigazione.
                 </p>
-                <ul className="text-xs text-slate-600 font-mono space-y-2 mb-6">
+                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
                   <li>• Postura, equilibrio sui paglioli e coordinazione</li>
                   <li>• Uso dello stroppo di canapa e dello scalmo in legno</li>
                   <li>• Addestramento su San Michele Arcangelo e Quandel</li>
                 </ul>
               </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 pt-4 border-t border-slate-200">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 Aperto a tutti · Livello base e avanzato
               </div>
             </div>
@@ -76,7 +76,7 @@ export default function CorsiPage() {
             {/* 02 · Vela Latina */}
             <div className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between">
               <div>
-                <span className="font-mono text-xs text-slate-400 block mb-2">
+                <span className="font-mono text-xs text-[#0a1c2a] font-semibold block mb-2">
                   02 · CONDUZIONE TRADIZIONALE
                 </span>
                 <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
@@ -87,13 +87,13 @@ export default function CorsiPage() {
                   armo dell’antenna di pino, tensionamento del carnao e del pizzo,
                   regolazione della scotta, virata in prua e in poppa.
                 </p>
-                <ul className="text-xs text-slate-600 font-mono space-y-2 mb-6">
+                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
                   <li>• Lettura delle brezze del canale di Procida e Ischia</li>
                   <li>• Conduzione al timone e bordeggio di sicurezza</li>
                   <li>• Preparazione per uscite costiere e d'altura</li>
                 </ul>
               </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 pt-4 border-t border-slate-200">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 A bordo di Janara e gozzi della flotta
               </div>
             </div>
@@ -113,13 +113,13 @@ export default function CorsiPage() {
                   Obiettivo: formare l’equipaggio per Les Voiles Latines di
                   Saint-Tropez nel 2027.
                 </p>
-                <ul className="text-xs text-slate-600 font-mono space-y-2 mb-6">
+                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
                   <li>• Allenamento atletico e tecnico continuativo</li>
                   <li>• Preparazione alle regate d'altura internazionali</li>
                   <li>• Modello di parità e leadership nel mare</li>
                 </ul>
               </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold pt-4 border-t border-slate-200">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 Selezioni e candidature aperte
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function CorsiPage() {
             {/* 04 · Inclusione Mare */}
             <div className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between">
               <div>
-                <span className="font-mono text-xs text-slate-400 block mb-2">
+                <span className="font-mono text-xs text-[#0a1c2a] font-semibold block mb-2">
                   04 · SOLIDARIETÀ & BENESSERE
                 </span>
                 <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
@@ -138,13 +138,13 @@ export default function CorsiPage() {
                   Monte di Procida, avviciniamo alla voga e alla navigazione
                   bambini e ragazzi con bisogni speciali o disabilità.
                 </p>
-                <ul className="text-xs text-slate-600 font-mono space-y-2 mb-6">
+                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
                   <li>• Esperienze sensoriali e motorie a bordo</li>
                   <li>• Educatori dedicati e imbarcazione accessibile</li>
                   <li>• Il mare come terapia, relazione e libertà</li>
                 </ul>
               </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 pt-4 border-t border-slate-200">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 A bordo di San Michele Arcangelo
               </div>
             </div>
@@ -156,13 +156,13 @@ export default function CorsiPage() {
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200">
         <div className="max-w-3xl mx-auto w-full">
           <div className="text-center space-y-4 mb-10">
-            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-500 block">
+            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block">
               Prenota una Uscita di Prova
             </span>
             <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light">
               Sali a bordo con noi.
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 font-light max-w-md mx-auto">
+            <p className="text-xs sm:text-sm text-slate-700 font-light max-w-md mx-auto">
               Compila il modulo per concordare la tua prima uscita di prova al
               porticciolo di Monte di Procida. Ti contatterà direttamente il
               responsabile corsi.
@@ -176,7 +176,7 @@ export default function CorsiPage() {
                 <h4 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a]">
                   Richiesta Iscrizione Inviata
                 </h4>
-                <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                <p className="text-xs text-slate-700 max-w-sm mx-auto leading-relaxed">
                   Grazie {formData.nome}. Ti ricontatteremo telefonicamente o via
                   email per fissare la data della tua prima lezione o uscita in
                   mare.
@@ -192,7 +192,7 @@ export default function CorsiPage() {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                       Nome e Cognome
                     </label>
                     <input
@@ -207,7 +207,7 @@ export default function CorsiPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                       Telefono
                     </label>
                     <input
@@ -224,7 +224,7 @@ export default function CorsiPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                     Email
                   </label>
                   <input
@@ -241,7 +241,7 @@ export default function CorsiPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                       Corso d'Interesse
                     </label>
                     <select
@@ -258,7 +258,7 @@ export default function CorsiPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                       Esperienza Marinaresca
                     </label>
                     <select
@@ -276,7 +276,7 @@ export default function CorsiPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                     Messaggio o Disponibilità
                   </label>
                   <textarea

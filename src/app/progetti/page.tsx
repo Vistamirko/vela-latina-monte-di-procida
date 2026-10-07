@@ -14,7 +14,7 @@ export default function ProgettiPage() {
       {/* Hero Progetti */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
             <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>Cantieri Strategici · Roadmap 2026–2027</span>
           </div>
@@ -44,11 +44,11 @@ export default function ProgettiPage() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-xs text-slate-400">
+                    <span className="font-mono text-xs text-[#0a1c2a] font-bold">
                       {proj.number} · {proj.category}
                     </span>
                     {proj.badge && (
-                      <span className="text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 bg-white border border-slate-300 text-[#0a1c2a]">
+                      <span className="text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 bg-white border border-slate-300 text-[#0a1c2a] font-semibold">
                         {proj.badge}
                       </span>
                     )}
@@ -57,7 +57,7 @@ export default function ProgettiPage() {
                   <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-2">
                     {proj.title}
                   </h3>
-                  <div className="font-serif italic text-base text-slate-600 mb-4">
+                  <div className="font-serif italic text-base text-slate-800 mb-4">
                     {proj.highlight}
                   </div>
 
@@ -66,9 +66,9 @@ export default function ProgettiPage() {
                   </p>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-slate-500">
+                <div className="pt-6 mt-6 border-t border-slate-300 flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold">
                   <span>Campi Flegrei · Rete Partner</span>
-                  <span className="text-[#0a1c2a] font-bold">In Corso</span>
+                  <span className="text-[#1b5b80]">In Corso</span>
                 </div>
               </div>
             ))}
@@ -79,7 +79,7 @@ export default function ProgettiPage() {
       {/* Opportunità di Partnership & Sostegno */}
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200">
         <div className="max-w-4xl mx-auto w-full text-center space-y-6">
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-500 block">
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block">
             Collaborazione Istituzionale
           </span>
           <h2 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl font-light text-[#0a1c2a]">

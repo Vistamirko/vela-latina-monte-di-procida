@@ -206,8 +206,8 @@ export function NauticalBorderRuler({
         ))}
       </div>
 
-      <div className="flex items-center gap-2 text-slate-500 font-mono text-[9px]">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#1b5b80]/40" />
+      <div className="flex items-center gap-2 text-slate-700 font-mono text-[9px] font-semibold">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#1b5b80]" />
         <span>{coordinate}</span>
       </div>
 
@@ -222,7 +222,7 @@ export function NauticalBorderRuler({
         ))}
       </div>
 
-      <div className="flex items-center gap-1.5 opacity-60">
+      <div className="flex items-center gap-1.5 font-mono text-[9px] text-slate-700 font-medium">
         <span>1.0 NM (1852m)</span>
         <span className="inline-block w-1.5 h-1.5 border border-current" />
       </div>
@@ -240,16 +240,16 @@ export function NauticalCartouche({
 }) {
   return (
     <div
-      className={`inline-flex items-center gap-3 px-3 py-1.5 border border-slate-200/80 bg-white/60 backdrop-blur-xs font-mono text-[8px] uppercase tracking-[0.22em] text-slate-500 select-none ${className}`}
+      className={`inline-flex items-center gap-3 px-3.5 py-1.5 border border-slate-300 bg-white/80 backdrop-blur-xs font-mono text-[9px] uppercase tracking-[0.22em] text-slate-700 font-medium select-none shadow-2xs ${className}`}
     >
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         <span className="w-1.5 h-1.5 bg-[#0a1c2a]" />
-        <span className="font-semibold text-[#0a1c2a]">I.I.M. N. 10</span>
+        <span className="font-bold text-[#0a1c2a]">I.I.M. N. 10</span>
       </div>
-      <span className="text-slate-300">|</span>
-      <span>Canale di Procida & Acquamorta</span>
-      <span className="text-slate-300">|</span>
-      <span>Scala 1:25 000</span>
+      <span className="text-slate-400">|</span>
+      <span className="text-slate-800 font-semibold">Canale di Procida & Acquamorta</span>
+      <span className="text-slate-400">|</span>
+      <span className="text-slate-700">Scala 1:25 000</span>
     </div>
   );
 }
@@ -268,7 +268,7 @@ export function NauticalCrosshair({
 }) {
   return (
     <div
-      className={`inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-wider text-slate-500 select-none ${className}`}
+      className={`inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-wider text-slate-700 select-none ${className}`}
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-[#1b5b80]">
         <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="0.8" />
@@ -276,8 +276,8 @@ export function NauticalCrosshair({
         <line x1="0" y1="7" x2="14" y2="7" stroke="currentColor" strokeWidth="0.8" />
         <circle cx="7" cy="7" r="1.5" fill="currentColor" />
       </svg>
-      <span>{label}</span>
-      <span className="text-slate-400">[{coords}]</span>
+      <span className="font-bold text-[#0a1c2a]">{label}</span>
+      <span className="text-slate-600 font-semibold">[{coords}]</span>
     </div>
   );
 }

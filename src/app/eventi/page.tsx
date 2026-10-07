@@ -14,7 +14,7 @@ export default function EventiPage() {
       {/* Hero Eventi */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
             <Calendar className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>Palmarès · Regate Storiche · Cinema & Media</span>
           </div>
@@ -36,7 +36,7 @@ export default function EventiPage() {
       {/* Riconoscimenti & Palmarès di Spicco */}
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto w-full">
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-400 block mb-3">
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#0a1c2a] font-bold block mb-3">
             I Risultati Sportivi
           </span>
           <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light mb-12">
@@ -46,13 +46,13 @@ export default function EventiPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 bg-[#fbfaf6] border border-slate-200">
               <Award className="w-8 h-8 text-[#b8860b] mb-4" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
                 Saint-Tropez · 2024
               </span>
               <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
                 Vittoria Assoluta
               </h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
+              <p className="text-xs text-slate-700 font-light leading-relaxed">
                 Janara conquista il primo gradino del podio assoluto a Les Voiles
                 Latines di Saint-Tropez, battendo i migliori equipaggi
                 provenienti da tutto il Mediterraneo.
@@ -61,13 +61,13 @@ export default function EventiPage() {
 
             <div className="p-8 bg-[#fbfaf6] border border-slate-200">
               <Award className="w-8 h-8 text-[#0a1c2a] mb-4" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
                 Procida · 2025
               </span>
               <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
                 1° Posto Procida Cup
               </h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
+              <p className="text-xs text-slate-700 font-light leading-relaxed">
                 Trionfo nelle acque del canale di Procida, ribadendo la padronanza
                 dell'equipaggio flegreo nelle correnti e nei salti di vento di
                 casa.
@@ -76,13 +76,13 @@ export default function EventiPage() {
 
             <div className="p-8 bg-[#fbfaf6] border border-slate-200">
               <Award className="w-8 h-8 text-[#1b5b80] mb-4" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
                 Marina di Pisciotta · 2026
               </span>
               <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
                 Premio Fair Play & Podio
               </h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
+              <p className="text-xs text-slate-700 font-light leading-relaxed">
                 Trofeo Tre Torri nel Cilento: 3° di classe, 8° assoluto e il
                 prestigioso Premio Fair Play assegnato per l'etica marinara e lo
                 spirito di collaborazione.
@@ -96,7 +96,7 @@ export default function EventiPage() {
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-slate-400 block">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#0a1c2a] font-bold block">
               Cultura & Audiovisivo
             </span>
             <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light leading-tight">
@@ -147,21 +147,21 @@ export default function EventiPage() {
       {/* Cronistoria Vent'Anni di Mare (2006–2027) */}
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto w-full">
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-400 block mb-3 text-center">
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#0a1c2a] font-bold block mb-3 text-center">
             Cronologia Ufficiale
           </span>
           <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light mb-16 text-center">
             Vent’anni di mare e relazioni.
           </h2>
 
-          <div className="relative border-l border-slate-200 pl-6 sm:pl-10 space-y-12">
+          <div className="relative border-l border-slate-300 pl-6 sm:pl-10 space-y-12">
             {TIMELINE_DATA.map((item: TimelineItem, index: number) => (
               <div key={index} className="relative group">
                 <div
                   className={`absolute -left-[31px] sm:-left-[47px] top-1.5 w-3 h-3 rounded-full border-2 ${
                     item.highlight
                       ? "bg-[#0a1c2a] border-[#0a1c2a]"
-                      : "bg-white border-slate-400"
+                      : "bg-white border-slate-700"
                   }`}
                 />
                 <span className="font-mono text-xs text-[#0a1c2a] font-bold block mb-1">
@@ -170,7 +170,7 @@ export default function EventiPage() {
                 <h3 className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl text-[#0a1c2a] font-light">
                   {item.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 font-light mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-700 font-light mt-1 leading-relaxed">
                   {item.description}
                 </p>
               </div>

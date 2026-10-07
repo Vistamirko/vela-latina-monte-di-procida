@@ -111,7 +111,7 @@ export default function Header() {
               <span className="font-['Cinzel'] text-xs sm:text-sm tracking-[0.25em] text-[#0a1c2a] uppercase font-semibold group-hover:text-[#b8860b] transition-colors leading-tight">
                 Vela Latina
               </span>
-              <span className="text-[8px] sm:text-[9px] tracking-[0.32em] text-slate-500 uppercase font-light">
+              <span className="text-[9px] sm:text-[10px] tracking-[0.32em] text-slate-700 uppercase font-medium">
                 Monte di Procida
               </span>
             </div>
@@ -128,7 +128,7 @@ export default function Header() {
                   className={`text-[10px] uppercase tracking-[0.28em] font-medium transition-colors duration-200 relative py-1 ${
                     isActive
                       ? "text-[#0a1c2a] after:w-full font-semibold"
-                      : "text-slate-600 hover:text-[#0a1c2a] after:w-0 hover:after:w-full"
+                      : "text-slate-700 hover:text-[#0a1c2a] after:w-0 hover:after:w-full"
                   } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:bg-[#0a1c2a] after:transition-all`}
                 >
                   {item.label}
@@ -143,17 +143,17 @@ export default function Header() {
               type="button"
               onClick={toggleSound}
               title={soundPlaying ? "Disattiva brezza marina" : "Attiva suono brezza marina"}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300 hover:border-slate-800 bg-white/70 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-slate-600 hover:text-slate-900 transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300 hover:border-slate-800 bg-white/70 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-slate-700 hover:text-slate-900 transition-all cursor-pointer shadow-2xs font-medium"
             >
               {soundPlaying ? (
                 <>
                   <Wind className="w-3 h-3 text-[#1b5b80] animate-spin" />
-                  <span className="hidden sm:inline text-[#1b5b80] font-medium">Brezza</span>
+                  <span className="hidden sm:inline text-[#1b5b80] font-semibold">Brezza</span>
                 </>
               ) : (
                 <>
-                  <VolumeX className="w-3 h-3 text-slate-400" />
-                  <span className="hidden sm:inline">Brezza</span>
+                  <VolumeX className="w-3 h-3 text-slate-700" />
+                  <span className="hidden sm:inline text-slate-700">Brezza</span>
                 </>
               )}
             </button>
@@ -161,7 +161,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-slate-700 hover:text-[#0a1c2a]"
+              className="md:hidden p-2 text-slate-800 hover:text-[#0a1c2a]"
               aria-label="Apri menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -174,7 +174,7 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-40 bg-white/98 backdrop-blur-xl flex flex-col justify-between p-8 pt-28 border-b border-slate-200">
           <div className="space-y-6">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-slate-400 font-mono">
+            <span className="text-[11px] tracking-[0.3em] uppercase text-[#0a1c2a] font-mono font-bold">
               Menu Principale
             </span>
             <div className="flex flex-col space-y-4">
@@ -186,7 +186,7 @@ export default function Header() {
                   className={`font-['Cormorant_Garamond'] text-3xl tracking-wider transition-colors ${
                     pathname === item.href
                       ? "text-[#0a1c2a] italic font-normal"
-                      : "text-slate-600 hover:text-[#0a1c2a]"
+                      : "text-slate-800 hover:text-[#0a1c2a]"
                   }`}
                 >
                   {item.label}
@@ -195,7 +195,7 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="pt-6 border-t border-slate-200 text-xs text-slate-500 space-y-2 font-mono">
+          <div className="pt-6 border-t border-slate-300 text-xs text-slate-700 space-y-2 font-mono">
             <p>40° 47′ N · 14° 03′ E · Porticciolo di Monte di Procida</p>
             <p className="italic font-serif text-[#0a1c2a] text-sm">
               “Un punto cospicuo sul Mediterraneo.”

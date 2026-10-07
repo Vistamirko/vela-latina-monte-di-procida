@@ -127,16 +127,16 @@ export default function EmotionalStory() {
 
         {/* Metadati di prua & Coordinate Nautiche */}
         <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-mono text-slate-500">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-mono text-slate-700 font-semibold">
             <div className="flex items-center gap-2.5">
               <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
               <span>40° 47′ 42″ N · 14° 03′ 05″ E</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#1b5b80]" />
-              <span>Canale di Procida · Vento da Maestro</span>
+              <span className="text-slate-800">Canale di Procida · Vento da Maestro</span>
             </div>
-            <span className="hidden md:inline text-slate-400">
+            <span className="hidden md:inline text-slate-600 font-medium">
               Hub Marinaro dei Campi Flegrei
             </span>
           </div>
@@ -161,11 +161,11 @@ export default function EmotionalStory() {
 
           {/* Patrimonio Culturale Immateriale della Campania — Posizionato sotto il titolo */}
           <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-slate-300 bg-white text-[10px] sm:text-xs tracking-[0.28em] text-[#0a1c2a] uppercase font-medium shadow-2xs">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-slate-300 bg-white text-[10px] sm:text-xs tracking-[0.28em] text-[#0a1c2a] uppercase font-semibold shadow-2xs">
               <Wind className="w-3.5 h-3.5 text-[#1b5b80]" />
               <span>Patrimonio Culturale Immateriale della Campania</span>
             </div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 hidden md:inline">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold hidden md:inline">
               D.D. n. 239 · 7 Luglio 2020
             </span>
           </div>
@@ -178,7 +178,7 @@ export default function EmotionalStory() {
             <p className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl md:text-5xl italic font-light text-[#0a1c2a] leading-tight">
               “Un punto cospicuo sul Mediterraneo.”
             </p>
-            <p className="mt-4 text-sm sm:text-base text-slate-600 font-light leading-relaxed max-w-xl">
+            <p className="mt-4 text-sm sm:text-base text-slate-700 font-light leading-relaxed max-w-xl">
               Dalla scogliera di tufo affacciata sulle isole al mare aperto del
               Tirreno. Custodiamo l&apos;anima del gozzo napoletano-flegreo,
               rimettiamo all&apos;onda imbarcazioni storiche e insegniamo l&apos;arte del
@@ -215,7 +215,7 @@ export default function EmotionalStory() {
         </div>
 
         {/* Indice Veloce delle 4 Sezioni Hub */}
-        <div className="max-w-7xl mx-auto w-full pt-8 mt-8 border-t border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-4 text-[10px] uppercase tracking-[0.25em] text-slate-600 font-mono">
+        <div className="max-w-7xl mx-auto w-full pt-8 mt-8 border-t border-slate-300 grid grid-cols-2 md:grid-cols-4 gap-4 text-[11px] uppercase tracking-[0.25em] text-[#0a1c2a] font-mono font-bold">
           <Link href="/progetti" className="hover:text-[#0a1c2a] flex items-center gap-1.5 transition-colors">
             <span>01 · Progetti</span>
             <span>→</span>
@@ -243,7 +243,7 @@ export default function EmotionalStory() {
         className="relative min-h-[90vh] flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-28 sm:py-36 bg-[#fbfaf6] border-b border-slate-200"
       >
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-mono font-semibold mb-4">
             <Users className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>01 · Identità & Flotta Storica</span>
           </div>
@@ -280,7 +280,7 @@ export default function EmotionalStory() {
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
-              <p className="mt-3 text-xs font-mono text-slate-500">
+              <p className="mt-3 text-xs font-mono text-slate-700 font-medium">
                 Janara · Quandel · San Giuda · San Michele · Torpediniera
               </p>
             </div>
@@ -315,7 +315,7 @@ export default function EmotionalStory() {
 
         <div className="max-w-7xl mx-auto w-full relative z-10">
           {/* Tag & Coordinate della Sede */}
-          <div className="flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4 border-b border-slate-100 pb-3">
+          <div className="flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4 border-b border-slate-200 pb-3">
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[#0a1c2a]" />
               <span>Sede Storica & Presidio a Terra · Porticciolo di Acquamorta</span>
@@ -323,7 +323,7 @@ export default function EmotionalStory() {
             <div className="flex items-center gap-3">
               <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Sonda Banchina: 3.8m" />
               <span className="hidden lg:inline text-slate-300">|</span>
-              <span className="hidden lg:inline text-slate-400">
+              <span className="hidden lg:inline text-slate-600 font-medium">
                 Via Guglielmo Marconi snc · Monte di Procida
               </span>
             </div>
@@ -332,7 +332,7 @@ export default function EmotionalStory() {
           {/* Intestazione Editoriale */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12 sm:mb-16">
             <div className="lg:col-span-8">
-              <span className="inline-block px-3 py-1 text-[9px] uppercase tracking-[0.3em] font-mono text-[#1b5b80] bg-[#eef5f9] border border-[#d2e4ee] mb-4">
+              <span className="inline-block px-3 py-1 text-[9px] uppercase tracking-[0.3em] font-mono text-[#1b5b80] bg-[#eef5f9] border border-[#d2e4ee] mb-4 font-semibold">
                 Patrimonio Marino & Memoria Viva
               </span>
               <h2 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl md:text-8xl font-light text-[#0a1c2a] leading-[0.92]">
@@ -341,7 +341,7 @@ export default function EmotionalStory() {
               </h2>
             </div>
             <div className="lg:col-span-4 lg:pb-2">
-              <p className="text-sm sm:text-base text-slate-600 font-light leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 font-light leading-relaxed">
                 Istituito nella grotta di tufo flegreo affacciata sulla banchina di Acquamorta,
                 storicamente destinata al ricovero di gozzi e attrezzi. È il cuore pulsante
                 dell&apos;associazione: il presidio a terra della flotta, dove la memoria
@@ -395,37 +395,37 @@ export default function EmotionalStory() {
           {/* Tre Pilastri della Sede Storica */}
           <div className="mt-16 sm:mt-20 pt-12 border-t border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             <div className="space-y-3">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-slate-400 block">
+              <span className="text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold block">
                 01 · Lo Spazio
               </span>
               <h4 className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-light text-[#0a1c2a]">
                 La Grotta nel Tufo
               </h4>
-              <p className="text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed">
                 Scavata nella falesia a picco sul porto di Acquamorta, ha protetto per generazioni i gozzi in legno dalle tempeste. Oggi è un archivio vivo di arredi nautici e calafateria.
               </p>
             </div>
 
             <div className="space-y-3">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-slate-400 block">
+              <span className="text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold block">
                 02 · L&apos;Eredità
               </span>
               <h4 className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-light text-[#0a1c2a]">
                 I Ferri dei Maestri d&apos;Ascia
               </h4>
-              <p className="text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed">
                 Pialle d&apos;epoca, asce a becco di passero, garbi tradizionali e modelli originali tramandati dalle antiche famiglie cantieristiche montesi.
               </p>
             </div>
 
             <div className="space-y-3">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-slate-400 block">
+              <span className="text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold block">
                 03 · La Missione
               </span>
               <h4 className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-light text-[#0a1c2a]">
                 Il Presidio del Quandel
               </h4>
-              <p className="text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed">
                 Naturale base a terra del futuro laboratorio galleggiante: punto d&apos;incontro per la biologia marina, la salvaguardia dell&apos;ecosistema flegreo e i corsi di vela e voga.
               </p>
             </div>
@@ -437,7 +437,7 @@ export default function EmotionalStory() {
               <span className="text-[10px] uppercase tracking-[0.25em] font-mono text-[#0a1c2a] font-semibold block">
                 Visite e Attività al Museo
               </span>
-              <p className="text-xs sm:text-sm text-slate-600 font-light">
+              <p className="text-xs sm:text-sm text-slate-700 font-light">
                 Il Piccolo Museo del Mare è aperto a visite didattiche per scolaresche, ricercatori e appassionati di marineria storica su appuntamento.
               </p>
             </div>
@@ -464,7 +464,7 @@ export default function EmotionalStory() {
         className="relative min-h-[90vh] flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-28 sm:py-36 bg-white border-b border-slate-200"
       >
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-mono font-semibold mb-4">
             <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>02 · I Grandi Orizzonti 2027</span>
           </div>
@@ -486,13 +486,13 @@ export default function EmotionalStory() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="p-8 bg-[#fbfaf6] border border-slate-200 relative group">
-              <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-2">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#0a1c2a] font-bold block mb-2">
                 Saint-Tropez 2027
               </span>
               <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mb-3">
                 Progetto ROSA
               </h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed mb-6">
+              <p className="text-xs text-slate-700 font-light leading-relaxed mb-6">
                 La formazione del primo equipaggio stabile interamente femminile
                 di vela latina verso Les Voiles Latines in Costa Azzurra.
               </p>
@@ -506,13 +506,13 @@ export default function EmotionalStory() {
             </div>
 
             <div className="p-8 bg-[#fbfaf6] border border-slate-200 relative group">
-              <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-2">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#0a1c2a] font-bold block mb-2">
                 Golfo di Napoli
               </span>
               <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mb-3">
                 America’s Cup Napoli
               </h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed mb-6">
+              <p className="text-xs text-slate-700 font-light leading-relaxed mb-6">
                 Janara presente alla cerimonia inaugurale: le vele storiche dei
                 maestri d’ascia a confronto con i foil più avanzati del pianeta.
               </p>
@@ -526,13 +526,13 @@ export default function EmotionalStory() {
             </div>
 
             <div className="p-8 bg-[#fbfaf6] border border-slate-200 relative group">
-              <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-2">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#0a1c2a] font-bold block mb-2">
                 Golfo di Trieste
               </span>
               <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mb-3">
                 Quandel alla Barcolana
               </h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed mb-6">
+              <p className="text-xs text-slate-700 font-light leading-relaxed mb-6">
                 La maestosa lancia del 1968, ex Amerigo Vespucci, pronta a
                 schierarsi sulla linea di partenza della regata più partecipata al
                 mondo.
@@ -557,7 +557,7 @@ export default function EmotionalStory() {
         className="relative min-h-[90vh] flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-28 sm:py-36 bg-[#fbfaf6] border-b border-slate-200"
       >
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-mono font-semibold mb-4">
             <Calendar className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>03 · Palmarès & Manifestazioni</span>
           </div>
@@ -570,7 +570,7 @@ export default function EmotionalStory() {
                 fill
                 className="object-cover"
               />
-              <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 text-[10px] font-mono uppercase tracking-widest border border-slate-300">
+              <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 text-[10px] font-mono uppercase tracking-widest border border-slate-300 font-semibold text-[#0a1c2a]">
                 1° Saint-Tropez 2024
               </div>
             </div>
@@ -598,7 +598,7 @@ export default function EmotionalStory() {
                   <span>Consulta il Calendario & Palmarès</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
-                <span className="text-xs font-mono text-slate-500">
+                <span className="text-xs font-mono text-slate-700 font-medium">
                   Procida Cup · Ischia · Taranto · Saint-Tropez
                 </span>
               </div>
@@ -615,7 +615,7 @@ export default function EmotionalStory() {
         className="relative min-h-[90vh] flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-28 sm:py-36 bg-white border-b border-slate-200"
       >
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-mono font-semibold mb-4">
             <GraduationCap className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>04 · Scuola di Mare & Inclusione</span>
           </div>
@@ -644,7 +644,7 @@ export default function EmotionalStory() {
                   <span>Iscriviti ai Corsi di Voga e Vela</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
-                <span className="text-xs font-mono text-slate-500">
+                <span className="text-xs font-mono text-slate-700 font-medium">
                   Aperto a giovani, scuole e aspiranti marinai
                 </span>
               </div>
@@ -674,7 +674,7 @@ export default function EmotionalStory() {
         className="relative min-h-[70vh] flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-24 sm:py-32 bg-[#fbfaf6]"
       >
         <div className="max-w-7xl mx-auto w-full text-center space-y-6">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono block">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-slate-700 font-mono font-semibold block">
             Il Nostro Approdo
           </span>
 
@@ -682,7 +682,7 @@ export default function EmotionalStory() {
             La rotta comincia al porticciolo.
           </h2>
 
-          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-light leading-relaxed">
+          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-700 font-light leading-relaxed">
             Via Guglielmo Marconi snc, Porticciolo di Monte di Procida (NA).
             <br />
             Presidente: Antonio Pugliese · Tel: +39 338 763 3350 · Email:
@@ -692,13 +692,13 @@ export default function EmotionalStory() {
           <div className="pt-4 flex flex-wrap justify-center gap-4">
             <Link
               href="/associazione"
-              className="px-6 py-3 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-colors"
+              className="px-6 py-3 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-colors shadow-xs"
             >
               Diventa Socio
             </Link>
             <Link
               href="/corsi"
-              className="px-6 py-3 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold hover:border-slate-800 transition-colors bg-white"
+              className="px-6 py-3 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold hover:border-slate-800 transition-colors bg-white shadow-2xs"
             >
               Partecipa ai Corsi
             </Link>
@@ -706,12 +706,12 @@ export default function EmotionalStory() {
         </div>
 
         {/* Footer Minimalista */}
-        <div className="max-w-7xl mx-auto w-full pt-16 mt-16 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 text-[10px] tracking-widest uppercase text-slate-500 font-mono">
+        <div className="max-w-7xl mx-auto w-full pt-16 mt-16 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-6 text-[11px] tracking-widest uppercase text-[#0a1c2a] font-mono font-bold">
           <div>
             © 2008–{new Date().getFullYear()} Associazione Vela Latina Monte di
             Procida (APS)
           </div>
-          <div className="font-serif italic text-sm text-[#0a1c2a] normal-case tracking-normal">
+          <div className="font-serif italic text-base text-[#0a1c2a] normal-case tracking-normal">
             “Un punto cospicuo sul Mediterraneo.”
           </div>
           <div>40°47′N · 14°03′E · Campi Flegrei</div>

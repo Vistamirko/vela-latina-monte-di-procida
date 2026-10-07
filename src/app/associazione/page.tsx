@@ -29,7 +29,7 @@ export default function AssociazionePage() {
       {/* Hero Sezione Associazione */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4">
+          <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
             <Anchor className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>Associazione di Promozione Sociale · Fondata nel 2008</span>
           </div>
@@ -52,7 +52,7 @@ export default function AssociazionePage() {
       <section className="py-24 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-white">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-7 space-y-6">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-slate-400 block">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#0a1c2a] font-bold block">
               D.D. n. 239 del 7 Luglio 2020
             </span>
             <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light leading-tight">
@@ -75,34 +75,34 @@ export default function AssociazionePage() {
 
           <div className="lg:col-span-5 grid grid-cols-2 gap-6 bg-[#fbfaf6] p-8 sm:p-10 border border-slate-200">
             <div>
-              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block">
+              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block font-light">
                 2008
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-slate-500 font-mono">
+              <span className="text-[10px] tracking-widest uppercase text-slate-700 font-semibold font-mono">
                 Anno Fondazione
               </span>
             </div>
             <div>
-              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block">
+              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block font-light">
                 ≈150
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-slate-500 font-mono">
+              <span className="text-[10px] tracking-widest uppercase text-slate-700 font-semibold font-mono">
                 Soci Attivi
               </span>
             </div>
             <div>
-              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block">
+              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block font-light">
                 5
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-slate-500 font-mono">
+              <span className="text-[10px] tracking-widest uppercase text-slate-700 font-semibold font-mono">
                 Scafi nella Flotta
               </span>
             </div>
             <div>
-              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block">
+              <span className="font-['Cormorant_Garamond'] text-5xl text-[#0a1c2a] block font-light">
                 25
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-slate-500 font-mono">
+              <span className="text-[10px] tracking-widest uppercase text-slate-700 font-semibold font-mono">
                 Volontari & Tecnici
               </span>
             </div>
@@ -115,7 +115,7 @@ export default function AssociazionePage() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
             <div>
-              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-500 block mb-2">
+              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block mb-2">
                 Restauro & Navigazione
               </span>
               <h2 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl font-light text-[#0a1c2a]">
@@ -132,7 +132,7 @@ export default function AssociazionePage() {
                   className={`px-3 py-2 text-[10px] font-mono tracking-widest border transition-all cursor-pointer ${
                     idx === selectedBoatIndex
                       ? "border-[#0a1c2a] bg-[#0a1c2a] text-white font-bold"
-                      : "border-slate-300 text-slate-600 hover:border-slate-800 bg-white"
+                      : "border-slate-300 text-slate-700 font-medium hover:border-slate-800 bg-white"
                   }`}
                 >
                   0{idx + 1} · {boat.name}
@@ -151,7 +151,7 @@ export default function AssociazionePage() {
                 className="object-cover"
               />
               {activeBoat.badge && (
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.2em] font-mono shadow-xs">
+                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.2em] font-mono font-semibold shadow-xs">
                   <Award className="w-3 h-3 text-[#b8860b]" />
                   <span>{activeBoat.badge}</span>
                 </div>
@@ -160,7 +160,7 @@ export default function AssociazionePage() {
 
             <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
               <div>
-                <span className="text-[10px] tracking-[0.3em] uppercase text-slate-500 block font-mono mb-2">
+                <span className="text-[10px] tracking-[0.3em] uppercase text-[#0a1c2a] font-bold block font-mono mb-2">
                   {activeBoat.category} · {activeBoat.length}
                 </span>
                 <h3 className="font-['Cormorant_Garamond'] text-4xl sm:text-5xl text-[#0a1c2a] font-light leading-none">
@@ -178,16 +178,16 @@ export default function AssociazionePage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-200 grid grid-cols-2 gap-4 text-[10px] uppercase tracking-wider text-slate-600 font-mono">
+              <div className="pt-4 border-t border-slate-300 grid grid-cols-2 gap-4 text-[11px] uppercase tracking-wider text-slate-800 font-mono">
                 <div>
-                  <span className="text-slate-400 block">Cantiere</span>
-                  <span className="text-[#0a1c2a] font-sans text-xs">
+                  <span className="text-[#0a1c2a] font-bold block">Cantiere</span>
+                  <span className="text-[#0a1c2a] font-sans text-xs font-medium">
                     {activeBoat.shipyard}
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">Armamento</span>
-                  <span className="text-[#0a1c2a] font-sans text-xs">
+                  <span className="text-[#0a1c2a] font-bold block">Armamento</span>
+                  <span className="text-[#0a1c2a] font-sans text-xs font-medium">
                     {activeBoat.rig}
                   </span>
                 </div>
@@ -214,7 +214,7 @@ export default function AssociazionePage() {
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-                <span className="text-[10px] tracking-widest text-slate-500 font-mono">
+                <span className="text-[10px] tracking-widest text-slate-700 font-mono font-semibold">
                   {selectedBoatIndex + 1} / {FLEET_DATA.length}
                 </span>
               </div>
@@ -226,13 +226,13 @@ export default function AssociazionePage() {
       {/* Diventa Socio / Modulo Adesione */}
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto w-full text-center space-y-6">
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-500 block">
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block">
             Adesione
           </span>
           <h2 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl font-light text-[#0a1c2a]">
             Entra a far parte della comunità.
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 font-light max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-700 font-light max-w-xl mx-auto leading-relaxed">
             Come socio praticante (voga e vela) o socio sostenitore, contribuisci
             direttamente alla salvaguardia del patrimonio marinaro flegreo.
           </p>
@@ -244,7 +244,7 @@ export default function AssociazionePage() {
                 <h4 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a]">
                   Richiesta di Tesseramento Inviata
                 </h4>
-                <p className="text-xs text-slate-600 max-w-sm mx-auto">
+                <p className="text-xs text-slate-700 max-w-sm mx-auto">
                   La segreteria dell'Associazione ti contatterà per completare la
                   domanda d'iscrizione e accoglierti al porticciolo.
                 </p>
@@ -259,7 +259,7 @@ export default function AssociazionePage() {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                       Nome e Cognome
                     </label>
                     <input
@@ -270,7 +270,7 @@ export default function AssociazionePage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                       Email
                     </label>
                     <input
@@ -282,7 +282,7 @@ export default function AssociazionePage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
                     Tipologia di Socio
                   </label>
                   <select className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none">
