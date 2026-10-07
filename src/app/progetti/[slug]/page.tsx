@@ -324,7 +324,7 @@ export default async function ProjectDetailPage({
             </div>
 
             <a
-              href={`mailto:velalatinamontediprocida@gmail.com?subject=Adesione%20al%20Progetto%20${encodeURIComponent(
+              href={`mailto:vistamirko@gmail.com?subject=Adesione%20al%20Progetto%20${encodeURIComponent(
                 project.title
               )}`}
               className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-[#0a1c2a] text-xs font-mono uppercase tracking-[0.2em] font-bold hover:bg-[#b8860b] hover:text-white transition-all shrink-0 cursor-pointer shadow-xs"

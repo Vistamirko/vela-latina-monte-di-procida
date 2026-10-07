@@ -147,7 +147,7 @@ const GLOBAL_SCHEMA_JSON = {
       ],
       contactPoint: {
         "@type": "ContactPoint",
-        email: "velalatinamontediprocida@gmail.com",
+        email: "vistamirko@gmail.com",
         contactType: "Segreteria & Relazioni Esterne",
         availableLanguage: ["Italian", "English"],
       },

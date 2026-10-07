@@ -18,7 +18,7 @@ export async function sendBookingNotification(data: BookingNotificationData) {
   const port = parseInt(process.env.SMTP_PORT || "587", 10);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
   const from = process.env.SMTP_FROM || `"Vela Latina Monte di Procida" <info@velalatinamontediprocida.it>`;
-  const notificationRecipient = process.env.NOTIFICATION_EMAIL || "velalatinamontediprocida@gmail.com";
+  const notificationRecipient = process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com";
 
   if (!host || !user || !pass) {
     console.warn(

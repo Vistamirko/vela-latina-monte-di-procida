@@ -84,7 +84,7 @@ export default function SponsorsSection() {
 
           <div>
             <a
-              href="mailto:velalatinamontediprocida@gmail.com?subject=Richiesta%20Dossier%20Sponsorizzazione"
+              href="mailto:vistamirko@gmail.com?subject=Richiesta%20Dossier%20Sponsorizzazione"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#fbfaf6] hover:bg-[#0a1c2a] text-[#0a1c2a] hover:text-white border border-slate-300 hover:border-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold transition-all duration-300 shadow-2xs font-mono"
             >
               <span>Diventa Sponsor</span>

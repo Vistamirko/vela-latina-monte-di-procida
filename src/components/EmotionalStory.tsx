@@ -463,7 +463,7 @@ export default function EmotionalStory() {
                 La Nostra Storia
               </Link>
               <a
-                href="mailto:velalatinamontediprocida@gmail.com"
+                href="mailto:vistamirko@gmail.com"
                 className="px-5 py-2.5 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold hover:border-slate-800 transition-colors bg-white rounded-xs"
               >
                 Richiedi una Visita
@@ -705,7 +705,7 @@ export default function EmotionalStory() {
             Via Guglielmo Marconi snc, Porticciolo di Monte di Procida (NA).
             <br />
             Presidente: Antonio Pugliese · Tel: +39 338 763 3350 · Email:
-            velalatinamontediprocida@gmail.com
+            vistamirko@gmail.com
           </p>
 
           <div className="pt-4 flex flex-wrap justify-center gap-4">

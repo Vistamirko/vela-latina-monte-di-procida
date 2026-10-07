@@ -186,7 +186,7 @@ export default async function ProgettiPage() {
 
           <div className="pt-6">
             <a
-              href="mailto:velalatinamontediprocida@gmail.com?subject=Richiesta%20Partnership%20Progetti"
+              href="mailto:vistamirko@gmail.com?subject=Richiesta%20Partnership%20Progetti"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all"
             >
               <span>Contatta l&apos;Associazione per Partnership</span>
