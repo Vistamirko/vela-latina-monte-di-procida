@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Volume2, VolumeX, Menu, X, Wind } from "lucide-react";
 
@@ -92,17 +93,28 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-12 flex items-center justify-between">
-          {/* Logo / Marchio Puramente Tipografico & Pulito (Senza elementi grafici invasivi) */}
+          {/* Logo Ufficiale con Stemma Tradizionale & Tipografia Classica */}
           <Link
             href="/"
-            className="group flex flex-col items-start focus:outline-none"
+            className="group flex items-center gap-3 focus:outline-none"
           >
-            <span className="font-['Cinzel'] text-xs sm:text-sm tracking-[0.3em] text-[#0a1c2a] uppercase font-semibold group-hover:text-[#b8860b] transition-colors">
-              Vela Latina
-            </span>
-            <span className="text-[8px] sm:text-[9px] tracking-[0.35em] text-slate-500 uppercase font-light -mt-0.5">
-              Monte di Procida
-            </span>
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 transition-transform duration-300 group-hover:scale-105">
+              <Image
+                src="/images/stemma-vela-latina.jpg"
+                alt="Stemma Vela Latina Monte di Procida"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="font-['Cinzel'] text-xs sm:text-sm tracking-[0.25em] text-[#0a1c2a] uppercase font-semibold group-hover:text-[#b8860b] transition-colors leading-tight">
+                Vela Latina
+              </span>
+              <span className="text-[8px] sm:text-[9px] tracking-[0.32em] text-slate-500 uppercase font-light">
+                Monte di Procida
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav - Esattamente le 4 voci richieste: Progetti, Associazione, Eventi, Corsi */}

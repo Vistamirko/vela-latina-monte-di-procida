@@ -65,8 +65,15 @@ export const metadata: Metadata = {
     images: ["/images/janara-regatta.jpeg"],
   },
   icons: {
-    icon: "/images/stemma-vela-latina.jpg",
-    apple: "/images/stemma-vela-latina.jpg",
+    icon: [
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+      { url: "/favicon.ico" },
+      { url: "/images/stemma-vela-latina.jpg" },
+    ],
+    apple: [
+      { url: "/icon.png" },
+      { url: "/images/stemma-vela-latina.jpg" },
+    ],
   },
 };
 

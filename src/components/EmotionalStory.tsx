@@ -17,6 +17,13 @@ import {
   X,
   Maximize2,
 } from "lucide-react";
+import {
+  NauticalCompassRose,
+  NauticalBathymetry,
+  NauticalBorderRuler,
+  NauticalCartouche,
+  NauticalCrosshair,
+} from "@/components/NauticalChartElements";
 
 interface MuseoPhoto {
   src: string;
@@ -113,26 +120,36 @@ export default function EmotionalStory() {
         id="prologo"
         className="relative min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-24 pt-28 sm:pt-36 pb-12 sm:pb-16 border-b border-slate-200"
       >
+        {/* Filigrana Nautica Sottile: Rosa dei Venti & Raggi Lossodromici (Non Invasiva) */}
+        <div className="absolute top-12 right-0 sm:right-10 md:right-16 pointer-events-none -z-0 opacity-40 select-none overflow-hidden">
+          <NauticalCompassRose className="w-[360px] h-[360px] sm:w-[500px] sm:h-[500px] lg:w-[640px] lg:h-[640px] text-[#0a1c2a]/[0.055]" />
+        </div>
+
         {/* Metadati di prua & Coordinate Nautiche */}
-        <div className="max-w-7xl mx-auto w-full flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-mono text-slate-500">
-          <div className="flex items-center gap-2.5">
-            <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
-            <span>40° 47′ 42″ N · 14° 03′ 05″ E</span>
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-mono text-slate-500">
+            <div className="flex items-center gap-2.5">
+              <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
+              <span>40° 47′ 42″ N · 14° 03′ 05″ E</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#1b5b80]" />
+              <span>Canale di Procida · Vento da Maestro</span>
+            </div>
+            <span className="hidden md:inline text-slate-400">
+              Hub Marinaro dei Campi Flegrei
+            </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#1b5b80]" />
-            <span>Canale di Procida · Vento da Maestro</span>
+          {/* Sottile scala graduata nautica */}
+          <div className="pt-2">
+            <NauticalBorderRuler coordinate="40° 47′ 42″ N · LATITUDINE CANALE DI PROCIDA" />
           </div>
-          <span className="hidden md:inline text-slate-400">
-            Hub Marinaro dei Campi Flegrei
-          </span>
         </div>
 
         {/* Titolo Monumentale con Grazie & Payoff */}
-        <div className="max-w-7xl mx-auto w-full my-auto py-12 sm:py-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-slate-300 bg-white text-[10px] sm:text-xs tracking-[0.3em] text-[#0a1c2a] uppercase mb-8 font-medium">
-            <Wind className="w-3.5 h-3.5 text-[#1b5b80]" />
-            <span>Patrimonio Culturale Immateriale della Campania</span>
+        <div className="max-w-7xl mx-auto w-full my-auto py-12 sm:py-16 relative z-10">
+          <div className="mb-6">
+            <NauticalCartouche className="inline-flex" />
           </div>
 
           <h1 className="font-['Cormorant_Garamond'] text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] font-light leading-[0.88] text-[#0a1c2a] tracking-tight">
@@ -142,15 +159,29 @@ export default function EmotionalStory() {
             </span>
           </h1>
 
-          {/* Il Payoff Ufficiale */}
+          {/* Patrimonio Culturale Immateriale della Campania — Posizionato sotto il titolo */}
+          <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-3">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-slate-300 bg-white text-[10px] sm:text-xs tracking-[0.28em] text-[#0a1c2a] uppercase font-medium shadow-2xs">
+              <Wind className="w-3.5 h-3.5 text-[#1b5b80]" />
+              <span>Patrimonio Culturale Immateriale della Campania</span>
+            </div>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 hidden md:inline">
+              D.D. n. 239 · 7 Luglio 2020
+            </span>
+          </div>
+
+          {/* Il Payoff Ufficiale & Mirino Cartografico */}
           <div className="mt-8 sm:mt-12 max-w-3xl border-l-2 border-[#0a1c2a] pl-6 sm:pl-8">
+            <div className="mb-3">
+              <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Ril. Faro & Scogliera" />
+            </div>
             <p className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl md:text-5xl italic font-light text-[#0a1c2a] leading-tight">
               “Un punto cospicuo sul Mediterraneo.”
             </p>
             <p className="mt-4 text-sm sm:text-base text-slate-600 font-light leading-relaxed max-w-xl">
               Dalla scogliera di tufo affacciata sulle isole al mare aperto del
-              Tirreno. Custodiamo l'anima del gozzo napoletano-flegreo,
-              rimettiamo all'onda imbarcazioni storiche e insegniamo l'arte del
+              Tirreno. Custodiamo l&apos;anima del gozzo napoletano-flegreo,
+              rimettiamo all&apos;onda imbarcazioni storiche e insegniamo l&apos;arte del
               vento alle nuove generazioni.
             </p>
           </div>
@@ -275,18 +306,27 @@ export default function EmotionalStory() {
       {/* ============================================================== */}
       <section
         id="sede-museo"
-        className="relative min-h-screen flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-28 sm:py-36 bg-white border-b border-slate-200"
+        className="relative min-h-screen flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-28 sm:py-36 bg-white border-b border-slate-200 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto w-full">
+        {/* Filigrana Nautica: Curve Batimetriche & Sonde dei Fondali di Acquamorta */}
+        <div className="absolute top-16 left-0 right-0 pointer-events-none -z-0 opacity-40 select-none overflow-hidden">
+          <NauticalBathymetry className="w-full h-40 sm:h-52 text-[#1b5b80]/[0.10]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto w-full relative z-10">
           {/* Tag & Coordinate della Sede */}
           <div className="flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.3em] uppercase text-slate-500 font-mono mb-4 border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[#0a1c2a]" />
               <span>Sede Storica & Presidio a Terra · Porticciolo di Acquamorta</span>
             </div>
-            <span className="hidden sm:inline text-slate-400">
-              Via Guglielmo Marconi snc · Monte di Procida
-            </span>
+            <div className="flex items-center gap-3">
+              <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Sonda Banchina: 3.8m" />
+              <span className="hidden lg:inline text-slate-300">|</span>
+              <span className="hidden lg:inline text-slate-400">
+                Via Guglielmo Marconi snc · Monte di Procida
+              </span>
+            </div>
           </div>
 
           {/* Intestazione Editoriale */}
