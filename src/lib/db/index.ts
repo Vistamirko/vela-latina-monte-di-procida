@@ -218,120 +218,236 @@ const DEFAULT_COURSES: CourseSession[] = [
 const DEFAULT_PROJECTS: ProjectItem[] = [
   {
     id: "proj-01-rosa",
+    slug: "progetto-rosa-saint-tropez-2027",
     number: "01",
     title: "Progetto ROSA",
-    highlight: "Saint-Tropez 2027",
+    highlight: "Saint-Tropez 2027 · Equipaggio Femminile",
     category: "Regata Internazionale",
     badge: "Equipaggio Femminile",
     partner: "Campi Flegrei · Rete Partner",
     status: "In Corso",
+    timeline: "2026 – 2027",
+    location: "Acquamorta & Saint-Tropez (Francia)",
+    imageUrl: "/images/janara-crew.jpeg",
     description:
       "Formazione del primo equipaggio stabile interamente femminile dell'Associazione. Un percorso intensivo di voga, conduzione di vela latina, manovre d'altura e sicurezza marittima con traguardo fissato a Les Voiles Latines di Saint-Tropez 2027.",
+    content: `Il Progetto ROSA rappresenta una delle sfide sportive, umane e culturali più ambiziose intraprese dall'Associazione Vela Latina Monte di Procida. Nato dalla volontà di superare secoli di tradizioni marinare a prevalenza maschile, il cantiere mira a formare il primo equipaggio stabile interamente femminile capace di condurre in sicurezza e con ambizioni di vertice un gozzo a vela latina in mare aperto.
+
+### Il Percorso Tecnico e Atletico
+La conduzione di una barca armata a vela latina richiede forza, sincronismo e profonda sensibilità marina. A differenza delle moderne imbarcazioni provviste di verricelli e boma orizzontali, la vela triangolare si governa con l'antenna inclinata sull'albero a calcese, manovrando carnao, osti e scotta a forza di braccia. Il programma del Progetto ROSA include:
+- Addestramento alla voga tradizionale in piedi sul gozzo a remi nel porto di Acquamorta, per sviluppare stabilità del baricentro, potenza dorsale e sincronismo di voga.
+- Manovre complesse di bordo: issata e ammainata dell'antenna, virata di bordo con passaggio dell'antenna da un lato all'altro dell'albero (imbroglio e cambio mura).
+- Navigazione tattica e lettura delle brezze termiche nel Canale di Procida e tra le secche dei Campi Flegrei.
+- Sicurezza marittima, nodi tradizionali, primo soccorso e carteggio nautico cartografico.
+
+### L'Obiettivo: Les Voiles Latines di Saint-Tropez 2027
+Il traguardo fissato per l'equipaggio è la partecipazione ufficiale a Les Voiles Latines di Saint-Tropez nel maggio 2027, la più prestigiosa rassegna del Mediterraneo. L'equipaggio femminile montese gareggerà a bordo dell'ammiraglia Janara, già vincitrice assoluta dell'edizione 2024, portando in Costa Azzurra il valore della determinazione e della marineria campana.
+
+### Impatto Comunitario e Borse di Studio
+Il progetto non si esaurisce nell'agonismo: l'Associazione ha istituito borse formative per giovani ragazze del territorio flegreo e dell'area metropolitana di Napoli, garantendo l'accesso gratuito ai corsi di vela e voga, sostenuto da sponsor etici e dalla rete dei partner territoriali.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-02-americas-cup",
+    slug: "americas-cup-napoli-2027",
     number: "02",
     title: "America's Cup Napoli",
-    highlight: "Cerimonia d'Apertura",
+    highlight: "Cerimonia d'Apertura · Janara e la Tradizione Flegrea",
     category: "Regata Internazionale",
     badge: "Evento Mondiale",
-    partner: "Golfo di Napoli",
+    partner: "Golfo di Napoli · Regione Campania",
     status: "In Programmazione",
+    timeline: "Primavera 2027",
+    location: "Golfo di Napoli · Lungomare Caracciolo",
+    imageUrl: "/images/janara-regatta.jpeg",
     description:
       "Partecipazione ufficiale programmata con l'ammiraglia Janara alla cerimonia inaugurale dell'America's Cup nel Golfo di Napoli, portando le radici della vela tradizionale tra i colossi della vela moderna.",
+    content: `La presenza della vela latina montese nel contesto dell'America's Cup a Napoli rappresenta un ponte simbolico e visivo tra le radici millenarie della marineria mediterranea e l'apice della tecnologia velica contemporanea.
+
+### Il Dialogo tra Legno e Carbonio
+Mentre gli AC75 solcano le acque del Golfo volando su foil in fibra di carbonio a oltre 50 nodi di velocità, l'ammiraglia Janara e la flotta storica montese sfileranno con le loro vele triangolari bianche e le carene in legno massello intagliate a mano dai maestri d'ascia di Monte di Procida. È il tributo che la modernità deve alle origini: senza la vela triangolare che permise ai navigatori flegrei e mediterranei di risalire il vento, l'evoluzione della nautica mondiale non sarebbe mai esistita.
+
+### La Parata d'Onore sul Lungomare Caracciolo
+In accordo con le istituzioni regionali e il comitato organizzatore, l'Associazione curerà una parata speciale lungo il litorale tra Castel dell'Ovo, Mergellina e Posillipo. L'equipaggio di Janara effettuerà manovre tradizionali a ridosso della costa, offrendo a migliaia di appassionati e delegazioni internazionali una cartolina vivente del Patrimonio Culturale Immateriale della Campania (D.D. n. 239/2020).
+
+### Workshop e Mostra del Mare Aperto
+Durante le giornate di regata, presso il Villaggio dell'America's Cup verrà allestito uno spazio divulgativo dedicato alla carpenteria navale campana, con dimostrazioni pratiche di calafateria, nodi storici e modelli in scala del gozzo flegreo.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-03-barcolana",
+    slug: "barcolana-lancia-quandel-trieste",
     number: "03",
     title: "Barcolana di Trieste",
-    highlight: "La Lancia Quandel al via",
+    highlight: "La Lancia Quandel al via nel Golfo di Trieste",
     category: "Regata Internazionale",
     badge: "Golfo di Trieste",
     partner: "Società Velica di Barcola e Grignano",
     status: "In Programmazione",
+    timeline: "Ottobre 2026",
+    location: "Golfo di Trieste",
+    imageUrl: "/images/fleet-sailing.webp",
     description:
       "La grande lancia Ludovico Quandel, ex Amerigo Vespucci, sarà schierata sulla linea di partenza del Golfo di Trieste per testimoniare la potenza dell'armo a filucone e della marineria flegrea.",
+    content: `La Barcolana di Trieste è la regata con il maggior numero di imbarcazioni iscritte al mondo: oltre 2.000 vele che trasformano il golfo giuliano in una distesa bianca spettacolare. Nel 2026, l'Associazione Vela Latina Monte di Procida porterà sulla linea di partenza la sua barca più imponente: la lancia storica Ludovico Quandel.
+
+### La Lancia Ludovico Quandel del 1968
+Lunga oltre 8,5 metri e costruita originariamente nei cantieri dell'Arsenale della Marina Militare per l'addestramento della nave scuola Amerigo Vespucci, la lancia Quandel è stata salvata e armata con una monumentale vela a filucone dall'Associazione. Una barca pesante, potente e marina, concepita sia per la navigazione a vela sia per dieci remi al banco.
+
+### La Sfida nelle Acque dell'Alto Adriatico
+Partecipare alla Barcolana richiede una complessa operazione logistica di trasporto stradale eccezionale da Monte di Procida a Trieste e un meticoloso piano di allestimento sul molo Audace. In mare, l'equipaggio montese affronterà le imprevedibili condizioni del Golfo di Trieste, preparandosi sia alle brezze leggere sia ai colpi di Bora, dimostrando la tenuta marina e l'efficacia dell'armo tradizionale di fronte a una platea velica internazionale.
+
+### Fratellanza tra Tirreno e Adriatico
+L'iniziativa consolida i legami storici e culturali con i circoli dell'Alto Adriatico, celebrando la marineria d'epoca come bene comune della nazione.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-04-quandel-gaeta",
+    slug: "operazione-quandel-monte-di-procida-gaeta",
     number: "04",
     title: "Operazione Quandel",
-    highlight: "Monte di Procida ↔ Gaeta",
+    highlight: "Monte di Procida ↔ Gaeta · 8ª Edizione",
     category: "Rotte Storiche",
     badge: "8ª Edizione",
     partner: "Marinerie Flegree & Pontine",
     status: "In Corso",
+    timeline: "Settembre 2026",
+    location: "Tirreno Centrale · Canale di Procida & Golfo di Gaeta",
+    imageUrl: "/images/hero-sailing.webp",
     description:
       "Traversata a vela latina in mare aperto che unisce Monte di Procida e Gaeta. Giunta all'8ª edizione, rinnova i secolari scambi commerciali, culturali e nautici tra le due storiche marinerie tirreniche.",
+    content: `L'Operazione Quandel è la tradizionale traversata d'altura a vela latina che unisce annualmente il porticciolo di Acquamorta a Monte di Procida con la città marinara di Gaeta. Giunta alla sua ottava edizione, la navigazione rinnova una rotta commerciale e culturale attiva da oltre tre secoli tra le due comunità tirreniche.
+
+### 42 Miglia di Mare Aperto Senza Motore
+La rotta attraversa l'intero Golfo di Gaeta e la costa domiziana per una distanza di oltre 42 miglia nautiche. L'equipaggio naviga rigorosamente senza ausilio del motore entrobordo: la barca risponde solo alle manovre delle scotte, alle virate all'antenna e alla saggezza dei marinai nel leggere i cambi di vento tra terra e mare aperto. In caso di bonaccia improvvisa, si armano i lunghi remi di faggio per mantenere l'avanzamento a colpi di voga cadenzata.
+
+### Il Legame Storico con la Famiglia Quandel
+L'operazione è intitolata alla memoria di Ludovico Quandel, nobile ufficiale borbonico, parlamentare e figura legata sia alla storia militare di Gaeta sia alle terre di Monte di Procida. La traversata diventa così un atto di rievocazione storiografica viva, in cui la barca in legno diventa archivio galleggiante.
+
+### Gemellaggio e Cerimonia a Gaeta Medievale
+All'arrivo nelle acque della base nautica di Gaeta, la flotta viene accolta dalle autorità locali, dalle marinerie pontine e dagli appassionati di nautica d'epoca, suggellando una festa dell'amicizia marittima con scambi enogastronomici flegrei e pontini.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-05-breccia-museo",
+    slug: "breccia-museo-itinerario-vulcanico",
     number: "05",
     title: "Breccia Museo",
-    highlight: "Itinerario dal Mare",
+    highlight: "Itinerario dal Mare · Geologia & Falesie di Tufo",
     category: "Cultura & Scienza",
     badge: "Vulcanologia & Mare",
-    partner: "Campi Flegrei · Rete Culturale",
+    partner: "Campi Flegrei · Rete Culturale & Parco Regionale",
     status: "In Corso",
+    timeline: "Itinerario Permanente",
+    location: "Falesia di Monte di Procida & Acquamorta",
+    imageUrl: "/images/museo/museo-2.jpeg",
     description:
       "Percorso turistico e scientifico fruibile via mare lungo la costa di Monte di Procida, dedicato alla formazione vulcanica della Breccia Museo e alla geologia millenaria dei Campi Flegrei.",
+    content: `La costa di Monte di Procida è uno dei siti vulcanologici e geomorfologici più importanti e spettacolari d'Europa. La cosiddetta 'Breccia Museo' è una straordinaria formazione rocciosa a falesia, generata dal deposito vulcanico dell'Ignimbrite Campana circa 39.000 anni fa, che racchiude al suo interno blocchi di tufo, lave e pomici provenienti da tutte le formazioni geologiche precedenti dei Campi Flegrei.
+
+### La Prospettiva Esclusiva dalla Barca a Vela
+La grandiosità di questa parete rocciosa a picco sul mare non è apprezzabile da terra: solo scivolando sull'acqua silenziosamente, senza il rumore e i gas di scarico di un motore a scoppio, è possibile contemplare la policromia degli strati tufacei, le colate piroclastiche e gli anfratti naturali intagliati dal moto ondoso millenario.
+
+### Un Progetto di Turismo Scientifico ed Eco-Sostenibile
+In sinergia con vulcanologi, geologi e guide ambientali della Campania, l'Associazione ha strutturato un percorso tematico via mare accessibile a studenti, ricercatori universitari e viaggiatori consapevoli. A bordo dei gozzi storici, i partecipanti imparano contemporaneamente i rudimenti della vela latina e la storia dell'evoluzione tettonica del Mediterraneo.
+
+### Monitoraggio e Tutela della Costa
+Durante le uscite scientifiche, gli equipaggi eseguono rilievi fotografici periodici dello stato della falesia per monitorare i fenomeni di erosione costiera e l'impatto del moto ondoso, collaborando attivamente con gli enti di tutela del paesaggio flegreo.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-06-quandel-lab",
+    slug: "quandel-lab-archeologia-navale-ricerca",
     number: "06",
     title: "Quandel Lab & Ricerca",
-    highlight: "Federico II & Suor Orsola",
+    highlight: "Federico II & Suor Orsola · Studi Idrodinamici",
     category: "Cultura & Scienza",
     badge: "Ricerca Scientifica",
-    partner: "Università Federico II & Suor Orsola",
+    partner: "Università Federico II & Suor Orsola Benincasa",
     status: "In Corso",
+    timeline: "2025 – 2028",
+    location: "Laboratori Accademici & Cantiere di Acquamorta",
+    imageUrl: "/images/museo/museo-1.jpeg",
     description:
       "Sperimentazioni idrodinamiche, archeologia navale e rilievi costieri in collaborazione con l'Università degli Studi di Napoli Federico II, l'Università Suor Orsola Benincasa e il Museo Nazionale di Haifa.",
+    content: `Il Quandel Lab è il polo di ricerca scientifica e archeologia navale istituito dall'Associazione Vela Latina Monte di Procida in stretta collaborazione con l'Università degli Studi di Napoli Federico II (Dipartimento di Ingegneria Industriale e Navale), l'Università Suor Orsola Benincasa e il Museo Nazionale Marittimo di Haifa.
+
+### Scansioni Laser 3D e Digital Twin delle Carene
+Gli scafi tradizionali in legno flegrei sono stati costruiti per secoli senza piani cartacei formali, affidandosi esclusivamente al 'garbo' (la dima ricurva) e all'occhio esperto del maestro d'ascia. Attraverso rilievi fotogrammetrici ad altissima risoluzione e scansioni laser 3D, il progetto sta digitalizzando le carene di Janara, San Giuda Taddeo, San Michele Arcangelo e Ludovico Quandel, creando i loro 'gemelli digitali' per preservarne le linee d'acqua per i secoli futuri.
+
+### Simulazioni Idrodinamiche CFD
+I ricercatori universitari applicano la fluidodinamica computazionale (CFD) per analizzare la resistenza all'avanzamento, l'angolo di scarroccio e la portanza aerodinamica dell'armo a vela latina rispetto alle moderne vele bermudiane. I risultati confermano l'eccezionale efficienza energetica del profilo alare triangolare nelle andature portanti e di bolina larga con brezze costiere.
+
+### Archivio Orale e Formazione delle Nuove Maestranze
+Il laboratorio raccoglie inoltre testimonianze video, interviste orali e glossari dialettali marinari dei vecchi maestri d'ascia e calafati montesi, organizzando tirocini formativi per giovani studenti di architettura navale e beni culturali.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-07-inclusione",
+    slug: "inclusione-mare-centro-serapide",
     number: "07",
     title: "Inclusione Mare",
-    highlight: "Centro Serapide",
+    highlight: "Centro Serapide · Voga e Terapia del Mare",
     category: "Inclusione",
     badge: "Impatto Sociale",
     partner: "Centro Serapide & Terzo Settore",
     status: "In Corso",
+    timeline: "Iniziativa Permanente",
+    location: "Banchina di Acquamorta & Canale di Procida",
+    imageUrl: "/images/museo/museo-3.jpeg",
     description:
       "Il mare come spazio educativo e terapeutico per bambini e ragazzi con disabilità o bisogni speciali. Attraverso la voga assistita a bordo del San Michele Arcangelo, promuoviamo l'accessibilità reale e il benessere.",
+    content: `Il mare è uno straordinario maestro di uguaglianza: a bordo di una barca a remi e a vela, le differenze svaniscono per lasciare spazio alla collaborazione, alla fiducia reciproca e alla gioia della condivisione. 'Inclusione Mare' è il progetto a forte impatto sociale sviluppato dall'Associazione Vela Latina Monte di Procida in collaborazione stabile con il Centro Serapide e le associazioni del Terzo Settore flegreo.
+
+### La Terapia del Mare e del Ritmo
+Il progetto offre percorsi continui di voga tradizionale e uscite in mare dedicate a bambini, adolescenti e adulti con disturbi dello spettro autistico, disabilità cognitive e motorie. A bordo della lancia San Michele Arcangelo, appositamente attrezzata per garantire la massima stabilità e sicurezza, i ragazzi impugnano i remi insieme agli istruttori: il ritmo cadenzato della remata stimola la concentrazione, favorisce la regolazione sensoriale e rafforza l'autostima personale.
+
+### Un'Esperienza Multi-Sensoriale Unica
+Il contatto diretto con l'acqua salmastra, il suono del vento tra le sartie di canapa, il profumo del legno stagionato e la luce naturale del Canale di Procida offrono stimoli terapeutici profondi, documentati dai neuropsicomotricisti del Centro Serapide che accompagnano costantemente i gruppi durante le uscite.
+
+### Attività Totalmente Gratuita per le Famiglie
+Fedele ai propri principi fondativi, l'Associazione garantisce la totale gratuità di tutte le sessioni di Inclusione Mare. Il progetto è finanziato attraverso donazioni private, quote solidali dei soci e il supporto di aziende etiche del territorio campano.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     id: "proj-08-stintino",
+    slug: "raduno-nazionale-stintino-pisciotta",
     number: "08",
     title: "Raduno Nazionale Stintino",
-    highlight: "Meeting Vela Latina",
+    highlight: "Meeting Vela Latina · Sardegna & Cilento",
     category: "Regata Internazionale",
     badge: "Sardegna & Cilento",
-    partner: "Comitato Vela Latina Stintino",
+    partner: "Comitato Vela Latina Stintino & Circoli Velici",
     status: "Completato",
+    timeline: "Edizioni Storiche & Prossimi Raduni",
+    location: "Stintino (Sardegna) & Marina di Pisciotta (Cilento)",
+    imageUrl: "/images/janara-regatta.jpeg",
     description:
       "Partecipazione ai raduni della vela latina a Stintino e al Trofeo Tre Torri di Marina di Pisciotta (dove l'equipaggio ha conquistato il prestigioso Trofeo Fair Play e podio di classe).",
+    content: `I raduni nazionali della vela latina rappresentano i momenti cardine in cui armatori, marinai e maestri d'ascia di tutta Italia si ritrovano per confrontarsi sul piano sportivo e celebrare l'identità marinara comune. Monte di Procida è da anni protagonista attiva e stimata nei due principali teatri storici del Tirreno: Stintino in Sardegna e Marina di Pisciotta nel Cilento.
+
+### Il Legame con Stintino, Capitale della Vela Latina
+Nel mare limpido delle Pelose e dell'Asinara, la flotta flegrea si confronta con le 'lance stintinesi' e i 'gozzi carlofortini'. La partecipazione ai meeting sardi ha permesso di affinare le regolazioni dell'antenna e di condividere le tecniche di taglio e cucitura delle vele in cotone d'Egitto, creando legami indissolubili tra marinai campani e sardi.
+
+### Il Trofeo Fair Play a Marina di Pisciotta
+Nel corso delle edizioni del celebre 'Trofeo Tre Torri' nelle acque del Parco Nazionale del Cilento, l'equipaggio di Monte di Procida ha ottenuto non solo piazzamenti sul podio di categoria, ma soprattutto il prestigioso 'Trofeo Fair Play'. Questo riconoscimento speciale premia l'etica della marineria: la disponibilità ad assistere imbarcazioni in difficoltà, la lealtà sul campo di regata e la generosità nel trasmettere le manovre ai più giovani.
+
+### Una Tradizione Viva che Guarda al Futuro
+I raduni nazionali non sono sfilate statiche, ma vere competizioni ad armi pari dove la vela latina dimostra la propria vitalità. L'Associazione continua a programmare le proprie trasferte per portare il vessillo di Monte di Procida nei porti storici d'Italia.`,
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -353,7 +469,24 @@ export async function initDb(): Promise<void> {
       readLocalJson<EventItem[]>("eventi.json", DEFAULT_EVENTS);
       readLocalJson<BlogPost[]>("blog.json", DEFAULT_BLOG_POSTS);
       readLocalJson<CourseSession[]>("corsi.json", DEFAULT_COURSES);
-      readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      
+      // Sincronizza progetti con dati ricchi e slug
+      const existingProjects = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      const mergedProjects = DEFAULT_PROJECTS.map((def) => {
+        const found = existingProjects.find((e) => e.id === def.id);
+        if (!found) return def;
+        return {
+          ...def,
+          ...found,
+          slug: found.slug || def.slug,
+          content: found.content || def.content,
+          imageUrl: found.imageUrl || def.imageUrl,
+          location: found.location || def.location,
+          timeline: found.timeline || def.timeline,
+        };
+      });
+      writeLocalJson<ProjectItem[]>("progetti.json", mergedProjects);
+
       const users = readLocalJson<AdminUser[]>("users.json", []);
       if (users.length === 0) {
         const defaultAdmin: AdminUser = {
@@ -453,6 +586,7 @@ export async function initDb(): Promise<void> {
       await sql`
         CREATE TABLE IF NOT EXISTS progetti (
           id VARCHAR(64) PRIMARY KEY,
+          slug VARCHAR(255) UNIQUE,
           number VARCHAR(32) NOT NULL,
           title VARCHAR(255) NOT NULL,
           highlight VARCHAR(255) NOT NULL,
@@ -461,11 +595,26 @@ export async function initDb(): Promise<void> {
           partner VARCHAR(255) DEFAULT 'Campi Flegrei · Rete Partner',
           status VARCHAR(64) NOT NULL DEFAULT 'In Corso',
           description TEXT NOT NULL,
+          content TEXT,
+          image_url TEXT,
+          location VARCHAR(255),
+          timeline VARCHAR(100),
           published BOOLEAN NOT NULL DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
         );
       `;
+
+      // Retrocompatibilità colonne progetti su tabelle già esistenti
+      try {
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS slug VARCHAR(255);`;
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS content TEXT;`;
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS image_url TEXT;`;
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS location VARCHAR(255);`;
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS timeline VARCHAR(100);`;
+      } catch {
+        // Ignora se le colonne esistono già
+      }
 
       // Controlla se esiste admin iniziale
       const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
@@ -512,15 +661,18 @@ export async function initDb(): Promise<void> {
         }
       }
 
-      // Seed Progetti se vuota
-      const existingProjects = await sql`SELECT count(*) FROM progetti;`;
-      if (parseInt(existingProjects[0].count) === 0) {
-        for (const pr of DEFAULT_PROJECTS) {
-          await sql`
-            INSERT INTO progetti (id, number, title, highlight, category, badge, partner, status, description, published)
-            VALUES (${pr.id}, ${pr.number}, ${pr.title}, ${pr.highlight}, ${pr.category}, ${pr.badge || null}, ${pr.partner || null}, ${pr.status}, ${pr.description}, ${pr.published});
-          `;
-        }
+      // Seed / Sincronizzazione Progetti con slug e contenuti completi
+      for (const pr of DEFAULT_PROJECTS) {
+        await sql`
+          INSERT INTO progetti (id, slug, number, title, highlight, category, badge, partner, status, description, content, image_url, location, timeline, published)
+          VALUES (${pr.id}, ${pr.slug}, ${pr.number}, ${pr.title}, ${pr.highlight}, ${pr.category}, ${pr.badge || null}, ${pr.partner || null}, ${pr.status}, ${pr.description}, ${pr.content || null}, ${pr.imageUrl || null}, ${pr.location || null}, ${pr.timeline || null}, ${pr.published})
+          ON CONFLICT (id) DO UPDATE SET
+            slug = COALESCE(progetti.slug, EXCLUDED.slug),
+            content = COALESCE(progetti.content, EXCLUDED.content),
+            image_url = COALESCE(progetti.image_url, EXCLUDED.image_url),
+            location = COALESCE(progetti.location, EXCLUDED.location),
+            timeline = COALESCE(progetti.timeline, EXCLUDED.timeline);
+        `;
       }
     } catch (err) {
       console.error("[initDb] Avviso: connessione database durante build/avvio:", err);
@@ -890,6 +1042,7 @@ export const ProjectsRepo = {
 
       return rows.map((r) => ({
         id: r.id,
+        slug: r.slug || r.id,
         number: r.number,
         title: r.title,
         highlight: r.highlight,
@@ -898,6 +1051,10 @@ export const ProjectsRepo = {
         partner: r.partner || undefined,
         status: (r.status || "In Corso") as ProjectItem["status"],
         description: r.description,
+        content: r.content || undefined,
+        imageUrl: r.image_url || undefined,
+        location: r.location || undefined,
+        timeline: r.timeline || undefined,
         published: Boolean(r.published),
         createdAt: r.created_at,
         updatedAt: r.updated_at,
@@ -921,6 +1078,7 @@ export const ProjectsRepo = {
     const r = rows[0];
     return {
       id: r.id,
+      slug: r.slug || r.id,
       number: r.number,
       title: r.title,
       highlight: r.highlight,
@@ -929,23 +1087,69 @@ export const ProjectsRepo = {
       partner: r.partner || undefined,
       status: (r.status || "In Corso") as ProjectItem["status"],
       description: r.description,
+      content: r.content || undefined,
+      imageUrl: r.image_url || undefined,
+      location: r.location || undefined,
+      timeline: r.timeline || undefined,
       published: Boolean(r.published),
       createdAt: r.created_at,
       updatedAt: r.updated_at,
     };
   },
 
+  async getBySlug(slug: string): Promise<ProjectItem | null> {
+    if (!DB_URL) {
+      const items = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      return items.find((i) => i.slug === slug || i.id === slug) || null;
+    }
+    try {
+      const sql = neon(DB_URL);
+      const rows = await sql`SELECT * FROM progetti WHERE slug = ${slug} OR id = ${slug} LIMIT 1;`;
+      if (rows.length === 0) return null;
+      const r = rows[0];
+      return {
+        id: r.id,
+        slug: r.slug || r.id,
+        number: r.number,
+        title: r.title,
+        highlight: r.highlight,
+        category: r.category as ProjectItem["category"],
+        badge: r.badge || undefined,
+        partner: r.partner || undefined,
+        status: (r.status || "In Corso") as ProjectItem["status"],
+        description: r.description,
+        content: r.content || undefined,
+        imageUrl: r.image_url || undefined,
+        location: r.location || undefined,
+        timeline: r.timeline || undefined,
+        published: Boolean(r.published),
+        createdAt: r.created_at,
+        updatedAt: r.updated_at,
+      };
+    } catch (err) {
+      console.error("[ProjectsRepo.getBySlug] Errore DB Neon, uso fallback statico:", err);
+      return DEFAULT_PROJECTS.find((i) => i.slug === slug || i.id === slug) || null;
+    }
+  },
+
   async save(project: Omit<ProjectItem, "createdAt" | "updatedAt">): Promise<ProjectItem> {
     const now = new Date().toISOString();
+    const slug =
+      project.slug ||
+      project.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
     if (!DB_URL) {
       const items = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
       const existingIdx = items.findIndex((i) => i.id === project.id);
       let saved: ProjectItem;
       if (existingIdx >= 0) {
-        saved = { ...items[existingIdx], ...project, updatedAt: now };
+        saved = { ...items[existingIdx], ...project, slug, updatedAt: now };
         items[existingIdx] = saved;
       } else {
-        saved = { ...project, createdAt: now, updatedAt: now };
+        saved = { ...project, slug, createdAt: now, updatedAt: now };
         items.push(saved);
       }
       writeLocalJson<ProjectItem[]>("progetti.json", items);
@@ -953,9 +1157,10 @@ export const ProjectsRepo = {
     }
     const sql = neon(DB_URL);
     await sql`
-      INSERT INTO progetti (id, number, title, highlight, category, badge, partner, status, description, published, updated_at)
-      VALUES (${project.id}, ${project.number}, ${project.title}, ${project.highlight}, ${project.category}, ${project.badge || null}, ${project.partner || null}, ${project.status}, ${project.description}, ${project.published}, ${now})
+      INSERT INTO progetti (id, slug, number, title, highlight, category, badge, partner, status, description, content, image_url, location, timeline, published, updated_at)
+      VALUES (${project.id}, ${slug}, ${project.number}, ${project.title}, ${project.highlight}, ${project.category}, ${project.badge || null}, ${project.partner || null}, ${project.status}, ${project.description}, ${project.content || null}, ${project.imageUrl || null}, ${project.location || null}, ${project.timeline || null}, ${project.published}, ${now})
       ON CONFLICT (id) DO UPDATE SET
+        slug = EXCLUDED.slug,
         number = EXCLUDED.number,
         title = EXCLUDED.title,
         highlight = EXCLUDED.highlight,
@@ -964,6 +1169,10 @@ export const ProjectsRepo = {
         partner = EXCLUDED.partner,
         status = EXCLUDED.status,
         description = EXCLUDED.description,
+        content = EXCLUDED.content,
+        image_url = EXCLUDED.image_url,
+        location = EXCLUDED.location,
+        timeline = EXCLUDED.timeline,
         published = EXCLUDED.published,
         updated_at = EXCLUDED.updated_at;
     `;

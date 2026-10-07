@@ -1,7 +1,8 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { initDb, ProjectsRepo } from "@/lib/db";
-import { Compass, ArrowUpRight } from "lucide-react";
+import { Compass, ArrowUpRight, ArrowRight } from "lucide-react";
 
 export const revalidate = 60;
 
@@ -14,35 +15,36 @@ export default async function ProgettiPage() {
       <Header />
 
       {/* Hero Progetti */}
-      <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
+      <section className="pt-28 sm:pt-44 pb-16 sm:pb-20 px-4 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
             <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
             <span>Cantieri Strategici · Roadmap 2026–2027</span>
           </div>
 
-          <h1 className="font-['Cormorant_Garamond'] text-6xl sm:text-8xl md:text-9xl font-light text-[#0a1c2a] leading-[0.9] max-w-5xl">
+          <h1 className="font-['Cormorant_Garamond'] text-4xl sm:text-7xl md:text-9xl font-light text-[#0a1c2a] leading-[0.92] max-w-5xl">
             I Grandi Progetti & <br />
             <span className="italic text-slate-700">Cantieri 2027.</span>
           </h1>
 
-          <p className="mt-8 text-base sm:text-xl text-slate-700 font-light leading-relaxed max-w-3xl">
+          <p className="mt-6 sm:mt-8 text-sm sm:text-xl text-slate-700 font-light leading-relaxed max-w-3xl">
             Otto cantieri attivi trasformano la memoria marinara flegrea in
             azione concreta. Dalla formazione del primo equipaggio femminile per
             Saint-Tropez alla presenza all’America’s Cup e alla Barcolana, fino
-            alle sperimentazioni idrodinamiche universitarie.
+            alle sperimentazioni idrodinamiche universitarie. Clicca su ciascun cantiere
+            per esplorare la scheda tecnica e la spiegazione dettagliata.
           </p>
         </div>
       </section>
 
       {/* Griglia dei Progetti Ufficiali dal Backend */}
-      <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
+      <section className="py-16 sm:py-24 px-4 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12">
             {projects.map((proj) => (
               <div
                 key={proj.id}
-                className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] hover:border-[#0a1c2a] transition-all flex flex-col justify-between"
+                className="group p-6 sm:p-10 border border-slate-200 bg-[#fbfaf6] hover:border-[#0a1c2a] hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -56,21 +58,34 @@ export default async function ProgettiPage() {
                     )}
                   </div>
 
-                  <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-2">
-                    {proj.title}
-                  </h3>
+                  <Link href={`/progetti/${proj.slug}`}>
+                    <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-2 group-hover:text-[#1b5b80] transition-colors">
+                      {proj.title}
+                    </h3>
+                  </Link>
+
                   <div className="font-serif italic text-base text-slate-800 mb-4">
                     {proj.highlight}
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed line-clamp-3">
                     {proj.description}
                   </p>
+
+                  <div className="pt-4">
+                    <Link
+                      href={`/progetti/${proj.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#0a1c2a] group-hover:text-[#1b5b80] uppercase tracking-wider transition-colors"
+                    >
+                      <span>Leggi la Spiegazione Completa</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-300 flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold">
-                  <span>{proj.partner || "Campi Flegrei · Rete Partner"}</span>
-                  <span className="text-[#1b5b80]">{proj.status}</span>
+                  <span className="truncate pr-2">{proj.partner || "Campi Flegrei · Rete Partner"}</span>
+                  <span className="text-[#1b5b80] shrink-0">{proj.status}</span>
                 </div>
               </div>
             ))}

@@ -1029,6 +1029,14 @@ export default function AdminDashboardPage() {
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-2">
+                            <Link
+                              href={`/progetti/${proj.slug}`}
+                              target="_blank"
+                              className="p-1.5 border border-slate-300 text-slate-700 hover:text-[#0a1c2a] hover:border-[#0a1c2a] transition-colors"
+                              title="Visualizza Pagina Dedicata Pubblica"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </Link>
                             <button
                               onClick={() => {
                                 setCurrentProject(proj);
@@ -1758,30 +1766,97 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Slug URL Pagina Dedicata
+                  </label>
+                  <input
+                    type="text"
+                    value={currentProject.slug || ""}
+                    onChange={(e) => setCurrentProject({ ...currentProject, slug: e.target.value })}
+                    placeholder="Es. progetto-rosa-saint-tropez-2027"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs font-mono text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  />
+                  <span className="text-[10px] font-mono text-slate-500 mt-0.5 block">
+                    URL: /progetti/{currentProject.slug || "slug-automatico"}
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Partner / Rete Territoriale
+                  </label>
+                  <input
+                    type="text"
+                    value={currentProject.partner || ""}
+                    onChange={(e) => setCurrentProject({ ...currentProject, partner: e.target.value })}
+                    placeholder="Es. Campi Flegrei · Rete Partner"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Orizzonte Temporale
+                  </label>
+                  <input
+                    type="text"
+                    value={currentProject.timeline || ""}
+                    onChange={(e) => setCurrentProject({ ...currentProject, timeline: e.target.value })}
+                    placeholder="Es. 2026 – 2027"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Teatro Operativo / Luogo
+                  </label>
+                  <input
+                    type="text"
+                    value={currentProject.location || ""}
+                    onChange={(e) => setCurrentProject({ ...currentProject, location: e.target.value })}
+                    placeholder="Es. Acquamorta & Saint-Tropez"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  />
+                </div>
+              </div>
+
+              {/* Upload o inserimento Immagine di Copertina */}
+              <ImageUploader
+                label="Fotografia di Copertina del Progetto"
+                value={currentProject.imageUrl || ""}
+                onChange={(url) => setCurrentProject({ ...currentProject, imageUrl: url })}
+                placeholder="/images/janara-crew.jpeg"
+              />
+
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Partner / Rete Territoriale
+                  Sintesi Breve (Anteprima nelle Schede)
                 </label>
-                <input
-                  type="text"
-                  value={currentProject.partner || ""}
-                  onChange={(e) => setCurrentProject({ ...currentProject, partner: e.target.value })}
-                  placeholder="Es. Campi Flegrei · Rete Partner"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                <textarea
+                  required
+                  rows={3}
+                  value={currentProject.description || ""}
+                  onChange={(e) => setCurrentProject({ ...currentProject, description: e.target.value })}
+                  placeholder="Spiega in breve gli obiettivi del cantiere (mostrato nella griglia)..."
+                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
                 />
               </div>
 
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Descrizione Dettagliata del Cantiere
+                  Spiegazione Approfondita della Pagina Dedicata (/progetti/[slug])
                 </label>
                 <textarea
-                  required
-                  rows={4}
-                  value={currentProject.description || ""}
-                  onChange={(e) => setCurrentProject({ ...currentProject, description: e.target.value })}
-                  placeholder="Spiega gli obiettivi, il percorso formativo o le regate in programma..."
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
+                  rows={8}
+                  value={currentProject.content || ""}
+                  onChange={(e) => setCurrentProject({ ...currentProject, content: e.target.value })}
+                  placeholder="Inserisci la relazione dettagliata di cantiere: storia, percorso tecnico, imbarcazioni, obiettivi... Supporta titoli con '### ' ed elenchi puntati con '- '."
+                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed font-mono"
                 />
               </div>
 

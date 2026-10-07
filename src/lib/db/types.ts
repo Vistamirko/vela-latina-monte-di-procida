@@ -58,10 +58,15 @@ export interface AdminUser {
 
 export interface ProjectItem {
   id: string;
+  slug: string;
   number: string;
   title: string;
   highlight: string;
   description: string;
+  content?: string;
+  imageUrl?: string;
+  location?: string;
+  timeline?: string;
   category: "Regata Internazionale" | "Cultura & Scienza" | "Inclusione" | "Rotte Storiche";
   badge?: string;
   partner?: string;

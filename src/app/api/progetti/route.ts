@@ -37,8 +37,16 @@ export async function POST(req: NextRequest) {
     }
 
     const id = body.id || `proj-${Date.now()}`;
+    const slug =
+      body.slug ||
+      body.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
     const saved = await ProjectsRepo.save({
       id,
+      slug,
       number: body.number || "01",
       title: body.title,
       highlight: body.highlight,
@@ -47,6 +55,10 @@ export async function POST(req: NextRequest) {
       partner: body.partner || "Campi Flegrei · Rete Partner",
       status: body.status || "In Corso",
       description: body.description,
+      content: body.content || undefined,
+      imageUrl: body.imageUrl || undefined,
+      location: body.location || undefined,
+      timeline: body.timeline || undefined,
       published: body.published !== false,
     });
 
