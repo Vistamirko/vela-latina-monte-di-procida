@@ -1,5 +1,29 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import EmotionalStory from "@/components/EmotionalStory";
+
+export const metadata: Metadata = {
+  title: "Associazione Vela Latina Monte di Procida — Un punto cospicuo sul Mediterraneo",
+  description:
+    "Presidio culturale per la marineria flegrea. Restauro navale, navigazione tradizionale, flotta storica (Janara, Quandel, San Giuda Taddeo), scuola di voga e grandi regate internazionali.",
+  alternates: {
+    canonical: "https://velalatinamontediprocida.it",
+  },
+  openGraph: {
+    title: "Associazione Vela Latina Monte di Procida — Un punto cospicuo sul Mediterraneo",
+    description:
+      "Presidio culturale per la marineria flegrea. Restauro navale, navigazione tradizionale, flotta storica e scuola di mare.",
+    url: "https://velalatinamontediprocida.it",
+    images: [
+      {
+        url: "/images/janara-regatta.jpeg",
+        width: 1600,
+        height: 874,
+        alt: "Vela Latina Monte di Procida in regata",
+      },
+    ],
+  },
+};
 
 export default function Home() {
   return (

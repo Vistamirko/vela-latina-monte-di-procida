@@ -37,13 +37,28 @@ export async function generateMetadata({
     };
   }
 
+  const canonicalUrl = `https://velalatinamontediprocida.it/progetti/${project.slug}`;
+
   return {
-    title: `${project.title} · ${project.highlight} | Vela Latina Monte di Procida`,
+    title: `${project.title} · ${project.highlight}`,
     description: project.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: `${project.title} · ${project.highlight}`,
+      title: `${project.title} · ${project.highlight} | Vela Latina Monte di Procida`,
       description: project.description,
-      images: project.imageUrl ? [{ url: project.imageUrl }] : undefined,
+      url: canonicalUrl,
+      images: project.imageUrl
+        ? [
+            {
+              url: project.imageUrl,
+              width: 1200,
+              height: 800,
+              alt: `${project.title} - Vela Latina Monte di Procida`,
+            },
+          ]
+        : undefined,
     },
   };
 }
@@ -71,8 +86,58 @@ export default async function ProjectDetailPage({
       ? allProjects[0]
       : null;
 
+  const projectUrl = `https://velalatinamontediprocida.it/progetti/${project.slug}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CreativeWork",
+        "@id": `${projectUrl}#project`,
+        name: project.title,
+        headline: `${project.title} · ${project.highlight}`,
+        description: project.description,
+        url: projectUrl,
+        image: project.imageUrl ? `https://velalatinamontediprocida.it${project.imageUrl}` : undefined,
+        creator: {
+          "@id": "https://velalatinamontediprocida.it/#organization",
+        },
+        temporalCoverage: project.timeline || "2026/2027",
+        spatialCoverage: project.location || "Monte di Procida, Italia",
+        inLanguage: "it-IT",
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://velalatinamontediprocida.it",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Progetti",
+            item: "https://velalatinamontediprocida.it/progetti",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: project.title,
+            item: projectUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       {/* Hero Progetto */}

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,6 +8,50 @@ import { ArrowLeft, Calendar, User, Compass } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
 
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  await initDb();
+  const { slug } = await params;
+  const post = await BlogRepo.getBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "Articolo non trovato · Vela Latina Monte di Procida",
+    };
+  }
+
+  const canonicalUrl = `https://velalatinamontediprocida.it/blog/${post.slug}`;
+
+  return {
+    title: `${post.title} | Il Giornale di Bordo`,
+    description: post.excerpt,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${post.title} | Vela Latina Monte di Procida`,
+      description: post.excerpt,
+      url: canonicalUrl,
+      type: "article",
+      publishedTime: post.publishedAt || post.createdAt,
+      authors: [post.author],
+      images: post.coverImage
+        ? [
+            {
+              url: post.coverImage,
+              width: 1200,
+              height: 800,
+              alt: post.title,
+            },
+          ]
+        : undefined,
+    },
+  };
+}
 
 export default async function BlogPostPage({
   params,
@@ -21,8 +66,64 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const postUrl = `https://velalatinamontediprocida.it/blog/${post.slug}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${postUrl}#article`,
+        headline: post.title,
+        description: post.excerpt,
+        url: postUrl,
+        datePublished: post.publishedAt || post.createdAt,
+        dateModified: post.updatedAt || post.createdAt,
+        author: {
+          "@type": "Person",
+          name: post.author,
+        },
+        publisher: {
+          "@id": "https://velalatinamontediprocida.it/#organization",
+        },
+        image: post.coverImage ? `https://velalatinamontediprocida.it${post.coverImage}` : undefined,
+        inLanguage: "it-IT",
+        isPartOf: {
+          "@id": "https://velalatinamontediprocida.it/blog#blog",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://velalatinamontediprocida.it",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Blog",
+            item: "https://velalatinamontediprocida.it/blog",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: post.title,
+            item: postUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <article className="pt-36 sm:pt-44 pb-24 px-6 sm:px-12 lg:px-24">

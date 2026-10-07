@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
@@ -7,12 +8,82 @@ import { initDb, BlogRepo } from "@/lib/db";
 
 export const revalidate = 60; // rigenera ogni minuto
 
+export const metadata: Metadata = {
+  title: "Il Giornale di Bordo & la Memoria Flegrea",
+  description:
+    "Articoli, memorie orali e saggi di marineria: i segreti costruttivi dei maestri d'ascia montesi, la conduzione all'antenna e la lettura del vento nel Canale di Procida.",
+  alternates: {
+    canonical: "https://velalatinamontediprocida.it/blog",
+  },
+  openGraph: {
+    title: "Il Giornale di Bordo & la Memoria Flegrea | Vela Latina Monte di Procida",
+    description:
+      "Racconti di mare, calafateria navale e storie di regata dall'Associazione Vela Latina Monte di Procida.",
+    url: "https://velalatinamontediprocida.it/blog",
+    images: [
+      {
+        url: "/images/janara-crew.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Il Giornale di Bordo di Vela Latina Monte di Procida",
+      },
+    ],
+  },
+};
+
 export default async function BlogPage() {
   await initDb();
   const posts = await BlogRepo.getAll(true);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": "https://velalatinamontediprocida.it/blog#blog",
+        url: "https://velalatinamontediprocida.it/blog",
+        name: "Il Giornale di Bordo & la Memoria Flegrea",
+        description: "Articoli, memorie e approfondimenti sulla marineria tradizionale flegrea.",
+        publisher: {
+          "@id": "https://velalatinamontediprocida.it/#organization",
+        },
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://velalatinamontediprocida.it",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Blog",
+              item: "https://velalatinamontediprocida.it/blog",
+            },
+          ],
+        },
+        blogPost: posts.map((p) => ({
+          "@type": "BlogPosting",
+          headline: p.title,
+          url: `https://velalatinamontediprocida.it/blog/${p.slug}`,
+          datePublished: p.publishedAt || p.createdAt,
+          author: {
+            "@type": "Person",
+            name: p.author,
+          },
+        })),
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       {/* Hero Blog */}

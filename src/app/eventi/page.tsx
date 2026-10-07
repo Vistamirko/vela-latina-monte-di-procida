@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { TIMELINE_DATA, TimelineItem } from "@/data/associationData";
@@ -8,12 +9,84 @@ import { initDb, EventsRepo } from "@/lib/db";
 
 export const revalidate = 60;
 
+export const metadata: Metadata = {
+  title: "Palmarès, Regate Storiche & Cinema",
+  description:
+    "Vittorie storiche e appuntamenti della flotta: 1° posto assoluto a Saint-Tropez 2024, Procida Cup, Barcolana 2026, presenza al cinema d'autore e all'America's Cup.",
+  alternates: {
+    canonical: "https://velalatinamontediprocida.it/eventi",
+  },
+  openGraph: {
+    title: "Palmarès & Regate Storiche | Vela Latina Monte di Procida",
+    description:
+      "Scopri i trionfi velici dell'ammiraglia Janara, le regate storiche nel Mediterraneo e la presenza nel cinema.",
+    url: "https://velalatinamontediprocida.it/eventi",
+    images: [
+      {
+        url: "/images/janara-regatta.jpeg",
+        width: 1600,
+        height: 874,
+        alt: "Janara vincitrice a Saint-Tropez",
+      },
+    ],
+  },
+};
+
 export default async function EventiPage() {
   await initDb();
   const events = await EventsRepo.getAll(true);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://velalatinamontediprocida.it/eventi#webpage",
+        url: "https://velalatinamontediprocida.it/eventi",
+        name: "Palmarès, Regate Storiche & Cinema",
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://velalatinamontediprocida.it",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Eventi",
+              item: "https://velalatinamontediprocida.it/eventi",
+            },
+          ],
+        },
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: events.map((e, index) => ({
+            "@type": "SportsEvent",
+            position: index + 1,
+            name: e.title,
+            description: e.description,
+            location: {
+              "@type": "Place",
+              name: e.location,
+            },
+            organizer: {
+              "@id": "https://velalatinamontediprocida.it/#organization",
+            },
+          })),
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       {/* Hero Eventi */}
