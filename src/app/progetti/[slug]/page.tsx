@@ -140,8 +140,9 @@ export default async function ProjectDetailPage({
       />
       <Header />
 
-      {/* Hero Progetto */}
-      <article className="pt-28 sm:pt-36 md:pt-44 pb-20 px-4 sm:px-8 lg:px-24">
+      <main id="main-content">
+        {/* Hero Progetto */}
+        <article className="pt-28 sm:pt-36 md:pt-44 pb-20 px-4 sm:px-8 lg:px-24">
         <div className="max-w-5xl mx-auto w-full">
           {/* Breadcrumb Back */}
           <div className="mb-6 sm:mb-8">
@@ -355,6 +356,7 @@ export default async function ProjectDetailPage({
           )}
         </div>
       </article>
+      </main>
 
       <Footer />
     </div>

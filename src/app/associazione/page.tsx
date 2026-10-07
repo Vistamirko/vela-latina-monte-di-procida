@@ -22,7 +22,8 @@ export default function AssociazionePage() {
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
       <Header />
 
-      {/* Hero Sezione Associazione */}
+      <main id="main-content">
+        {/* Hero Sezione Associazione */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
@@ -192,19 +193,23 @@ export default function AssociazionePage() {
               <div className="flex items-center justify-between pt-4 border-t border-slate-200">
                 <div className="flex items-center gap-3">
                   <button
+                    type="button"
                     onClick={() =>
                       setSelectedBoatIndex(
                         (prev) => (prev - 1 + FLEET_DATA.length) % FLEET_DATA.length
                       )
                     }
+                    aria-label="Imbarcazione precedente"
                     className="p-2 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
+                    type="button"
                     onClick={() =>
                       setSelectedBoatIndex((prev) => (prev + 1) % FLEET_DATA.length)
                     }
+                    aria-label="Imbarcazione successiva"
                     className="p-2 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -253,12 +258,17 @@ export default function AssociazionePage() {
                 }}
                 className="space-y-4"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                    <label
+                      htmlFor="socio-nome"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
                       Nome e Cognome
                     </label>
                     <input
+                      id="socio-nome"
+                      name="nome"
                       type="text"
                       required
                       placeholder="Mario Rossi"
@@ -266,10 +276,15 @@ export default function AssociazionePage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                    <label
+                      htmlFor="socio-email"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
                       Email
                     </label>
                     <input
+                      id="socio-email"
+                      name="email"
                       type="email"
                       required
                       placeholder="mario@esempio.it"
@@ -278,10 +293,17 @@ export default function AssociazionePage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                  <label
+                    htmlFor="socio-tipologia"
+                    className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                  >
                     Tipologia di Socio
                   </label>
-                  <select className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none">
+                  <select
+                    id="socio-tipologia"
+                    name="tipologia"
+                    className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
+                  >
                     <option>Socio Praticante (Voga & Vela Latina)</option>
                     <option>Socio Sostenitore Culturale</option>
                     <option>Volontario Cantiere & Restauro</option>
@@ -298,6 +320,7 @@ export default function AssociazionePage() {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
       </div>
 
       {/* Login Card */}
-      <div className="max-w-md mx-auto w-full bg-white border border-slate-300 p-8 sm:p-10 shadow-sm relative my-auto">
+      <main className="max-w-md mx-auto w-full bg-white border border-slate-300 p-8 sm:p-10 shadow-sm relative my-auto">
         <div className="text-center space-y-3 mb-8">
           <div className="relative w-14 h-14 mx-auto mb-2">
             <Image
@@ -83,11 +83,16 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+            <label
+              htmlFor="admin-email"
+              className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1"
+            >
               Email Amministratore
             </label>
             <div className="relative">
               <input
+                id="admin-email"
+                name="email"
                 type="email"
                 required
                 value={email}
@@ -99,11 +104,16 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+            <label
+              htmlFor="admin-password"
+              className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1"
+            >
               Password
             </label>
             <div className="relative">
               <input
+                id="admin-password"
+                name="password"
                 type="password"
                 required
                 value={password}
@@ -136,7 +146,7 @@ export default function AdminLoginPage() {
             <span>Autenticazione protetta con Cookie HttpOnly & JWT</span>
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Footer */}
       <div className="max-w-md mx-auto w-full text-center text-[10px] uppercase tracking-widest font-mono text-slate-700 font-bold">

@@ -83,7 +83,8 @@ export default async function ProgettiPage() {
       />
       <Header />
 
-      {/* Hero Progetti */}
+      <main id="main-content">
+        {/* Hero Progetti */}
       <section className="pt-28 sm:pt-44 pb-16 sm:pb-20 px-4 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
@@ -194,6 +195,7 @@ export default async function ProgettiPage() {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

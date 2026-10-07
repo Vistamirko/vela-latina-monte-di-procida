@@ -33,7 +33,8 @@ export default function CorsiPage() {
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
       <Header />
 
-      {/* Hero Corsi */}
+      <main id="main-content">
+        {/* Hero Corsi */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
@@ -293,10 +294,15 @@ export default function CorsiPage() {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                    <label
+                      htmlFor="corso-nome"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
                       Nome e Cognome
                     </label>
                     <input
+                      id="corso-nome"
+                      name="nome"
                       type="text"
                       required
                       value={formData.nome}
@@ -308,10 +314,15 @@ export default function CorsiPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                    <label
+                      htmlFor="corso-telefono"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
                       Telefono
                     </label>
                     <input
+                      id="corso-telefono"
+                      name="telefono"
                       type="tel"
                       required
                       value={formData.telefono}
@@ -325,10 +336,15 @@ export default function CorsiPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                  <label
+                    htmlFor="corso-email"
+                    className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                  >
                     Email
                   </label>
                   <input
+                    id="corso-email"
+                    name="email"
                     type="email"
                     required
                     value={formData.email}
@@ -342,10 +358,15 @@ export default function CorsiPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                    <label
+                      htmlFor="corso-interesse"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
                       Corso d&apos;Interesse
                     </label>
                     <select
+                      id="corso-interesse"
+                      name="corso"
                       value={formData.corso}
                       onChange={(e) =>
                         setFormData({ ...formData, corso: e.target.value })
@@ -359,10 +380,15 @@ export default function CorsiPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                    <label
+                      htmlFor="corso-esperienza"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
                       Esperienza Marinaresca
                     </label>
                     <select
+                      id="corso-esperienza"
+                      name="esperienza"
                       value={formData.esperienza}
                       onChange={(e) =>
                         setFormData({ ...formData, esperienza: e.target.value })
@@ -377,10 +403,15 @@ export default function CorsiPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
+                  <label
+                    htmlFor="corso-note"
+                    className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                  >
                     Messaggio o Disponibilità
                   </label>
                   <textarea
+                    id="corso-note"
+                    name="note"
                     rows={3}
                     value={formData.note}
                     onChange={(e) =>
@@ -402,6 +433,7 @@ export default function CorsiPage() {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

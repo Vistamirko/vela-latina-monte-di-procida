@@ -182,6 +182,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white text-[#0a1c2a] font-sans antialiased selection:bg-[#0a1c2a] selection:text-white">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#0a1c2a] focus:text-white focus:font-mono focus:text-xs focus:shadow-lg focus:outline-none"
+        >
+          Salta al contenuto principale
+        </a>
         {children}
       </body>
     </html>

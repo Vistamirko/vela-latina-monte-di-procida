@@ -89,7 +89,8 @@ export default async function EventiPage() {
       />
       <Header />
 
-      {/* Hero Eventi */}
+      <main id="main-content">
+        {/* Hero Eventi */}
       <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
@@ -258,6 +259,7 @@ export default async function EventiPage() {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

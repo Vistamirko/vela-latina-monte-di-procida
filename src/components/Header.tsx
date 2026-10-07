@@ -143,6 +143,7 @@ export default function Header() {
             <button
               type="button"
               onClick={toggleSound}
+              aria-label={soundPlaying ? "Disattiva brezza marina" : "Attiva suono brezza marina"}
               title={soundPlaying ? "Disattiva brezza marina" : "Attiva suono brezza marina"}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300 hover:border-slate-800 bg-white/70 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-slate-700 hover:text-slate-900 transition-all cursor-pointer shadow-2xs font-medium"
             >
@@ -163,7 +164,8 @@ export default function Header() {
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-slate-800 hover:text-[#0a1c2a]"
-              aria-label="Apri menu"
+              aria-label={mobileMenuOpen ? "Chiudi menu" : "Apri menu"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>

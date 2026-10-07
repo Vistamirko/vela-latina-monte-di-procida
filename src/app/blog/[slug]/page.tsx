@@ -126,7 +126,8 @@ export default async function BlogPostPage({
       />
       <Header />
 
-      <article className="pt-36 sm:pt-44 pb-24 px-6 sm:px-12 lg:px-24">
+      <main id="main-content">
+        <article className="pt-36 sm:pt-44 pb-24 px-6 sm:px-12 lg:px-24">
         <div className="max-w-4xl mx-auto w-full">
           {/* Breadcrumb Back */}
           <div className="mb-8">
@@ -211,6 +212,7 @@ export default async function BlogPostPage({
           </div>
         </div>
       </article>
+      </main>
 
       <Footer />
     </div>
