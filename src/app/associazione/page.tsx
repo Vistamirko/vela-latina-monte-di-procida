@@ -17,7 +17,44 @@ import {
 export default function AssociazionePage() {
   const [selectedBoatIndex, setSelectedBoatIndex] = useState(0);
   const [membershipSubmitted, setMembershipSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [formData, setFormData] = useState({
+    nome: "",
+    email: "",
+    tipologia: "Socio Praticante (Voga & Vela Latina)",
+  });
   const activeBoat: Boat = FLEET_DATA[selectedBoatIndex];
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const res = await fetch("/api/iscrizioni", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "tesseramento",
+          name: formData.nome,
+          email: formData.email,
+          itemTitle: formData.tipologia,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Si è verificato un errore durante l'invio.");
+      }
+
+      setMembershipSubmitted(true);
+    } catch (err: any) {
+      setSubmitError(err.message || "Errore di connessione. Riprova più tardi.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
@@ -252,13 +289,12 @@ export default function AssociazionePage() {
                 </p>
               </div>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setMembershipSubmitted(true);
-                }}
-                className="space-y-4"
-              >
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {submitError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-800 text-xs font-mono">
+                    {submitError}
+                  </div>
+                )}
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label
@@ -272,6 +308,10 @@ export default function AssociazionePage() {
                       name="nome"
                       type="text"
                       required
+                      value={formData.nome}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nome: e.target.value })
+                      }
                       placeholder="Mario Rossi"
                       className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
                     />
@@ -288,6 +328,10 @@ export default function AssociazionePage() {
                       name="email"
                       type="email"
                       required
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       placeholder="mario@esempio.it"
                       className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
                     />
@@ -303,6 +347,10 @@ export default function AssociazionePage() {
                   <select
                     id="socio-tipologia"
                     name="tipologia"
+                    value={formData.tipologia}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tipologia: e.target.value })
+                    }
                     className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
                   >
                     <option>Socio Praticante (Voga & Vela Latina)</option>
@@ -312,9 +360,10 @@ export default function AssociazionePage() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-3 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all cursor-pointer"
+                  disabled={submitting}
+                  className="w-full py-3 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all cursor-pointer disabled:opacity-50"
                 >
-                  Richiedi Tesseramento
+                  {submitting ? "Invio in corso..." : "Richiedi Tesseramento"}
                 </button>
               </form>
             )}

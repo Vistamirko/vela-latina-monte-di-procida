@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
-import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem } from "./types";
+import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem, BookingRequest } from "./types";
 import { hashPassword } from "../auth";
 
 const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -616,6 +616,23 @@ export async function initDb(): Promise<void> {
         // Ignora se le colonne esistono già
       }
 
+      // Tabella Iscrizioni e Richieste di Partecipazione
+      await sql`
+        CREATE TABLE IF NOT EXISTS iscrizioni_richieste (
+          id VARCHAR(64) PRIMARY KEY,
+          type VARCHAR(32) NOT NULL DEFAULT 'corso',
+          name VARCHAR(255) NOT NULL,
+          email VARCHAR(255) NOT NULL,
+          phone VARCHAR(64),
+          item_title VARCHAR(255) NOT NULL,
+          experience VARCHAR(100),
+          message TEXT,
+          status VARCHAR(32) NOT NULL DEFAULT 'nuova',
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+      `;
+
       // Controlla se esiste admin iniziale
       const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
       if (parseInt(existingUsers[0].count) === 0) {
@@ -1189,6 +1206,100 @@ export const ProjectsRepo = {
     }
     const sql = neon(DB_URL);
     await sql`DELETE FROM progetti WHERE id = ${id};`;
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: ISCRIZIONI & PRENOTAZIONI
+============================================================== */
+export const BookingsRepo = {
+  async getAll(): Promise<BookingRequest[]> {
+    if (!DB_URL) {
+      const items = readLocalJson<BookingRequest[]>("richieste.json", []);
+      return items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+    const sql = neon(DB_URL);
+    const rows = await sql`
+      SELECT id, type, name, email, phone, item_title, experience, message, status, created_at, updated_at
+      FROM iscrizioni_richieste
+      ORDER BY created_at DESC;
+    `;
+    return rows.map((r: any) => ({
+      id: r.id,
+      type: r.type as "corso" | "tesseramento",
+      name: r.name,
+      email: r.email,
+      phone: r.phone || undefined,
+      itemTitle: r.item_title,
+      experience: r.experience || undefined,
+      message: r.message || undefined,
+      status: r.status as BookingRequest["status"],
+      createdAt: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+      updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : new Date().toISOString(),
+    }));
+  },
+
+  async getById(id: string): Promise<BookingRequest | null> {
+    const all = await this.getAll();
+    return all.find((b) => b.id === id) || null;
+  },
+
+  async create(data: Omit<BookingRequest, "id" | "createdAt" | "updatedAt">): Promise<BookingRequest> {
+    const id = `req-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const now = new Date().toISOString();
+    const item: BookingRequest = {
+      ...data,
+      id,
+      status: data.status || "nuova",
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    if (!DB_URL) {
+      const items = readLocalJson<BookingRequest[]>("richieste.json", []);
+      items.unshift(item);
+      writeLocalJson<BookingRequest[]>("richieste.json", items);
+      return item;
+    }
+
+    const sql = neon(DB_URL);
+    await sql`
+      INSERT INTO iscrizioni_richieste (id, type, name, email, phone, item_title, experience, message, status, created_at, updated_at)
+      VALUES (${id}, ${item.type}, ${item.name}, ${item.email}, ${item.phone || null}, ${item.itemTitle}, ${item.experience || null}, ${item.message || null}, ${item.status}, ${now}, ${now});
+    `;
+    return item;
+  },
+
+  async updateStatus(id: string, status: BookingRequest["status"]): Promise<BookingRequest | null> {
+    const now = new Date().toISOString();
+    if (!DB_URL) {
+      const items = readLocalJson<BookingRequest[]>("richieste.json", []);
+      const idx = items.findIndex((i) => i.id === id);
+      if (idx === -1) return null;
+      items[idx].status = status;
+      items[idx].updatedAt = now;
+      writeLocalJson<BookingRequest[]>("richieste.json", items);
+      return items[idx];
+    }
+    const sql = neon(DB_URL);
+    await sql`
+      UPDATE iscrizioni_richieste
+      SET status = ${status}, updated_at = ${now}
+      WHERE id = ${id};
+    `;
+    return this.getById(id);
+  },
+
+  async delete(id: string): Promise<boolean> {
+    if (!DB_URL) {
+      const items = readLocalJson<BookingRequest[]>("richieste.json", []);
+      const filtered = items.filter((i) => i.id !== id);
+      writeLocalJson<BookingRequest[]>("richieste.json", filtered);
+      return true;
+    }
+    const sql = neon(DB_URL);
+    await sql`DELETE FROM iscrizioni_richieste WHERE id = ${id};`;
     return true;
   },
 };

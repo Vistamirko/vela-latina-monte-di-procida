@@ -9,6 +9,8 @@ import { CourseSession } from "@/lib/db/types";
 export default function CorsiPage() {
   const [calendarSessions, setCalendarSessions] = useState<CourseSession[]>([]);
   const [courseSubmitted, setCourseSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
@@ -17,6 +19,46 @@ export default function CorsiPage() {
     esperienza: "principiante",
     note: "",
   });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitError("");
+
+    const courseLabels: Record<string, string> = {
+      voga: "Voga Tradizionale Flegrea",
+      vela: "Corso di Vela Latina",
+      rosa: "Progetto ROSA (Equipaggio Femminile)",
+      inclusione: "Inclusione Mare (Centro Serapide)",
+    };
+
+    try {
+      const res = await fetch("/api/iscrizioni", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "corso",
+          name: formData.nome,
+          email: formData.email,
+          phone: formData.telefono,
+          itemTitle: courseLabels[formData.corso] || formData.corso,
+          experience: formData.esperienza,
+          message: formData.note,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Si è verificato un errore durante l'invio della richiesta.");
+      }
+
+      setCourseSubmitted(true);
+    } catch (err: any) {
+      setSubmitError(err.message || "Errore di connessione. Riprova più tardi.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/corsi-calendar")
@@ -285,13 +327,12 @@ export default function CorsiPage() {
                 </p>
               </div>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setCourseSubmitted(true);
-                }}
-                className="space-y-4"
-              >
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {submitError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-800 text-xs font-mono">
+                    {submitError}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label
@@ -424,9 +465,10 @@ export default function CorsiPage() {
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all cursor-pointer shadow-xs"
+                  disabled={submitting}
+                  className="w-full py-3.5 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all cursor-pointer shadow-xs disabled:opacity-50"
                 >
-                  Invia Domanda di Partecipazione
+                  {submitting ? "Invio in corso..." : "Invia Domanda di Partecipazione"}
                 </button>
               </form>
             )}

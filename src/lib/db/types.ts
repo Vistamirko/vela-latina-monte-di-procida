@@ -76,3 +76,17 @@ export interface ProjectItem {
   updatedAt: string;
 }
 
+export interface BookingRequest {
+  id: string;
+  type: "corso" | "tesseramento";
+  name: string;
+  email: string;
+  phone?: string;
+  itemTitle: string;
+  experience?: string;
+  message?: string;
+  status: "nuova" | "contattato" | "iscritto" | "archiviata";
+  createdAt: string;
+  updatedAt: string;
+}
+

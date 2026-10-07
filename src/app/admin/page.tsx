@@ -21,8 +21,14 @@ import {
   Eye,
   EyeOff,
   Compass,
+  Inbox,
+  Phone,
+  Mail,
+  MessageSquare,
+  Check,
+  User,
 } from "lucide-react";
-import { EventItem, BlogPost, CourseSession, ProjectItem } from "@/lib/db/types";
+import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest } from "@/lib/db/types";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -34,14 +40,16 @@ export default function AdminDashboardPage() {
   } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Active Tab: 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
-  const [activeTab, setActiveTab] = useState<"eventi" | "blog" | "corsi" | "progetti" | "db">("eventi");
+  // Active Tab: 'richieste' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
+  const [activeTab, setActiveTab] = useState<"richieste" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
 
   // Data states
   const [events, setEvents] = useState<EventItem[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [courses, setCourses] = useState<CourseSession[]>([]);
   const [projects, setProjects] = useState<ProjectItem[]>([]);
+  const [bookings, setBookings] = useState<BookingRequest[]>([]);
+  const [bookingFilter, setBookingFilter] = useState<"tutte" | "nuova" | "contattato" | "iscritto">("tutte");
   const [loadingData, setLoadingData] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -66,11 +74,12 @@ export default function AdminDashboardPage() {
   const loadAllData = useCallback(async () => {
     setLoadingData(true);
     try {
-      const [resEvt, resBlog, resCourses, resProj] = await Promise.all([
+      const [resEvt, resBlog, resCourses, resProj, resBookings] = await Promise.all([
         fetch("/api/eventi?all=true"),
         fetch("/api/blog?all=true"),
         fetch("/api/corsi-calendar?all=true"),
         fetch("/api/progetti?all=true"),
+        fetch("/api/iscrizioni"),
       ]);
 
       if (resEvt.ok) {
@@ -89,12 +98,43 @@ export default function AdminDashboardPage() {
         const d = await resProj.json();
         setProjects(d.data || []);
       }
+      if (resBookings.ok) {
+        const d = await resBookings.json();
+        setBookings(d.data || []);
+      }
     } catch {
       showToast("error", "Errore nel caricamento dei dati");
     } finally {
       setLoadingData(false);
     }
   }, [showToast]);
+
+  const handleUpdateBookingStatus = async (id: string, status: BookingRequest["status"]) => {
+    try {
+      const res = await fetch("/api/iscrizioni", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      if (!res.ok) throw new Error("Errore aggiornamento");
+      setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status } : b)));
+      showToast("success", "Stato richiesta aggiornato");
+    } catch {
+      showToast("error", "Impossibile aggiornare lo stato");
+    }
+  };
+
+  const handleDeleteBooking = async (id: string) => {
+    if (!confirm("Sei sicuro di voler eliminare questa richiesta?")) return;
+    try {
+      const res = await fetch(`/api/iscrizioni?id=${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Errore eliminazione");
+      setBookings((prev) => prev.filter((b) => b.id !== id));
+      showToast("success", "Richiesta eliminata");
+    } catch {
+      showToast("error", "Impossibile eliminare la richiesta");
+    }
+  };
 
   // Check auth
   useEffect(() => {
@@ -371,8 +411,25 @@ export default function AdminDashboardPage() {
         {/* Tab Navigation */}
         <div className="max-w-7xl mx-auto px-6 flex items-center gap-1 border-t border-slate-200 overflow-x-auto">
           <button
+            onClick={() => setActiveTab("richieste")}
+            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+              activeTab === "richieste"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <Inbox className="w-3.5 h-3.5" />
+            <span>Iscrizioni & Richieste ({bookings.length})</span>
+            {bookings.filter((b) => b.status === "nuova").length > 0 && (
+              <span className="px-1.5 py-0.5 text-[9px] bg-red-600 text-white rounded-full font-bold animate-pulse">
+                {bookings.filter((b) => b.status === "nuova").length} nuove
+              </span>
+            )}
+          </button>
+
+          <button
             onClick={() => setActiveTab("eventi")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
               activeTab === "eventi"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
@@ -454,6 +511,266 @@ export default function AdminDashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* ==============================================================
+           TAB 0: ISCRIZIONI & RICHIESTE
+        ============================================================== */}
+        {activeTab === "richieste" && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light">
+                  Iscrizioni Corsi & Richieste Tesseramento
+                </h2>
+                <p className="text-xs text-slate-700 font-light mt-1">
+                  Gestione candidature arrivate dal sito: contatta gli aspiranti marinai e soci su WhatsApp o via email e aggiorna lo stato.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={loadAllData}
+                  className="px-3 py-2 border border-slate-300 hover:border-slate-800 text-xs font-mono text-slate-700 hover:text-[#0a1c2a] flex items-center gap-1.5 transition-colors cursor-pointer bg-white shadow-2xs"
+                  title="Aggiorna elenco richieste"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Aggiorna</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Filtri rapidi per stato */}
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-b border-slate-200 pb-4 text-xs font-mono">
+              <button
+                onClick={() => setBookingFilter("tutte")}
+                className={`px-3 py-1.5 border text-xs cursor-pointer transition-colors ${
+                  bookingFilter === "tutte"
+                    ? "bg-[#0a1c2a] text-white border-[#0a1c2a] font-bold"
+                    : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
+                }`}
+              >
+                Tutte ({bookings.length})
+              </button>
+              <button
+                onClick={() => setBookingFilter("nuova")}
+                className={`px-3 py-1.5 border text-xs cursor-pointer transition-colors flex items-center gap-1.5 ${
+                  bookingFilter === "nuova"
+                    ? "bg-amber-600 text-white border-amber-600 font-bold"
+                    : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
+                }`}
+              >
+                <span>Da Contattare ({bookings.filter((b) => b.status === "nuova").length})</span>
+                {bookings.filter((b) => b.status === "nuova").length > 0 && (
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                )}
+              </button>
+              <button
+                onClick={() => setBookingFilter("contattato")}
+                className={`px-3 py-1.5 border text-xs cursor-pointer transition-colors ${
+                  bookingFilter === "contattato"
+                    ? "bg-blue-600 text-white border-blue-600 font-bold"
+                    : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
+                }`}
+              >
+                Contattati ({bookings.filter((b) => b.status === "contattato").length})
+              </button>
+              <button
+                onClick={() => setBookingFilter("iscritto")}
+                className={`px-3 py-1.5 border text-xs cursor-pointer transition-colors ${
+                  bookingFilter === "iscritto"
+                    ? "bg-emerald-700 text-white border-emerald-700 font-bold"
+                    : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
+                }`}
+              >
+                Iscritti / Confermati ({bookings.filter((b) => b.status === "iscritto").length})
+              </button>
+            </div>
+
+            {/* Elenco Richieste */}
+            {(() => {
+              const filtered = bookings.filter((b) =>
+                bookingFilter === "tutte" ? true : b.status === bookingFilter
+              );
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="p-12 text-center bg-white border border-slate-200 space-y-3">
+                    <Inbox className="w-10 h-10 text-slate-300 mx-auto" />
+                    <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a]">
+                      Nessuna richiesta trovata
+                    </h3>
+                    <p className="text-xs text-slate-700 max-w-sm mx-auto font-light">
+                      {bookingFilter === "tutte"
+                        ? "Non ci sono ancora richieste pervenute dal modulo corsi o tesseramento. Quando un utente invia il form, comparirà qui con tutti i dettagli e la notifica."
+                        : `Nessuna richiesta nello stato "${bookingFilter}".`}
+                    </p>
+                  </div>
+                );
+              }
+
+              return (
+                <div className="space-y-4">
+                  {filtered.map((item) => {
+                    const cleanPhone = item.phone ? item.phone.replace(/[^0-9+]/g, "") : "";
+                    const waLink = cleanPhone
+                      ? `https://wa.me/${cleanPhone.replace("+", "")}?text=${encodeURIComponent(
+                          `Buongiorno ${item.name}, ti contatto dall'Associazione Vela Latina Monte di Procida in merito alla tua richiesta per "${item.itemTitle}".`
+                        )}`
+                      : "";
+
+                    return (
+                      <div
+                        key={item.id}
+                        className={`p-6 bg-white border transition-all ${
+                          item.status === "nuova"
+                            ? "border-amber-400 shadow-xs bg-amber-50/10"
+                            : "border-slate-200"
+                        }`}
+                      >
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                          <div className="flex flex-wrap items-center gap-2.5">
+                            <span
+                              className={`px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-bold ${
+                                item.type === "corso"
+                                  ? "bg-[#0a1c2a] text-white"
+                                  : "bg-[#b8860b] text-white"
+                              }`}
+                            >
+                              {item.type === "corso" ? "⛵ Corso di Mare" : "🏛️ Tesseramento Socio"}
+                            </span>
+
+                            <span
+                              className={`px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-semibold rounded-xs ${
+                                item.status === "nuova"
+                                  ? "bg-amber-100 text-amber-900 border border-amber-300 font-bold"
+                                  : item.status === "contattato"
+                                  ? "bg-blue-100 text-blue-900 border border-blue-200"
+                                  : item.status === "iscritto"
+                                  ? "bg-emerald-100 text-emerald-900 border border-emerald-200"
+                                  : "bg-slate-100 text-slate-700"
+                              }`}
+                            >
+                              ● {item.status.toUpperCase()}
+                            </span>
+
+                            <span className="text-[10px] font-mono text-slate-600">
+                              {new Date(item.createdAt).toLocaleString("it-IT", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
+
+                          {/* Selettore cambio stato rapido */}
+                          <div className="flex items-center gap-2 text-xs font-mono">
+                            <span className="text-slate-600 text-[10px] uppercase">Stato:</span>
+                            <select
+                              value={item.status}
+                              onChange={(e) =>
+                                handleUpdateBookingStatus(item.id, e.target.value as any)
+                              }
+                              className="px-2.5 py-1 bg-[#fbfaf6] border border-slate-300 text-xs text-[#0a1c2a] font-semibold focus:border-[#0a1c2a] outline-none cursor-pointer"
+                            >
+                              <option value="nuova">Nuova (Da contattare)</option>
+                              <option value="contattato">Contattato</option>
+                              <option value="iscritto">Iscritto / Confermato</option>
+                              <option value="archiviata">Archiviata</option>
+                            </select>
+
+                            <button
+                              onClick={() => handleDeleteBooking(item.id)}
+                              className="p-1 text-slate-400 hover:text-red-700 transition-colors cursor-pointer ml-2"
+                              title="Elimina richiesta"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Corpo della richiesta */}
+                        <div className="pt-4 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                          <div className="md:col-span-4 space-y-1">
+                            <h4 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-medium leading-snug">
+                              {item.name}
+                            </h4>
+                            <div className="text-xs font-mono font-bold text-[#1b5b80]">
+                              {item.itemTitle}
+                            </div>
+                            {item.experience && (
+                              <div className="text-[11px] font-mono text-slate-600">
+                                Livello: <span className="capitalize">{item.experience}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="md:col-span-4 space-y-2 text-xs font-mono">
+                            {item.phone && (
+                              <div className="flex items-center gap-2">
+                                <Phone className="w-3.5 h-3.5 text-slate-500" />
+                                <a
+                                  href={`tel:${item.phone}`}
+                                  className="text-[#0a1c2a] hover:underline font-semibold"
+                                >
+                                  {item.phone}
+                                </a>
+                              </div>
+                            )}
+                            <div className="flex items-center gap-2">
+                              <Mail className="w-3.5 h-3.5 text-slate-500" />
+                              <a
+                                href={`mailto:${item.email}`}
+                                className="text-[#0a1c2a] hover:underline"
+                              >
+                                {item.email}
+                              </a>
+                            </div>
+                          </div>
+
+                          {/* Azioni Rapide Contatto */}
+                          <div className="md:col-span-4 flex flex-wrap lg:justify-end gap-2">
+                            {waLink && (
+                              <a
+                                href={waLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] uppercase font-mono tracking-wider font-bold transition-colors cursor-pointer shadow-2xs"
+                              >
+                                <MessageSquare className="w-3.5 h-3.5" />
+                                <span>WhatsApp</span>
+                              </a>
+                            )}
+                            <a
+                              href={`mailto:${item.email}?subject=${encodeURIComponent(
+                                `Vela Latina Monte di Procida — Riscontro per ${item.itemTitle}`
+                              )}`}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-[10px] uppercase font-mono tracking-wider font-bold transition-colors cursor-pointer shadow-2xs"
+                            >
+                              <Mail className="w-3.5 h-3.5" />
+                              <span>Email</span>
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* Messaggio o note */}
+                        {item.message && (
+                          <div className="mt-4 p-3 bg-[#fbfaf6] border border-slate-200 text-xs text-slate-700 font-light italic">
+                            <span className="font-mono text-[10px] font-bold text-slate-600 uppercase not-italic block mb-0.5">
+                              Note / Disponibilità indicate:
+                            </span>
+                            “{item.message}”
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
         {/* ==============================================================
            TAB 1: EVENTI
         ============================================================== */}
