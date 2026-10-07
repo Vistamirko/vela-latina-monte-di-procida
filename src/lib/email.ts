@@ -14,10 +14,10 @@ interface BookingNotificationData {
 export async function sendBookingNotification(data: BookingNotificationData) {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-  const port = parseInt(process.env.SMTP_PORT || "587", 10);
+  const pass = process.env.SMTP_PASS ? process.env.SMTP_PASS.replace(/\s+/g, "") : undefined;
+  const port = parseInt(process.env.SMTP_PORT || "465", 10);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
-  const from = process.env.SMTP_FROM || `"Vela Latina Monte di Procida" <info@velalatinamontediprocida.it>`;
+  const from = process.env.SMTP_FROM || `"Vela Latina Monte di Procida" <${user || "vistamirko@gmail.com"}>`;
   const notificationRecipient = process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com";
 
   if (!host || !user || !pass) {
