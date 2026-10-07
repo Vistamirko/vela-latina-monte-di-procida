@@ -1,0 +1,58 @@
+[
+  {
+    "id": "evt-st-tropez-2024",
+    "title": "Les Voiles Latines de Saint-Tropez 2024",
+    "date": "Maggio 2024",
+    "location": "Saint-Tropez, Costa Azzurra (Francia)",
+    "category": "regata",
+    "badge": "1° Posto Assoluto",
+    "description": "Vittoria storica di Janara tra oltre 60 scafi tradizionali provenienti da tutto il Mediterraneo. La marineria montese sul gradino più alto del podio.",
+    "imageUrl": "/images/hero-sailing.webp",
+    "result": "1° Classificato Assoluto",
+    "published": true,
+    "createdAt": "2026-10-07T10:32:32.456Z",
+    "updatedAt": "2026-10-07T10:32:32.456Z"
+  },
+  {
+    "id": "evt-procida-cup-2025",
+    "title": "Procida Cup 2025",
+    "date": "Giugno 2025",
+    "location": "Canale di Procida, Campi Flegrei",
+    "category": "regata",
+    "badge": "1° Posto Janara",
+    "description": "Trionfo di Janara nelle acque di casa: perfetta conduzione tattica nelle correnti e nei salti di brezza tra Monte di Procida e Vivara.",
+    "imageUrl": "/images/janara-regatta.jpeg",
+    "result": "1° Posto",
+    "published": true,
+    "createdAt": "2026-10-07T10:32:32.456Z",
+    "updatedAt": "2026-10-07T10:32:32.456Z"
+  },
+  {
+    "id": "evt-barcolana-2026",
+    "title": "Barcolana 58 · Quandel sulla Linea di Partenza",
+    "date": "Ottobre 2026",
+    "location": "Golfo di Trieste",
+    "category": "manifestazione",
+    "badge": "Roadmap 2026",
+    "description": "La maestosa lancia in legno Quandel del 1968, ex Amerigo Vespucci, rappresenterà la vela tradizionale campana alla regata più affollata al mondo.",
+    "imageUrl": "/images/fleet-sailing.webp",
+    "result": "Iscrizione Ufficiale",
+    "published": true,
+    "createdAt": "2026-10-07T10:32:32.456Z",
+    "updatedAt": "2026-10-07T10:32:32.456Z"
+  },
+  {
+    "id": "evt-americas-cup-2027",
+    "title": "Cerimonia America's Cup Napoli 2027",
+    "date": "Primavera 2027",
+    "location": "Golfo di Napoli · Lungomare Caracciolo",
+    "category": "cultura",
+    "badge": "Orizzonti 2027",
+    "description": "Janara e la flotta storica montese sfileranno accanto ai foil moderni dell'America's Cup, celebrando la continuità tra la maestria d'ascia millenaria e la tecnologia d'avanguardia.",
+    "imageUrl": "/images/janara-crew.jpeg",
+    "result": "Presenza Ufficiale",
+    "published": true,
+    "createdAt": "2026-10-07T10:32:32.456Z",
+    "updatedAt": "2026-10-07T10:32:32.456Z"
+  }
+]

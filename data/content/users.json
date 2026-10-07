@@ -1,0 +1,10 @@
+[
+  {
+    "id": "admin-root",
+    "email": "admin@velalatinamontediprocida.it",
+    "passwordHash": "bb6c42c06519bf7ef109ec7ebee20b88:092742d1731b4001e19ecff8d3af0fdd67693c766c6fe821c2984155a4cb81e088ce140da75cb408b4d24389b4571e7f3ff7dd1a6b8d91d814e134ca890a0305",
+    "name": "Amministratore Vela Latina",
+    "role": "superadmin",
+    "createdAt": "2026-10-07T10:32:32.491Z"
+  }
+]

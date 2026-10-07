@@ -1,0 +1,30 @@
+[
+  {
+    "id": "post-anima-legno",
+    "slug": "anima-di-legno-il-segreto-del-gozzo-flegreo",
+    "title": "L'anima di legno: i segreti costruttivi del gozzo flegreo",
+    "excerpt": "Come i maestri d'ascia montesi intagliavano le ordinate nel rovere e il fasciame nel pino, creando scafi capaci di domare il mare aperto.",
+    "content": "Nel porticciolo di Acquamorta, il profumo di resina e stoppa di canapa impregnata di pece calda è il profumo della nostra identità.\n\nIl gozzo napoletano-flegreo non nasceva da un disegno al computer, ma dal \"garbo\", la dima curva in legno che il maestro d'ascia custodiva gelosamente e trasmetteva di padre in figlio. Ogni ordinata di rovere veniva scelta nel bosco seguendo la naturale curvatura del ramo, per garantire una fibra ininterrotta e una robustezza indistruttibile.\n\nOggi, l'Associazione Vela Latina Monte di Procida custodisce questi saperi orali e li tramanda quotidianamente: ogni restauro a bordo di Janara, San Michele Arcangelo o Quandel è una lezione viva di calafateria e carpenteria navale.",
+    "coverImage": "/images/janara-crew.jpeg",
+    "author": "Antonio Pugliese",
+    "category": "Cultura & Maestranze",
+    "published": true,
+    "publishedAt": "2026-03-15T10:00:00Z",
+    "createdAt": "2026-10-07T10:32:32.456Z",
+    "updatedAt": "2026-10-07T10:32:32.456Z"
+  },
+  {
+    "id": "post-vento-di-maestro",
+    "slug": "leggere-il-vento-di-maestro-nel-canale-di-procida",
+    "title": "Leggere il vento di Maestro nel canale di Procida",
+    "excerpt": "Tra la scogliera di Monte di Procida e la punta di Vivara si genera un corridoio di brezze unico nel Mediterraneo. Ecco come governarlo all'antenna.",
+    "content": "La vela latina triangolare ha una particolarità unica: non ha boma inferiore orizzontale, ma un'antenna inclinata issata a mezza altezza sull'albero a calcese.\n\nQuesto armo arcaico, perfezionato nei secoli dai pescatori e dai mercanti del Mediterraneo, consente di stringere il vento in modo sorprendente se si sa interpretare il gradiente termico tra il canale e la terraferma.\n\nNel canale di Procida, il vento termico pomeridiano da Maestro si incanala tra le falesie vulcaniche: chi impara a virare coordinando carnao, osti e scotta a Monte di Procida, può governare qualsiasi mare del mondo.",
+    "coverImage": "/images/janara-regatta.jpeg",
+    "author": "Direzione Tecnica Vela Latina",
+    "category": "Navigazione Tradizionale",
+    "published": true,
+    "publishedAt": "2026-04-02T09:30:00Z",
+    "createdAt": "2026-10-07T10:32:32.456Z",
+    "updatedAt": "2026-10-07T10:32:32.457Z"
+  }
+]

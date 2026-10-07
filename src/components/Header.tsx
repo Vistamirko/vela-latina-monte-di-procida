@@ -11,6 +11,7 @@ const NAV_PAGES = [
   { href: "/associazione", label: "Associazione" },
   { href: "/eventi", label: "Eventi" },
   { href: "/corsi", label: "Corsi" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export default function Header() {

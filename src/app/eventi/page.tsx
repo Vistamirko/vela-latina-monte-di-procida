@@ -1,12 +1,16 @@
-"use client";
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { TIMELINE_DATA, TimelineItem } from "@/data/associationData";
 import { Calendar, Award, Film, Tv, MapPin } from "lucide-react";
 import Image from "next/image";
+import { initDb, EventsRepo } from "@/lib/db";
 
-export default function EventiPage() {
+export const revalidate = 60;
+
+export default async function EventiPage() {
+  await initDb();
+  const events = await EventsRepo.getAll(true);
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
       <Header />
@@ -33,61 +37,49 @@ export default function EventiPage() {
         </div>
       </section>
 
-      {/* Riconoscimenti & Palmarès di Spicco */}
+      {/* Riconoscimenti & Palmarès Dinamico da API/Database */}
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto w-full">
           <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#0a1c2a] font-bold block mb-3">
-            I Risultati Sportivi
+            I Risultati Sportivi & Manifestazioni
           </span>
           <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light mb-12">
             Il Palmarès della Vela Latina Montese.
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 bg-[#fbfaf6] border border-slate-200">
-              <Award className="w-8 h-8 text-[#b8860b] mb-4" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
-                Saint-Tropez · 2024
-              </span>
-              <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
-                Vittoria Assoluta
-              </h3>
-              <p className="text-xs text-slate-700 font-light leading-relaxed">
-                Janara conquista il primo gradino del podio assoluto a Les Voiles
-                Latines di Saint-Tropez, battendo i migliori equipaggi
-                provenienti da tutto il Mediterraneo.
-              </p>
-            </div>
+            {events.map((evt) => (
+              <div key={evt.id} className="p-8 bg-[#fbfaf6] border border-slate-200 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <Award className="w-8 h-8 text-[#b8860b]" />
+                    {evt.badge && (
+                      <span className="text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 bg-white border border-slate-300 text-[#0a1c2a] font-bold">
+                        {evt.badge}
+                      </span>
+                    )}
+                  </div>
 
-            <div className="p-8 bg-[#fbfaf6] border border-slate-200">
-              <Award className="w-8 h-8 text-[#0a1c2a] mb-4" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
-                Procida · 2025
-              </span>
-              <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
-                1° Posto Procida Cup
-              </h3>
-              <p className="text-xs text-slate-700 font-light leading-relaxed">
-                Trionfo nelle acque del canale di Procida, ribadendo la padronanza
-                dell'equipaggio flegreo nelle correnti e nei salti di vento di
-                casa.
-              </p>
-            </div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
+                    {evt.location} · {evt.date}
+                  </span>
 
-            <div className="p-8 bg-[#fbfaf6] border border-slate-200">
-              <Award className="w-8 h-8 text-[#1b5b80] mb-4" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold block">
-                Marina di Pisciotta · 2026
-              </span>
-              <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
-                Premio Fair Play & Podio
-              </h3>
-              <p className="text-xs text-slate-700 font-light leading-relaxed">
-                Trofeo Tre Torri nel Cilento: 3° di classe, 8° assoluto e il
-                prestigioso Premio Fair Play assegnato per l'etica marinara e lo
-                spirito di collaborazione.
-              </p>
-            </div>
+                  <h3 className="font-['Cormorant_Garamond'] text-3xl text-[#0a1c2a] font-light mt-1 mb-3">
+                    {evt.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-700 font-light leading-relaxed mb-4">
+                    {evt.description}
+                  </p>
+                </div>
+
+                {evt.result && (
+                  <div className="pt-4 border-t border-slate-300 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold">
+                    {evt.result}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>

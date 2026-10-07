@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { GraduationCap, Wind, Compass, Users, CheckCircle2, Send, ArrowRight } from "lucide-react";
+import { GraduationCap, Wind, Compass, Users, CheckCircle2, Send, ArrowRight, Calendar, Clock } from "lucide-react";
+import { CourseSession } from "@/lib/db/types";
 
 export default function CorsiPage() {
+  const [calendarSessions, setCalendarSessions] = useState<CourseSession[]>([]);
   const [courseSubmitted, setCourseSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     nome: "",
@@ -16,6 +18,17 @@ export default function CorsiPage() {
     esperienza: "principiante",
     note: "",
   });
+
+  useEffect(() => {
+    fetch("/api/corsi-calendar")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          setCalendarSessions(data.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
@@ -152,8 +165,97 @@ export default function CorsiPage() {
         </div>
       </section>
 
+      {/* Calendario Date & Posti Disponibili (Aggiornato da API) */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#0a1c2a] font-bold block mb-3">
+                Disponibilità in Tempo Reale
+              </span>
+              <h2 className="font-['Cormorant_Garamond'] text-4xl sm:text-6xl text-[#0a1c2a] font-light">
+                Calendario Sessioni & Posti 2026–2027.
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-700 font-light max-w-md">
+              Le uscite in mare e le lezioni pratiche si svolgono con gruppi a numero chiuso per garantire la massima sicurezza e padronanza dell'armo.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {calendarSessions.map((session) => (
+              <div
+                key={session.id}
+                className="p-6 bg-[#fbfaf6] border border-slate-200 flex flex-col justify-between hover:border-[#0a1c2a] transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span
+                      className={`px-2 py-0.5 text-[9px] uppercase tracking-wider font-mono font-bold border ${
+                        session.status === "aperte"
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                          : session.status === "in-esaurimento"
+                          ? "bg-amber-50 text-amber-800 border-amber-300"
+                          : "bg-red-50 text-red-800 border-red-300"
+                      }`}
+                    >
+                      {session.status}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-700 font-bold">
+                      {session.availableSeats} posti liberi
+                    </span>
+                  </div>
+
+                  <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light mb-2">
+                    {session.courseTitle}
+                  </h3>
+
+                  <div className="space-y-1.5 text-xs text-slate-700 font-mono mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-[#1b5b80]" />
+                      <span className="font-bold text-[#0a1c2a]">Dal {session.startDate}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#1b5b80]" />
+                      <span>{session.schedule}</span>
+                    </div>
+                  </div>
+
+                  {session.notes && (
+                    <p className="text-xs text-slate-600 font-light mb-4">
+                      {session.notes}
+                    </p>
+                  )}
+                </div>
+
+                <div className="pt-4 border-t border-slate-300 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-700">
+                    {session.instructor}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        corso: session.courseKey,
+                        note: `Richiesta per sessione: ${session.courseTitle} (${session.startDate})`,
+                      }));
+                      const formEl = document.getElementById("form-iscrizione");
+                      if (formEl) formEl.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold hover:text-[#b8860b] transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    <span>Seleziona</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Form di Iscrizione / Richiesta Info */}
-      <section className="py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200">
+      <section id="form-iscrizione" className="py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200">
         <div className="max-w-3xl mx-auto w-full">
           <div className="text-center space-y-4 mb-10">
             <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block">

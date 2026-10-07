@@ -48,6 +48,11 @@ export default function Footer() {
               Scuola di Voga & Vela
             </Link>
           </div>
+          <div>
+            <Link href="/blog" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
+              Giornale di Bordo & Blog
+            </Link>
+          </div>
         </div>
 
         <div className="md:col-span-4 space-y-3 font-mono text-xs text-slate-700">
@@ -75,7 +80,13 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto w-full pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-[#0a1c2a] font-mono font-bold">
         <div>© 2008–{new Date().getFullYear()} APS Vela Latina Monte di Procida</div>
-        <div>40° 47′ 42″ N · 14° 03′ 05″ E · Campi Flegrei</div>
+        <div className="flex items-center gap-4">
+          <span>40° 47′ 42″ N · 14° 03′ 05″ E</span>
+          <span>·</span>
+          <Link href="/admin" className="text-slate-600 hover:text-[#0a1c2a] font-mono underline decoration-slate-300">
+            Area Riservata API
+          </Link>
+        </div>
       </div>
     </footer>
   );
