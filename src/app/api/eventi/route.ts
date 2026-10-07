@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const events = await EventsRepo.getAll(publishedOnly);
 
     return NextResponse.json({ success: true, count: events.length, data: events });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("GET /api/eventi error:", error);
     return NextResponse.json({ error: "Errore recupero eventi" }, { status: 500 });
   }
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: saved }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("POST /api/eventi error:", error);
     return NextResponse.json({ error: "Errore salvataggio evento" }, { status: 500 });
   }
@@ -91,7 +91,7 @@ export async function PUT(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: saved });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/eventi error:", error);
     return NextResponse.json({ error: "Errore aggiornamento evento" }, { status: 500 });
   }
@@ -114,7 +114,7 @@ export async function DELETE(req: NextRequest) {
 
     await EventsRepo.delete(id);
     return NextResponse.json({ success: true, message: "Evento eliminato" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/eventi error:", error);
     return NextResponse.json({ error: "Errore eliminazione evento" }, { status: 500 });
   }

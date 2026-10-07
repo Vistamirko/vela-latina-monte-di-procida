@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     });
 
     return res;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Login error:", error);
     return NextResponse.json(
       { error: "Errore durante il login" },

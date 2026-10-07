@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Volume2, VolumeX, Menu, X, Wind } from "lucide-react";
+import { VolumeX, Menu, X, Wind } from "lucide-react";
 
 const NAV_PAGES = [
   { href: "/progetti", label: "Progetti" },

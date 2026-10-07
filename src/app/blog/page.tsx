@@ -20,7 +20,7 @@ export default async function BlogPage() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-semibold font-mono mb-4">
             <BookOpen className="w-3.5 h-3.5 text-[#0a1c2a]" />
-            <span>Racconti di Mare · Maestri d'Ascia · Diari di Bordo</span>
+            <span>Racconti di Mare · Maestri d&apos;Ascia · Diari di Bordo</span>
           </div>
 
           <h1 className="font-['Cormorant_Garamond'] text-6xl sm:text-8xl md:text-9xl font-light text-[#0a1c2a] leading-[0.9] max-w-5xl">
@@ -98,7 +98,7 @@ export default async function BlogPage() {
                     href={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold group-hover:text-[#b8860b] transition-colors"
                   >
-                    <span>Leggi l'articolo</span>
+                    <span>Leggi l&apos;articolo</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,22 +12,24 @@ import {
   Trash2,
   Edit2,
   CheckCircle2,
-  XCircle,
   LogOut,
   ExternalLink,
   Database,
   RefreshCw,
-  Search,
   AlertCircle,
   Eye,
   EyeOff,
-  Compass,
 } from "lucide-react";
 import { EventItem, BlogPost, CourseSession } from "@/lib/db/types";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<{
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
   // Active Tab: 'eventi' | 'blog' | 'corsi' | 'db'
@@ -50,36 +52,12 @@ export default function AdminDashboardPage() {
   const [courseModalOpen, setCourseModalOpen] = useState(false);
   const [currentCourse, setCurrentCourse] = useState<Partial<CourseSession> | null>(null);
 
-  // Search
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Check auth
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => {
-        if (!res.ok) throw new Error("Non autenticato");
-        return res.json();
-      })
-      .then((data) => {
-        if (data.authenticated) {
-          setCurrentUser(data.user);
-          setAuthLoading(false);
-          loadAllData();
-        } else {
-          router.push("/admin/login");
-        }
-      })
-      .catch(() => {
-        router.push("/admin/login");
-      });
-  }, [router]);
-
-  const showToast = (type: "success" | "error", message: string) => {
+  const showToast = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 4000);
-  };
+  }, []);
 
-  const loadAllData = async () => {
+  const loadAllData = useCallback(async () => {
     setLoadingData(true);
     try {
       const [resEvt, resBlog, resCourses] = await Promise.all([
@@ -105,7 +83,28 @@ export default function AdminDashboardPage() {
     } finally {
       setLoadingData(false);
     }
-  };
+  }, [showToast]);
+
+  // Check auth
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => {
+        if (!res.ok) throw new Error("Non autenticato");
+        return res.json();
+      })
+      .then((data) => {
+        if (data.authenticated) {
+          setCurrentUser(data.user);
+          setAuthLoading(false);
+          loadAllData();
+        } else {
+          router.push("/admin/login");
+        }
+      })
+      .catch(() => {
+        router.push("/admin/login");
+      });
+  }, [router, loadAllData]);
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -131,8 +130,8 @@ export default function AdminDashboardPage() {
       showToast("success", isNew ? "Evento creato con successo" : "Evento aggiornato");
       setEventModalOpen(false);
       loadAllData();
-    } catch (err: any) {
-      showToast("error", err.message);
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -143,8 +142,8 @@ export default function AdminDashboardPage() {
       if (!res.ok) throw new Error("Errore eliminazione");
       showToast("success", "Evento eliminato");
       loadAllData();
-    } catch (err: any) {
-      showToast("error", err.message);
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -182,8 +181,8 @@ export default function AdminDashboardPage() {
       showToast("success", isNew ? "Articolo pubblicato" : "Articolo aggiornato");
       setBlogModalOpen(false);
       loadAllData();
-    } catch (err: any) {
-      showToast("error", err.message);
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -194,8 +193,8 @@ export default function AdminDashboardPage() {
       if (!res.ok) throw new Error("Errore eliminazione");
       showToast("success", "Articolo eliminato");
       loadAllData();
-    } catch (err: any) {
-      showToast("error", err.message);
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -233,8 +232,8 @@ export default function AdminDashboardPage() {
       showToast("success", isNew ? "Sessione corso creata" : "Sessione corso aggiornata");
       setCourseModalOpen(false);
       loadAllData();
-    } catch (err: any) {
-      showToast("error", err.message);
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -245,8 +244,8 @@ export default function AdminDashboardPage() {
       if (!res.ok) throw new Error("Errore eliminazione");
       showToast("success", "Sessione eliminata");
       loadAllData();
-    } catch (err: any) {
-      showToast("error", err.message);
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -567,7 +566,7 @@ export default function AdminDashboardPage() {
                   Blog, Racconti & Rassegna Stampa
                 </h2>
                 <p className="text-xs text-slate-700 font-light mt-1">
-                  Articoli sulla tradizione dei maestri d'ascia, diari di bordo e aggiornamenti.
+                  Articoli sulla tradizione dei maestri d&apos;ascia, diari di bordo e aggiornamenti.
                 </p>
               </div>
 
@@ -685,7 +684,7 @@ export default function AdminDashboardPage() {
                     {blogPosts.length === 0 && (
                       <tr>
                         <td colSpan={5} className="p-8 text-center text-slate-600 font-light">
-                          Nessun articolo blog presente. Clicca su "Nuovo Articolo".
+                          Nessun articolo blog presente. Clicca su &quot;Nuovo Articolo&quot;.
                         </td>
                       </tr>
                     )}
@@ -856,7 +855,7 @@ export default function AdminDashboardPage() {
                   </h3>
                   <p className="text-xs text-slate-700 font-light mt-1 leading-relaxed">
                     Il backend è già predisposto per collegarsi direttamente a <strong>Neon / Vercel Postgres</strong>.
-                    Quando la variabile d'ambiente <code className="bg-slate-100 px-1.5 py-0.5 border text-slate-800">POSTGRES_URL</code> non è ancora presente, il sistema usa automaticamente la persistenza JSON sicura in <code className="bg-slate-100 px-1.5 py-0.5 border text-slate-800">data/content/</code> senza causare errori.
+                    Quando la variabile d&apos;ambiente <code className="bg-slate-100 px-1.5 py-0.5 border text-slate-800">POSTGRES_URL</code> non è ancora presente, il sistema usa automaticamente la persistenza JSON sicura in <code className="bg-slate-100 px-1.5 py-0.5 border text-slate-800">data/content/</code> senza causare errori.
                   </p>
                 </div>
               </div>
@@ -868,7 +867,7 @@ export default function AdminDashboardPage() {
                   <li>Apri la scheda <strong>Storage</strong> e seleziona <strong>Postgres (Neon)</strong></li>
                   <li>Clicca su <strong>Create Database</strong> e collegalo al progetto</li>
                   <li>Vercel inietterà automaticamente la variabile <code className="text-[#0a1c2a] font-bold">POSTGRES_URL</code></li>
-                  <li>Al primo avvio, le tabelle <code className="text-slate-900">eventi</code>, <code className="text-slate-900">blog_posts</code>, <code className="text-slate-900">corsi_calendar</code> e <code className="text-slate-900">admin_users</code> verranno create e popolate all'istante!</li>
+                  <li>Al primo avvio, le tabelle <code className="text-slate-900">eventi</code>, <code className="text-slate-900">blog_posts</code>, <code className="text-slate-900">corsi_calendar</code> e <code className="text-slate-900">admin_users</code> verranno create e popolate all&apos;istante!</li>
                 </ol>
               </div>
 
@@ -906,7 +905,7 @@ export default function AdminDashboardPage() {
             <form onSubmit={handleSaveEvent} className="space-y-4">
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Titolo dell'Evento
+                  Titolo dell&apos;Evento
                 </label>
                 <input
                   type="text"
@@ -955,7 +954,7 @@ export default function AdminDashboardPage() {
                   </label>
                   <select
                     value={currentEvent.category || "regata"}
-                    onChange={(e) => setCurrentEvent({ ...currentEvent, category: e.target.value as any })}
+                    onChange={(e) => setCurrentEvent({ ...currentEvent, category: e.target.value as EventItem["category"] })}
                     className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
                   >
                     <option value="regata">Regata</option>
@@ -1007,7 +1006,7 @@ export default function AdminDashboardPage() {
 
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Descrizione dell'Evento
+                  Descrizione dell&apos;Evento
                 </label>
                 <textarea
                   required
@@ -1204,7 +1203,7 @@ export default function AdminDashboardPage() {
 
               <div>
                 <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Contenuto Completo dell'Articolo
+                  Contenuto Completo dell&apos;Articolo
                 </label>
                 <textarea
                   required
@@ -1275,7 +1274,7 @@ export default function AdminDashboardPage() {
                   </label>
                   <select
                     value={currentCourse.courseKey || "voga"}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, courseKey: e.target.value as any })}
+                    onChange={(e) => setCurrentCourse({ ...currentCourse, courseKey: e.target.value as CourseSession["courseKey"] })}
                     className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
                   >
                     <option value="voga">01 · Voga in Piedi Tradizionale</option>
@@ -1291,7 +1290,7 @@ export default function AdminDashboardPage() {
                   </label>
                   <select
                     value={currentCourse.status || "aperte"}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, status: e.target.value as any })}
+                    onChange={(e) => setCurrentCourse({ ...currentCourse, status: e.target.value as CourseSession["status"] })}
                     className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
                   >
                     <option value="aperte">Iscrizioni Aperte</option>

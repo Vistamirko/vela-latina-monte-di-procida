@@ -3,8 +3,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { STRATEGIC_PROJECTS, ProjectGoal } from "@/data/associationData";
-import { Compass, Wind, Award, ArrowUpRight, ShieldCheck } from "lucide-react";
-import Link from "next/link";
+import { Compass, ArrowUpRight } from "lucide-react";
 
 export default function ProgettiPage() {
   return (
@@ -96,7 +95,7 @@ export default function ProgettiPage() {
               href="mailto:velalatinamontediprocida@gmail.com?subject=Richiesta%20Partnership%20Progetti"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all"
             >
-              <span>Contatta l'Associazione per Partnership</span>
+              <span>Contatta l&apos;Associazione per Partnership</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>

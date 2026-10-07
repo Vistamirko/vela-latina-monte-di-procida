@@ -15,7 +15,7 @@ export async function GET(
     }
 
     return NextResponse.json({ success: true, data: post });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("GET /api/blog/[slug] error:", error);
     return NextResponse.json({ error: "Errore recupero articolo" }, { status: 500 });
   }

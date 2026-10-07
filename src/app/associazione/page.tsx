@@ -7,13 +7,9 @@ import Footer from "@/components/Footer";
 import { FLEET_DATA, Boat } from "@/data/associationData";
 import {
   Anchor,
-  Compass,
   Award,
-  Users,
   ChevronLeft,
   ChevronRight,
-  ShieldCheck,
-  Send,
   CheckCircle2,
 } from "lucide-react";
 
@@ -245,8 +241,8 @@ export default function AssociazionePage() {
                   Richiesta di Tesseramento Inviata
                 </h4>
                 <p className="text-xs text-slate-700 max-w-sm mx-auto">
-                  La segreteria dell'Associazione ti contatterà per completare la
-                  domanda d'iscrizione e accoglierti al porticciolo.
+                  La segreteria dell&apos;Associazione ti contatterà per completare la
+                  domanda d&apos;iscrizione e accoglierti al porticciolo.
                 </p>
               </div>
             ) : (

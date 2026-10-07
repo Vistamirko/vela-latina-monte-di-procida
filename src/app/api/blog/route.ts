@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const posts = await BlogRepo.getAll(publishedOnly);
 
     return NextResponse.json({ success: true, count: posts.length, data: posts });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("GET /api/blog error:", error);
     return NextResponse.json({ error: "Errore recupero articoli blog" }, { status: 500 });
   }
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: saved }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("POST /api/blog error:", error);
     return NextResponse.json({ error: "Errore salvataggio articolo" }, { status: 500 });
   }
@@ -96,7 +96,7 @@ export async function PUT(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: saved });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/blog error:", error);
     return NextResponse.json({ error: "Errore aggiornamento articolo" }, { status: 500 });
   }
@@ -119,7 +119,7 @@ export async function DELETE(req: NextRequest) {
 
     await BlogRepo.delete(id);
     return NextResponse.json({ success: true, message: "Articolo eliminato" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/blog error:", error);
     return NextResponse.json({ error: "Errore eliminazione articolo" }, { status: 500 });
   }

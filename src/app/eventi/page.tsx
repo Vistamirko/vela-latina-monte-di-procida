@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { TIMELINE_DATA, TimelineItem } from "@/data/associationData";
-import { Calendar, Award, Film, Tv, MapPin, ArrowRight } from "lucide-react";
+import { Calendar, Award, Film, Tv, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { initDb, EventsRepo } from "@/lib/db";
@@ -114,10 +114,10 @@ export default async function EventiPage() {
                 <Film className="w-4 h-4 text-[#0a1c2a] mt-1 shrink-0" />
                 <div>
                   <strong className="text-[#0a1c2a]">
-                    “The Happy Prince - L'ultimo ritratto di Oscar Wilde” (2018)
+                    “The Happy Prince - L&apos;ultimo ritratto di Oscar Wilde” (2018)
                   </strong>
                   : Il nostro gozzo San Giuda Taddeo è stato scelto dal regista
-                  Rupert Everett per le scene marittime d'epoca del film.
+                  Rupert Everett per le scene marittime d&apos;epoca del film.
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -134,7 +134,7 @@ export default async function EventiPage() {
                 <div>
                   <strong className="text-[#0a1c2a]">Rai 1 · “Camper”</strong>:
                   Approfondimento con Giuseppe Calabrese sulle tecniche
-                  artigianali dei maestri d'ascia montesi.
+                  artigianali dei maestri d&apos;ascia montesi.
                 </div>
               </div>
             </div>

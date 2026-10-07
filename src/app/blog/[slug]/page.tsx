@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ArrowLeft, Calendar, User, Compass, Share2 } from "lucide-react";
+import { ArrowLeft, Calendar, User, Compass } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
 
 export const revalidate = 60;

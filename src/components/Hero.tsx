@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowDown, Compass, Award, ShieldCheck, Waves } from "lucide-react";
+import { ArrowDown, Compass, Waves } from "lucide-react";
 
 export default function Hero() {
   return (

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { GraduationCap, Wind, Compass, Users, CheckCircle2, Send, ArrowRight, Calendar, Clock } from "lucide-react";
+import { GraduationCap, CheckCircle2, Calendar, Clock } from "lucide-react";
 import { CourseSession } from "@/lib/db/types";
 
 export default function CorsiPage() {
@@ -50,7 +49,7 @@ export default function CorsiPage() {
           <p className="mt-8 text-base sm:text-xl text-slate-700 font-light leading-relaxed max-w-3xl">
             Imparare il mare significa viverlo sul legno. I nostri corsi non si
             fermano alla teoria: formiamo marinai in grado di leggere il vento,
-            governare l'antenna e vogare ritti sui paglioli guardando la rotta
+            governare l&apos;antenna e vogare ritti sui paglioli guardando la rotta
             davanti a sé.
           </p>
         </div>
@@ -103,7 +102,7 @@ export default function CorsiPage() {
                 <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
                   <li>• Lettura delle brezze del canale di Procida e Ischia</li>
                   <li>• Conduzione al timone e bordeggio di sicurezza</li>
-                  <li>• Preparazione per uscite costiere e d'altura</li>
+                  <li>• Preparazione per uscite costiere e d&apos;altura</li>
                 </ul>
               </div>
               <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
@@ -128,7 +127,7 @@ export default function CorsiPage() {
                 </p>
                 <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
                   <li>• Allenamento atletico e tecnico continuativo</li>
-                  <li>• Preparazione alle regate d'altura internazionali</li>
+                  <li>• Preparazione alle regate d&apos;altura internazionali</li>
                   <li>• Modello di parità e leadership nel mare</li>
                 </ul>
               </div>
@@ -178,7 +177,7 @@ export default function CorsiPage() {
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-700 font-light max-w-md">
-              Le uscite in mare e le lezioni pratiche si svolgono con gruppi a numero chiuso per garantire la massima sicurezza e padronanza dell'armo.
+              Le uscite in mare e le lezioni pratiche si svolgono con gruppi a numero chiuso per garantire la massima sicurezza e padronanza dell&apos;armo.
             </p>
           </div>
 
@@ -344,7 +343,7 @@ export default function CorsiPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1">
-                      Corso d'Interesse
+                      Corso d&apos;Interesse
                     </label>
                     <select
                       value={formData.corso}

@@ -32,8 +32,8 @@ export default function AdminLoginPage() {
 
       router.push("/admin");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Errore durante il login");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Errore durante il login");
     } finally {
       setLoading(false);
     }

@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const courses = await CoursesRepo.getAll(publishedOnly);
 
     return NextResponse.json({ success: true, count: courses.length, data: courses });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("GET /api/corsi-calendar error:", error);
     return NextResponse.json({ error: "Errore recupero calendario corsi" }, { status: 500 });
   }
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: saved }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("POST /api/corsi-calendar error:", error);
     return NextResponse.json({ error: "Errore salvataggio sessione corso" }, { status: 500 });
   }
@@ -94,7 +94,7 @@ export async function PUT(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: saved });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/corsi-calendar error:", error);
     return NextResponse.json({ error: "Errore aggiornamento sessione corso" }, { status: 500 });
   }
@@ -117,7 +117,7 @@ export async function DELETE(req: NextRequest) {
 
     await CoursesRepo.delete(id);
     return NextResponse.json({ success: true, message: "Sessione corso eliminata" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/corsi-calendar error:", error);
     return NextResponse.json({ error: "Errore eliminazione sessione corso" }, { status: 500 });
   }

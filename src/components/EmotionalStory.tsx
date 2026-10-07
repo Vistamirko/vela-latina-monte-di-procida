@@ -6,10 +6,7 @@ import Link from "next/link";
 import {
   Compass,
   Wind,
-  Anchor,
   ArrowRight,
-  Award,
-  Sparkles,
   Users,
   Calendar,
   GraduationCap,
@@ -242,8 +239,8 @@ export default function EmotionalStory() {
               </h2>
 
               <p className="mt-8 text-base sm:text-lg text-slate-700 font-light leading-relaxed max-w-2xl">
-                Nata nel 2008, l'Associazione Vela Latina Monte di Procida riunisce
-                circa 150 soci e maestri d'ascia. Custodisce una flotta di cinque
+                Nata nel 2008, l&apos;Associazione Vela Latina Monte di Procida riunisce
+                circa 150 soci e maestri d&apos;ascia. Custodisce una flotta di cinque
                 imbarcazioni storiche restaurate e riconosciute dalla Regione
                 Campania come Patrimonio Culturale Immateriale.
               </p>

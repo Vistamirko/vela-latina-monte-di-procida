@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Compass, Anchor, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -35,7 +35,7 @@ export default function Footer() {
           </div>
           <div>
             <Link href="/associazione" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
-              L'Associazione & La Flotta
+              L&apos;Associazione & La Flotta
             </Link>
           </div>
           <div>
