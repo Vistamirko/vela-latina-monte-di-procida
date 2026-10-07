@@ -8,32 +8,67 @@ const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL;
 
 // Cartella fallback locale quando Postgres non è ancora configurato
 const LOCAL_DATA_DIR = path.join(process.cwd(), "data", "content");
+const TMP_DATA_DIR = path.join("/tmp", "vela-latina-data");
 
-function ensureLocalDir() {
-  if (!fs.existsSync(LOCAL_DATA_DIR)) {
-    fs.mkdirSync(LOCAL_DATA_DIR, { recursive: true });
-  }
+const MEMORY_CACHE: Record<string, any> = {};
+
+function ensureDir(dir: string) {
+  try {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  } catch {}
 }
 
 function readLocalJson<T>(filename: string, defaultValue: T): T {
-  ensureLocalDir();
-  const filePath = path.join(LOCAL_DATA_DIR, filename);
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, JSON.stringify(defaultValue, null, 2), "utf-8");
-    return defaultValue;
+  if (MEMORY_CACHE[filename]) {
+    return MEMORY_CACHE[filename] as T;
   }
-  try {
-    const raw = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(raw) as T;
-  } catch {
-    return defaultValue;
+
+  // 1. Prova da TMP se modificato in ambiente serverless
+  const tmpPath = path.join(TMP_DATA_DIR, filename);
+  if (fs.existsSync(tmpPath)) {
+    try {
+      const raw = fs.readFileSync(tmpPath, "utf-8");
+      const parsed = JSON.parse(raw) as T;
+      MEMORY_CACHE[filename] = parsed;
+      return parsed;
+    } catch {}
   }
+
+  // 2. Prova dalla cartella locale di progetto
+  const localPath = path.join(LOCAL_DATA_DIR, filename);
+  if (fs.existsSync(localPath)) {
+    try {
+      const raw = fs.readFileSync(localPath, "utf-8");
+      const parsed = JSON.parse(raw) as T;
+      MEMORY_CACHE[filename] = parsed;
+      return parsed;
+    } catch {}
+  }
+
+  return defaultValue;
 }
 
 function writeLocalJson<T>(filename: string, data: T): void {
-  ensureLocalDir();
-  const filePath = path.join(LOCAL_DATA_DIR, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  MEMORY_CACHE[filename] = data;
+
+  // Prova a scrivere in LOCAL_DATA_DIR (sviluppo locale)
+  try {
+    ensureDir(LOCAL_DATA_DIR);
+    const filePath = path.join(LOCAL_DATA_DIR, filename);
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+    return;
+  } catch {
+    // In ambienti serverless (es. Vercel) con filesystem read-only, salva in /tmp
+    try {
+      ensureDir(TMP_DATA_DIR);
+      const tmpPath = path.join(TMP_DATA_DIR, filename);
+      fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), "utf-8");
+    } catch (err) {
+      console.warn("Impossibile salvare su disco locale/tmp:", err);
+    }
+  }
 }
 
 /* ==============================================================

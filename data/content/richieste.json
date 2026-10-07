@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "type": "corso",
+    "name": "Test Mirko",
+    "email": "vistamirko@gmail.com",
+    "phone": "+393331234567",
+    "itemTitle": "Corso di Vela Latina",
+    "message": "Test verifica iscrizione",
+    "status": "nuova",
+    "id": "req-1791386832791-32tst",
+    "createdAt": "2026-10-07T15:27:12.792Z",
+    "updatedAt": "2026-10-07T15:27:12.792Z"
+  }
+]

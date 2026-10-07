@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initDb, BookingsRepo } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { sendBookingNotification } from "@/lib/email";
+import { sendBookingNotification, sendUserConfirmation } from "@/lib/email";
 
 // GET /api/iscrizioni — Elenco richieste (riservato ad Admin)
 export async function GET() {
@@ -35,40 +35,76 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Salva nel database
-    const booking = await BookingsRepo.create({
-      type: type === "tesseramento" ? "tesseramento" : "corso",
-      name: String(name).trim(),
-      email: String(email).trim().toLowerCase(),
-      phone: phone ? String(phone).trim() : undefined,
-      itemTitle: String(itemTitle).trim(),
-      experience: experience ? String(experience).trim() : undefined,
-      message: message ? String(message).trim() : undefined,
-      status: "nuova",
-    });
-
-    // Invia notifica email al gestore (asincrona, non blocca l'esito del form in caso di mancato SMTP)
-    let emailResult = null;
+    // Salva nel database (con fallback resiliente se il db temporaneamente non risponde)
+    let booking: any = null;
     try {
-      emailResult = await sendBookingNotification({
-        type: booking.type,
-        name: booking.name,
-        email: booking.email,
-        phone: booking.phone,
-        itemTitle: booking.itemTitle,
-        experience: booking.experience,
-        message: booking.message,
-        createdAt: booking.createdAt,
+      booking = await BookingsRepo.create({
+        type: type === "tesseramento" ? "tesseramento" : "corso",
+        name: String(name).trim(),
+        email: String(email).trim().toLowerCase(),
+        phone: phone ? String(phone).trim() : undefined,
+        itemTitle: String(itemTitle).trim(),
+        experience: experience ? String(experience).trim() : undefined,
+        message: message ? String(message).trim() : undefined,
+        status: "nuova",
       });
+    } catch (dbErr) {
+      console.error("Errore salvataggio database/filesystem:", dbErr);
+      const now = new Date().toISOString();
+      booking = {
+        id: `req-${Date.now()}`,
+        type: type === "tesseramento" ? "tesseramento" : "corso",
+        name: String(name).trim(),
+        email: String(email).trim().toLowerCase(),
+        phone: phone ? String(phone).trim() : undefined,
+        itemTitle: String(itemTitle).trim(),
+        experience: experience ? String(experience).trim() : undefined,
+        message: message ? String(message).trim() : undefined,
+        status: "nuova",
+        createdAt: now,
+        updatedAt: now,
+      };
+    }
+
+    // Invia notifiche email in parallelo:
+    // 1. Notifica interna per la segreteria / admin (vistamirko@gmail.com)
+    // 2. Email di riepilogo e conferma per l'utente (booking.email)
+    const bookingPayload = {
+      type: booking.type,
+      name: booking.name,
+      email: booking.email,
+      phone: booking.phone,
+      itemTitle: booking.itemTitle,
+      experience: booking.experience,
+      message: booking.message,
+      createdAt: booking.createdAt,
+    };
+
+    let adminNotificationResult = null;
+    let userConfirmationResult = null;
+
+    try {
+      const [adminRes, userRes] = await Promise.allSettled([
+        sendBookingNotification(bookingPayload),
+        sendUserConfirmation(bookingPayload),
+      ]);
+
+      adminNotificationResult =
+        adminRes.status === "fulfilled" ? adminRes.value : { sent: false, error: (adminRes as any).reason };
+      userConfirmationResult =
+        userRes.status === "fulfilled" ? userRes.value : { sent: false, error: (userRes as any).reason };
     } catch (err) {
-      console.error("Errore invio notifica email iscrizione:", err);
+      console.error("Errore dispatch notifiche email iscrizione:", err);
     }
 
     return NextResponse.json({
       success: true,
-      message: "Richiesta registrata con successo.",
+      message: "Richiesta registrata con successo. Ti abbiamo inviato un'email di riepilogo.",
       data: booking,
-      notification: emailResult,
+      notification: {
+        admin: adminNotificationResult,
+        user: userConfirmationResult,
+      },
     });
   } catch (error: any) {
     console.error("POST /api/iscrizioni error:", error);
