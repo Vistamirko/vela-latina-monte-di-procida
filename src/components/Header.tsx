@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { Volume2, VolumeX, Menu, X, Compass, Wind } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Volume2, VolumeX, Menu, X, Wind } from "lucide-react";
 
-const CHAPTERS_NAV = [
-  { id: "rotta", label: "01 · La Rotta" },
-  { id: "vento", label: "02 · L'Armo" },
-  { id: "flotta", label: "03 · Le Vele" },
-  { id: "gesto", label: "04 · Il Gesto" },
-  { id: "orizzonti", label: "05 · 2027" },
-  { id: "porto", label: "06 · Sali a Bordo" },
+const NAV_PAGES = [
+  { href: "/progetti", label: "Progetti" },
+  { href: "/associazione", label: "Associazione" },
+  { href: "/eventi", label: "Eventi" },
+  { href: "/corsi", label: "Corsi" },
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [soundPlaying, setSoundPlaying] = useState(false);
@@ -22,7 +22,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 30);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -85,81 +85,71 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-md border-b border-slate-200/80 py-3 shadow-xs"
-            : "bg-transparent py-6 sm:py-8"
+            ? "bg-white/95 backdrop-blur-md border-b border-slate-200/80 py-4 shadow-xs"
+            : "bg-transparent py-7 sm:py-9"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
-          {/* Logo / Monogram */}
-          <a
-            href="#rotta"
-            className="flex items-center gap-3.5 group cursor-pointer"
+        <div className="max-w-7xl mx-auto px-6 sm:px-12 flex items-center justify-between">
+          {/* Logo / Marchio Puramente Tipografico & Pulito (Senza elementi grafici invasivi) */}
+          <Link
+            href="/"
+            className="group flex flex-col items-start focus:outline-none"
           >
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-slate-300 p-0.5 bg-white shadow-xs group-hover:border-[#0a1c2a] transition-all">
-              <Image
-                src="/images/stemma-vela-latina.jpg"
-                alt="Stemma Vela Latina Monte di Procida"
-                fill
-                className="object-cover rounded-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-['Cinzel'] text-xs sm:text-sm tracking-[0.28em] text-[#0a1c2a] uppercase font-semibold group-hover:text-[#b8860b] transition-colors">
-                Vela Latina
-              </span>
-              <span className="text-[9px] tracking-[0.32em] text-slate-500 uppercase font-normal">
-                Monte di Procida
-              </span>
-            </div>
-          </a>
+            <span className="font-['Cinzel'] text-xs sm:text-sm tracking-[0.3em] text-[#0a1c2a] uppercase font-semibold group-hover:text-[#b8860b] transition-colors">
+              Vela Latina
+            </span>
+            <span className="text-[8px] sm:text-[9px] tracking-[0.35em] text-slate-500 uppercase font-light -mt-0.5">
+              Monte di Procida
+            </span>
+          </Link>
 
-          {/* Desktop Nav - Piccoli testi eleganti e distanziati */}
-          <nav className="hidden lg:flex items-center gap-8 xl:gap-10">
-            {CHAPTERS_NAV.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="text-[10px] uppercase tracking-[0.26em] font-medium text-slate-600 hover:text-[#0a1c2a] transition-colors duration-200 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#0a1c2a] hover:after:w-full after:transition-all"
-              >
-                {item.label}
-              </a>
-            ))}
+          {/* Desktop Nav - Esattamente le 4 voci richieste: Progetti, Associazione, Eventi, Corsi */}
+          <nav className="hidden md:flex items-center gap-9 lg:gap-12">
+            {NAV_PAGES.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-[10px] uppercase tracking-[0.28em] font-medium transition-colors duration-200 relative py-1 ${
+                    isActive
+                      ? "text-[#0a1c2a] after:w-full font-semibold"
+                      : "text-slate-600 hover:text-[#0a1c2a] after:w-0 hover:after:w-full"
+                  } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:bg-[#0a1c2a] after:transition-all`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Right Controls: Ambient Ocean Breeze & Action */}
+          {/* Destra: Atmosfera marina discreta + Toggle mobile */}
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={toggleSound}
               title={soundPlaying ? "Disattiva brezza marina" : "Attiva suono brezza marina"}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-300 hover:border-slate-800 bg-white/70 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-slate-700 hover:text-slate-900 transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-300 hover:border-slate-800 bg-white/70 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-slate-600 hover:text-slate-900 transition-all cursor-pointer shadow-2xs"
             >
               {soundPlaying ? (
                 <>
-                  <Wind className="w-3.5 h-3.5 text-[#1b5b80] animate-spin" />
-                  <span className="hidden sm:inline text-[#1b5b80] font-medium">Brezza Attiva</span>
+                  <Wind className="w-3 h-3 text-[#1b5b80] animate-spin" />
+                  <span className="hidden sm:inline text-[#1b5b80] font-medium">Brezza</span>
                 </>
               ) : (
                 <>
-                  <VolumeX className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="hidden sm:inline">Suono Mare</span>
+                  <VolumeX className="w-3 h-3 text-slate-400" />
+                  <span className="hidden sm:inline">Brezza</span>
                 </>
               )}
             </button>
 
-            <a
-              href="#porto"
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-[10px] uppercase tracking-[0.24em] font-semibold text-white bg-[#0a1c2a] hover:bg-[#b8860b] transition-all rounded-xs shadow-xs"
-            >
-              <span>A Bordo</span>
-            </a>
-
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-700 hover:text-[#0a1c2a]"
+              className="md:hidden p-2 text-slate-700 hover:text-[#0a1c2a]"
               aria-label="Apri menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -168,23 +158,27 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile Drawer Menu Clean White */}
+      {/* Mobile Menu Pulito a tutto schermo */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-white/98 backdrop-blur-xl flex flex-col justify-between p-8 pt-28 border-b border-slate-200">
+        <div className="md:hidden fixed inset-0 z-40 bg-white/98 backdrop-blur-xl flex flex-col justify-between p-8 pt-28 border-b border-slate-200">
           <div className="space-y-6">
             <span className="text-[10px] tracking-[0.3em] uppercase text-slate-400 font-mono">
-              La Rotta Emozionale
+              Menu Principale
             </span>
             <div className="flex flex-col space-y-4">
-              {CHAPTERS_NAV.map((item) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
+              {NAV_PAGES.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="font-['Cormorant_Garamond'] text-3xl tracking-wider text-[#0a1c2a] hover:text-[#b8860b] transition-colors"
+                  className={`font-['Cormorant_Garamond'] text-3xl tracking-wider transition-colors ${
+                    pathname === item.href
+                      ? "text-[#0a1c2a] italic font-normal"
+                      : "text-slate-600 hover:text-[#0a1c2a]"
+                  }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
