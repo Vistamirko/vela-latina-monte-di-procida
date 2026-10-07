@@ -52,6 +52,7 @@ const DEFAULT_EVENTS: EventItem[] = [
       "Vittoria storica di Janara tra oltre 60 scafi tradizionali provenienti da tutto il Mediterraneo. La marineria montese sul gradino più alto del podio.",
     imageUrl: "/images/hero-sailing.webp",
     result: "1° Classificato Assoluto",
+    articleSlug: "anima-di-legno-il-segreto-del-gozzo-flegreo",
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -67,6 +68,7 @@ const DEFAULT_EVENTS: EventItem[] = [
       "Trionfo di Janara nelle acque di casa: perfetta conduzione tattica nelle correnti e nei salti di brezza tra Monte di Procida e Vivara.",
     imageUrl: "/images/janara-regatta.jpeg",
     result: "1° Posto",
+    articleSlug: "leggere-il-vento-di-maestro-nel-canale-di-procida",
     published: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -264,10 +266,12 @@ export async function initDb(): Promise<void> {
       description TEXT NOT NULL,
       image_url TEXT,
       result VARCHAR(100),
+      article_slug VARCHAR(255),
       published BOOLEAN NOT NULL DEFAULT true,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
+    ALTER TABLE eventi ADD COLUMN IF NOT EXISTS article_slug VARCHAR(255);
   `;
 
   // Tabella Articoli Blog / News
@@ -381,6 +385,7 @@ export const EventsRepo = {
       description: r.description,
       imageUrl: r.image_url || undefined,
       result: r.result || undefined,
+      articleSlug: r.article_slug || undefined,
       published: Boolean(r.published),
       createdAt: r.created_at,
       updatedAt: r.updated_at,
@@ -406,6 +411,7 @@ export const EventsRepo = {
       description: r.description,
       imageUrl: r.image_url || undefined,
       result: r.result || undefined,
+      articleSlug: r.article_slug || undefined,
       published: Boolean(r.published),
       createdAt: r.created_at,
       updatedAt: r.updated_at,
@@ -430,8 +436,8 @@ export const EventsRepo = {
     }
     const sql = neon(DB_URL);
     await sql`
-      INSERT INTO eventi (id, title, date, location, category, badge, description, image_url, result, published, updated_at)
-      VALUES (${event.id}, ${event.title}, ${event.date}, ${event.location}, ${event.category}, ${event.badge || null}, ${event.description}, ${event.imageUrl || null}, ${event.result || null}, ${event.published}, ${now})
+      INSERT INTO eventi (id, title, date, location, category, badge, description, image_url, result, article_slug, published, updated_at)
+      VALUES (${event.id}, ${event.title}, ${event.date}, ${event.location}, ${event.category}, ${event.badge || null}, ${event.description}, ${event.imageUrl || null}, ${event.result || null}, ${event.articleSlug || null}, ${event.published}, ${now})
       ON CONFLICT (id) DO UPDATE SET
         title = EXCLUDED.title,
         date = EXCLUDED.date,
@@ -441,6 +447,7 @@ export const EventsRepo = {
         description = EXCLUDED.description,
         image_url = EXCLUDED.image_url,
         result = EXCLUDED.result,
+        article_slug = EXCLUDED.article_slug,
         published = EXCLUDED.published,
         updated_at = EXCLUDED.updated_at;
     `;

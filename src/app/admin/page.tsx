@@ -483,9 +483,40 @@ export default function AdminDashboardPage() {
                             </span>
                           )}
                           {evt.result && (
-                            <span className="text-[9px] text-slate-600 font-sans">
+                            <span className="text-[9px] text-slate-600 font-sans block">
                               {evt.result}
                             </span>
+                          )}
+                          {evt.articleSlug ? (
+                            <Link
+                              href={`/blog/${evt.articleSlug}`}
+                              target="_blank"
+                              className="inline-flex items-center gap-1 text-[9px] text-[#1b5b80] hover:text-[#0a1c2a] font-semibold underline mt-1"
+                            >
+                              <span>Articolo collegato</span>
+                              <ExternalLink className="w-2.5 h-2.5" />
+                            </Link>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                const slug = `racconto-${evt.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "")}`;
+                                setCurrentBlogPost({
+                                  title: `Diario di Bordo & Racconto: ${evt.title}`,
+                                  slug,
+                                  category: "Reportage Regata",
+                                  author: currentUser?.name || "Vela Latina",
+                                  excerpt: `Cronaca, emozioni e manovre dell'evento ${evt.title} a ${evt.location} (${evt.date}).`,
+                                  content: `L'evento ${evt.title} si è svolto a ${evt.location}.\n\nLe imbarcazioni dell'Associazione Vela Latina Monte di Procida hanno preso parte alla manifestazione affrontando il vento e le correnti con determinazione.\n\n[Inserisci qui il racconto dettagliato delle prove in mare, impressioni dell'equipaggio e fotografie...]`,
+                                  coverImage: evt.imageUrl || "/images/hero-sailing.webp",
+                                  published: true,
+                                });
+                                setActiveTab("blog");
+                                setBlogModalOpen(true);
+                              }}
+                              className="text-[9px] text-slate-700 hover:text-[#0a1c2a] font-bold underline mt-1 block cursor-pointer"
+                            >
+                              + Scrivi Articolo
+                            </button>
                           )}
                         </td>
                         <td className="p-4 text-right whitespace-nowrap">
@@ -986,6 +1017,42 @@ export default function AdminDashboardPage() {
                   placeholder="Racconto e dettagli dell'evento sportivo o culturale..."
                   className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
                 />
+              </div>
+
+              <div>
+                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                  Articolo / Reportage Collegato nel Blog (Slug URL)
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="text"
+                    value={currentEvent.articleSlug || ""}
+                    onChange={(e) => setCurrentEvent({ ...currentEvent, articleSlug: e.target.value })}
+                    placeholder="Es. anima-di-legno-il-segreto-del-gozzo-flegreo"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono"
+                  />
+                  {blogPosts.length > 0 && (
+                    <select
+                      value={currentEvent.articleSlug || ""}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          setCurrentEvent({ ...currentEvent, articleSlug: e.target.value });
+                        }
+                      }}
+                      className="px-3 py-2 border border-slate-300 text-xs text-slate-700 bg-white outline-none shrink-0"
+                    >
+                      <option value="">Scegli articolo esistente...</option>
+                      {blogPosts.map((p) => (
+                        <option key={p.id} value={p.slug}>
+                          {p.title}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+                <span className="text-[10px] text-slate-600 font-mono mt-1 block">
+                  Collega un articolo del blog per mostrare il pulsante &quot;Leggi il Racconto dell&apos;Evento&quot; nella pagina pubblica degli Eventi.
+                </span>
               </div>
 
               <div className="flex items-center gap-2 pt-2">

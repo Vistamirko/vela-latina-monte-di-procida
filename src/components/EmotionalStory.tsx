@@ -125,25 +125,9 @@ export default function EmotionalStory() {
           <NauticalCompassRose className="w-[360px] h-[360px] sm:w-[500px] sm:h-[500px] lg:w-[640px] lg:h-[640px] text-[#0a1c2a]/[0.055]" />
         </div>
 
-        {/* Metadati di prua & Coordinate Nautiche */}
-        <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-mono text-slate-700 font-semibold">
-            <div className="flex items-center gap-2.5">
-              <Compass className="w-3.5 h-3.5 text-[#0a1c2a]" />
-              <span>40° 47′ 42″ N · 14° 03′ 05″ E</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#1b5b80]" />
-              <span className="text-slate-800">Canale di Procida · Vento da Maestro</span>
-            </div>
-            <span className="hidden md:inline text-slate-600 font-medium">
-              Hub Marinaro dei Campi Flegrei
-            </span>
-          </div>
-          {/* Sottile scala graduata nautica */}
-          <div className="pt-2">
-            <NauticalBorderRuler coordinate="40° 47′ 42″ N · LATITUDINE CANALE DI PROCIDA" />
-          </div>
+        {/* Sottile scala graduata nautica con Latitudine sotto al menu e logo */}
+        <div className="max-w-7xl mx-auto w-full relative z-10 pb-2">
+          <NauticalBorderRuler coordinate="40° 47′ 42″ N · LATITUDINE CANALE DI PROCIDA" />
         </div>
 
         {/* Titolo Monumentale con Grazie & Payoff */}

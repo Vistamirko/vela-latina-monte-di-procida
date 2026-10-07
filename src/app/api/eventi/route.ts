@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
       description: body.description,
       imageUrl: body.imageUrl || undefined,
       result: body.result || undefined,
+      articleSlug: body.articleSlug || undefined,
       published: body.published !== false,
     });
 
@@ -85,6 +86,7 @@ export async function PUT(req: NextRequest) {
       description: body.description,
       imageUrl: body.imageUrl || undefined,
       result: body.result || undefined,
+      articleSlug: body.articleSlug || undefined,
       published: Boolean(body.published),
     });
 

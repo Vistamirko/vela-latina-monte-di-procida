@@ -8,6 +8,7 @@ export interface EventItem {
   description: string;
   imageUrl?: string;
   result?: string;
+  articleSlug?: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;

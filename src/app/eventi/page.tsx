@@ -1,8 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { TIMELINE_DATA, TimelineItem } from "@/data/associationData";
-import { Calendar, Award, Film, Tv, MapPin } from "lucide-react";
+import { Calendar, Award, Film, Tv, MapPin, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { initDb, EventsRepo } from "@/lib/db";
 
 export const revalidate = 60;
@@ -73,11 +74,25 @@ export default async function EventiPage() {
                   </p>
                 </div>
 
-                {evt.result && (
-                  <div className="pt-4 border-t border-slate-300 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold">
-                    {evt.result}
-                  </div>
-                )}
+                <div className="pt-4 border-t border-slate-300 flex flex-wrap items-center justify-between gap-2">
+                  {evt.result ? (
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold">
+                      {evt.result}
+                    </span>
+                  ) : (
+                    <span />
+                  )}
+
+                  {evt.articleSlug && (
+                    <Link
+                      href={`/blog/${evt.articleSlug}`}
+                      className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[#1b5b80] hover:text-[#0a1c2a] font-bold transition-colors ml-auto"
+                    >
+                      <span>Leggi il Racconto</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
+                </div>
               </div>
             ))}
           </div>
