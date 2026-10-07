@@ -190,13 +190,13 @@ export function NauticalBorderRuler({
       className={`w-full flex items-center justify-between border-t border-b border-slate-200/70 py-1 font-mono text-[8px] uppercase tracking-widest select-none ${className}`}
       aria-hidden="true"
     >
-      <div className="flex items-center gap-1.5 opacity-60">
+      <div className="hidden sm:flex items-center gap-1.5 opacity-60 shrink-0">
         <span className="inline-block w-1.5 h-1.5 border border-current" />
         <span>0.0 NM</span>
       </div>
 
-      <div className="flex-1 mx-4 flex items-center justify-between overflow-hidden">
-        {Array.from({ length: 12 }).map((_, i) => (
+      <div className="flex-1 mx-2 sm:mx-4 flex items-center justify-between overflow-hidden">
+        {Array.from({ length: 8 }).map((_, i) => (
           <span
             key={i}
             className={`inline-block ${
@@ -206,13 +206,13 @@ export function NauticalBorderRuler({
         ))}
       </div>
 
-      <div className="flex items-center gap-2 text-slate-700 font-mono text-[9px] font-semibold">
+      <div className="flex items-center gap-2 text-slate-700 font-mono text-[8px] sm:text-[9px] font-semibold shrink-0">
         <span className="w-1.5 h-1.5 rounded-full bg-[#1b5b80]" />
         <span>{coordinate}</span>
       </div>
 
-      <div className="flex-1 mx-4 flex items-center justify-between overflow-hidden">
-        {Array.from({ length: 12 }).map((_, i) => (
+      <div className="flex-1 mx-2 sm:mx-4 flex items-center justify-between overflow-hidden">
+        {Array.from({ length: 8 }).map((_, i) => (
           <span
             key={i}
             className={`inline-block ${
@@ -222,8 +222,8 @@ export function NauticalBorderRuler({
         ))}
       </div>
 
-      <div className="flex items-center gap-1.5 font-mono text-[9px] text-slate-700 font-medium">
-        <span>1.0 NM (1852m)</span>
+      <div className="hidden sm:flex items-center gap-1.5 font-mono text-[9px] text-slate-700 font-medium shrink-0">
+        <span>1.0 NM</span>
         <span className="inline-block w-1.5 h-1.5 border border-current" />
       </div>
     </div>
@@ -240,16 +240,16 @@ export function NauticalCartouche({
 }) {
   return (
     <div
-      className={`inline-flex items-center gap-3 px-3.5 py-1.5 border border-slate-300 bg-white/80 backdrop-blur-xs font-mono text-[9px] uppercase tracking-[0.22em] text-slate-700 font-medium select-none shadow-2xs ${className}`}
+      className={`inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-3.5 py-1 sm:py-1.5 border border-slate-300 bg-white/80 backdrop-blur-xs font-mono text-[8.5px] sm:text-[9px] uppercase tracking-[0.14em] sm:tracking-[0.22em] text-slate-700 font-medium select-none shadow-2xs max-w-full ${className}`}
     >
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1.5 shrink-0">
         <span className="w-1.5 h-1.5 bg-[#0a1c2a]" />
         <span className="font-bold text-[#0a1c2a]">I.I.M. N. 10</span>
       </div>
       <span className="text-slate-400">|</span>
-      <span className="text-slate-800 font-semibold">Canale di Procida & Acquamorta</span>
-      <span className="text-slate-400">|</span>
-      <span className="text-slate-700">Scala 1:25 000</span>
+      <span className="text-slate-800 font-semibold truncate">Canale di Procida & Acquamorta</span>
+      <span className="text-slate-400 hidden sm:inline">|</span>
+      <span className="text-slate-700 hidden sm:inline">Scala 1:25 000</span>
     </div>
   );
 }

@@ -113,64 +113,84 @@ export default function EmotionalStory() {
       {/* ============================================================== */}
       {/* PROLOGO — LA ROTTA & IL PUNTO COSPICUO */}
       {/* ============================================================== */}
+      {/* ============================================================== */}
+      {/* PROLOGO / HERO — IL PUNTO COSPICUO */}
+      {/* ============================================================== */}
       <section
         id="prologo"
-        className="relative min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-24 pt-28 sm:pt-36 pb-12 sm:pb-16 border-b border-slate-200"
+        className="relative min-h-[90vh] sm:min-h-screen flex flex-col justify-between px-4 sm:px-12 lg:px-24 pt-20 sm:pt-28 md:pt-36 pb-8 sm:pb-16 border-b border-slate-200"
       >
         {/* Filigrana Nautica Sottile: Rosa dei Venti & Raggi Lossodromici (Non Invasiva) */}
         <div className="absolute top-12 right-0 sm:right-10 md:right-16 pointer-events-none -z-0 opacity-40 select-none overflow-hidden">
-          <NauticalCompassRose className="w-[360px] h-[360px] sm:w-[500px] sm:h-[500px] lg:w-[640px] lg:h-[640px] text-[#0a1c2a]/[0.055]" />
+          <NauticalCompassRose className="w-[280px] h-[280px] sm:w-[500px] sm:h-[500px] lg:w-[640px] lg:h-[640px] text-[#0a1c2a]/[0.055]" />
         </div>
 
         {/* Sottile scala graduata nautica con Latitudine sotto al menu e logo */}
-        <div className="max-w-7xl mx-auto w-full relative z-10 pb-2">
+        <div className="max-w-7xl mx-auto w-full relative z-10 pb-1 sm:pb-2">
           <NauticalBorderRuler coordinate="40° 47′ 42″ N · LATITUDINE CANALE DI PROCIDA" />
         </div>
 
         {/* Titolo Monumentale con Grazie & Payoff */}
-        <div className="max-w-7xl mx-auto w-full my-auto py-12 sm:py-16 relative z-10">
-          <div className="mb-6">
+        <div className="max-w-7xl mx-auto w-full my-auto py-5 sm:py-12 md:py-16 relative z-10">
+          <div className="mb-3.5 sm:mb-6">
             <NauticalCartouche className="inline-flex" />
           </div>
 
-          <h1 className="font-['Cormorant_Garamond'] text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] font-light leading-[0.88] text-[#0a1c2a] tracking-tight">
-            Vela Latina <br />
-            <span className="italic font-normal text-slate-700">
+          <h1 className="font-['Cormorant_Garamond'] text-4xl sm:text-7xl md:text-8xl lg:text-[10rem] font-light leading-[0.94] sm:leading-[0.88] text-[#0a1c2a] tracking-tight">
+            Vela Latina <br className="hidden sm:inline" />{" "}
+            <span className="italic font-normal text-slate-700 block sm:inline">
               Monte di Procida
             </span>
           </h1>
 
           {/* Patrimonio Culturale Immateriale della Campania — Posizionato sotto il titolo */}
-          <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-slate-300 bg-white text-[10px] sm:text-xs tracking-[0.28em] text-[#0a1c2a] uppercase font-semibold shadow-2xs">
-              <Wind className="w-3.5 h-3.5 text-[#1b5b80]" />
+          <div className="mt-4 sm:mt-8 flex flex-wrap items-center gap-2 sm:gap-3">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-slate-300 bg-white text-[9px] sm:text-xs tracking-[0.12em] sm:tracking-[0.25em] text-[#0a1c2a] uppercase font-semibold shadow-2xs">
+              <Wind className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#1b5b80] shrink-0" />
               <span>Patrimonio Culturale Immateriale della Campania</span>
             </div>
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold hidden md:inline">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[#0a1c2a] font-bold hidden md:inline">
               D.D. n. 239 · 7 Luglio 2020
             </span>
           </div>
 
           {/* Il Payoff Ufficiale & Mirino Cartografico */}
-          <div className="mt-8 sm:mt-12 max-w-3xl border-l-2 border-[#0a1c2a] pl-6 sm:pl-8">
-            <div className="mb-3">
+          <div className="mt-5 sm:mt-10 max-w-3xl border-l-2 border-[#0a1c2a] pl-3.5 sm:pl-8">
+            <div className="mb-2 sm:mb-3">
               <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Ril. Faro & Scogliera" />
             </div>
-            <p className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl md:text-5xl italic font-light text-[#0a1c2a] leading-tight">
+            <p className="font-['Cormorant_Garamond'] text-2xl sm:text-4xl md:text-5xl italic font-light text-[#0a1c2a] leading-snug sm:leading-tight">
               “Un punto cospicuo sul Mediterraneo.”
             </p>
-            <p className="mt-4 text-sm sm:text-base text-slate-700 font-light leading-relaxed max-w-xl">
+            <p className="mt-2 sm:mt-4 text-xs sm:text-base text-slate-700 font-light leading-relaxed max-w-xl">
               Dalla scogliera di tufo affacciata sulle isole al mare aperto del
               Tirreno. Custodiamo l&apos;anima del gozzo napoletano-flegreo,
               rimettiamo all&apos;onda imbarcazioni storiche e insegniamo l&apos;arte del
               vento alle nuove generazioni.
             </p>
+
+            {/* Azioni immediate accessibili al visitatore mobile */}
+            <div className="mt-4 sm:mt-7 flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <Link
+                href="/progetti"
+                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-[#0a1c2a] text-white text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.2em] font-semibold hover:bg-[#1b5b80] transition-colors shadow-xs"
+              >
+                <span>I Nostri Progetti</span>
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </Link>
+              <Link
+                href="/associazione"
+                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 border border-[#0a1c2a]/30 bg-white/80 text-[#0a1c2a] text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.2em] font-semibold hover:bg-slate-50 transition-colors shadow-2xs"
+              >
+                <span>L&apos;Associazione</span>
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Grande Immagine Fotografica Sotto Vele Bianche */}
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="relative w-full h-80 sm:h-[480px] md:h-[560px] rounded-xs overflow-hidden border border-slate-200 shadow-sm group">
+        <div className="max-w-7xl mx-auto w-full mt-2 sm:mt-0">
+          <div className="relative w-full h-60 sm:h-[460px] md:h-[560px] rounded-xs overflow-hidden border border-slate-200 shadow-sm group">
             <Image
               src="/images/janara-regatta.jpeg"
               alt="Janara in regata sotto vela latina piena"
@@ -178,17 +198,17 @@ export default function EmotionalStory() {
               priority
               className="object-cover object-[center_38%] transition-transform duration-1000 group-hover:scale-102"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 sm:bottom-6 left-3.5 sm:left-6 right-3.5 sm:right-6 flex items-end justify-between text-white pointer-events-none">
               <div>
-                <span className="text-[10px] uppercase tracking-[0.3em] font-mono opacity-80 block">
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.25em] font-mono opacity-85 block">
                   Ammiraglia Janara
                 </span>
-                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl italic">
+                <span className="font-['Cormorant_Garamond'] text-xl sm:text-3xl italic leading-tight block">
                   Vele latine nel vento flegreo
                 </span>
               </div>
-              <span className="text-[10px] font-mono tracking-widest hidden sm:inline bg-black/50 backdrop-blur-sm px-3 py-1 border border-white/20">
+              <span className="text-[9px] sm:text-[10px] font-mono tracking-widest hidden sm:inline bg-black/50 backdrop-blur-sm px-3 py-1 border border-white/20">
                 Numero Velico 098 · Saint-Tropez Champion
               </span>
             </div>
@@ -196,20 +216,32 @@ export default function EmotionalStory() {
         </div>
 
         {/* Indice Veloce delle 4 Sezioni Hub */}
-        <div className="max-w-7xl mx-auto w-full pt-8 mt-8 border-t border-slate-300 grid grid-cols-2 md:grid-cols-4 gap-4 text-[11px] uppercase tracking-[0.25em] text-[#0a1c2a] font-mono font-bold">
-          <Link href="/progetti" className="hover:text-[#0a1c2a] flex items-center gap-1.5 transition-colors">
+        <div className="max-w-7xl mx-auto w-full pt-4 sm:pt-8 mt-4 sm:mt-8 border-t border-slate-300 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.25em] text-[#0a1c2a] font-mono font-bold">
+          <Link
+            href="/progetti"
+            className="p-2 sm:p-0 rounded-xs bg-slate-50/80 sm:bg-transparent border border-slate-200/60 sm:border-0 hover:bg-white sm:hover:text-[#1b5b80] flex items-center justify-between sm:justify-start gap-1.5 transition-all"
+          >
             <span>01 · Progetti</span>
             <span>→</span>
           </Link>
-          <Link href="/associazione" className="hover:text-[#0a1c2a] flex items-center gap-1.5 transition-colors">
+          <Link
+            href="/associazione"
+            className="p-2 sm:p-0 rounded-xs bg-slate-50/80 sm:bg-transparent border border-slate-200/60 sm:border-0 hover:bg-white sm:hover:text-[#1b5b80] flex items-center justify-between sm:justify-start gap-1.5 transition-all"
+          >
             <span>02 · Associazione</span>
             <span>→</span>
           </Link>
-          <Link href="/eventi" className="hover:text-[#0a1c2a] flex items-center gap-1.5 transition-colors">
+          <Link
+            href="/eventi"
+            className="p-2 sm:p-0 rounded-xs bg-slate-50/80 sm:bg-transparent border border-slate-200/60 sm:border-0 hover:bg-white sm:hover:text-[#1b5b80] flex items-center justify-between sm:justify-start gap-1.5 transition-all"
+          >
             <span>03 · Eventi</span>
             <span>→</span>
           </Link>
-          <Link href="/corsi" className="hover:text-[#0a1c2a] flex items-center gap-1.5 transition-colors">
+          <Link
+            href="/corsi"
+            className="p-2 sm:p-0 rounded-xs bg-slate-50/80 sm:bg-transparent border border-slate-200/60 sm:border-0 hover:bg-white sm:hover:text-[#1b5b80] flex items-center justify-between sm:justify-start gap-1.5 transition-all"
+          >
             <span>04 · Corsi</span>
             <span>→</span>
           </Link>
