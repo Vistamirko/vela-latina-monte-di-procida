@@ -4,59 +4,68 @@
   --font-serif: var(--font-cormorant), Georgia, serif;
   --font-display: var(--font-cinzel), Georgia, serif;
   --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
-  --color-sea-950: #040d13;
-  --color-sea-900: #071722;
-  --color-sea-850: #0b2131;
-  --color-sea-800: #102e44;
-  --color-gold-400: #e0be82;
-  --color-gold-500: #c99f5a;
-  --color-gold-600: #9e7836;
-  --color-canvas-bg: #061118;
-  --color-canvas-card: #0a1b26;
-  --color-canvas-border: rgba(201, 159, 90, 0.2);
+  
+  --color-sail-white: #ffffff;
+  --color-sail-canvas: #fbfaf6;
+  --color-sail-linen: #f4efe4;
+  --color-sea-deep: #0a1c2a;
+  --color-sea-navy: #112d42;
+  --color-sea-azure: #1b5b80;
+  --color-sea-mist: #e8f1f5;
+  --color-wood-brass: #b8860b;
+  --color-wood-teak: #8b5a2b;
+  --color-border-subtle: #e6e4dc;
 }
 
 :root {
-  --background: #061118;
-  --foreground: #f4efe6;
+  --background: #ffffff;
+  --foreground: #0a1c2a;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #061118;
-  color: #f4efe6;
+  background-color: #ffffff;
+  color: #0a1c2a;
 }
 
 body {
-  background-color: #061118;
-  color: #f4efe6;
+  background-color: #ffffff;
+  color: #0a1c2a;
   overflow-x: hidden;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom editorial scrollbar */
+/* Custom crisp nautical scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #061118;
+  background: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
-  background: #19384c;
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #c99f5a;
+  background: #0a1c2a;
 }
 
-/* Subtle grain overlay for authentic vintage maritime feel */
-.vintage-grain {
-  background-image: radial-gradient(rgba(201, 159, 90, 0.04) 1px, transparent 0);
-  background-size: 24px 24px;
+/* Nautical canvas subtle grid texture */
+.sail-grid {
+  background-image: 
+    linear-gradient(to right, rgba(10, 28, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 28, 42, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
-/* Custom text selection */
+/* Subtle compass circle border */
+.compass-ring {
+  border: 1px dashed rgba(10, 28, 42, 0.15);
+  border-radius: 9999px;
+}
+
 ::selection {
-  background: #c99f5a;
-  color: #040d13;
+  background: #0a1c2a;
+  color: #ffffff;
 }

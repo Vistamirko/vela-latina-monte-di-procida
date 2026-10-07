@@ -51,10 +51,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/janara-crew.jpeg",
+        url: "/images/janara-regatta.jpeg",
         width: 1600,
-        height: 1064,
-        alt: "Janara in navigazione - Vela Latina Monte di Procida",
+        height: 874,
+        alt: "Vele latine in regata - Vela Latina Monte di Procida",
       },
     ],
   },
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Associazione Vela Latina Monte di Procida",
     description: "Un punto cospicuo sul Mediterraneo. Tradizione, restauro e mare flegreo.",
-    images: ["/images/janara-crew.jpeg"],
+    images: ["/images/janara-regatta.jpeg"],
   },
   icons: {
     icon: "/images/stemma-vela-latina.jpg",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#061118",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
 };
@@ -86,7 +86,7 @@ export default function RootLayout({
       lang="it"
       className={`${cormorant.variable} ${cinzel.variable} ${plusJakarta.variable} scroll-smooth`}
     >
-      <body className="min-h-screen bg-[#061118] text-[#f4efe6] font-sans antialiased selection:bg-[#c99f5a] selection:text-[#061118]">
+      <body className="min-h-screen bg-white text-[#0a1c2a] font-sans antialiased selection:bg-[#0a1c2a] selection:text-white">
         {children}
       </body>
     </html>
