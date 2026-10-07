@@ -20,8 +20,9 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
+  Compass,
 } from "lucide-react";
-import { EventItem, BlogPost, CourseSession } from "@/lib/db/types";
+import { EventItem, BlogPost, CourseSession, ProjectItem } from "@/lib/db/types";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -33,13 +34,14 @@ export default function AdminDashboardPage() {
   } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Active Tab: 'eventi' | 'blog' | 'corsi' | 'db'
-  const [activeTab, setActiveTab] = useState<"eventi" | "blog" | "corsi" | "db">("eventi");
+  // Active Tab: 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
+  const [activeTab, setActiveTab] = useState<"eventi" | "blog" | "corsi" | "progetti" | "db">("eventi");
 
   // Data states
   const [events, setEvents] = useState<EventItem[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [courses, setCourses] = useState<CourseSession[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [loadingData, setLoadingData] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -53,6 +55,9 @@ export default function AdminDashboardPage() {
   const [courseModalOpen, setCourseModalOpen] = useState(false);
   const [currentCourse, setCurrentCourse] = useState<Partial<CourseSession> | null>(null);
 
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Partial<ProjectItem> | null>(null);
+
   const showToast = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 4000);
@@ -61,10 +66,11 @@ export default function AdminDashboardPage() {
   const loadAllData = useCallback(async () => {
     setLoadingData(true);
     try {
-      const [resEvt, resBlog, resCourses] = await Promise.all([
+      const [resEvt, resBlog, resCourses, resProj] = await Promise.all([
         fetch("/api/eventi?all=true"),
         fetch("/api/blog?all=true"),
         fetch("/api/corsi-calendar?all=true"),
+        fetch("/api/progetti?all=true"),
       ]);
 
       if (resEvt.ok) {
@@ -78,6 +84,10 @@ export default function AdminDashboardPage() {
       if (resCourses.ok) {
         const d = await resCourses.json();
         setCourses(d.data || []);
+      }
+      if (resProj.ok) {
+        const d = await resProj.json();
+        setProjects(d.data || []);
       }
     } catch {
       showToast("error", "Errore nel caricamento dei dati");
@@ -250,6 +260,57 @@ export default function AdminDashboardPage() {
     }
   };
 
+  /* ==============================================================
+     PROGETTI ACTIONS
+  ============================================================== */
+  const handleSaveProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentProject) return;
+
+    try {
+      const isNew = !currentProject.id;
+      const res = await fetch("/api/progetti", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentProject),
+      });
+
+      if (!res.ok) throw new Error("Errore salvataggio progetto");
+      showToast("success", isNew ? "Progetto creato con successo" : "Progetto aggiornato");
+      setProjectModalOpen(false);
+      loadAllData();
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
+    }
+  };
+
+  const handleDeleteProject = async (id: string, title: string) => {
+    if (!confirm(`Sei sicuro di voler eliminare il progetto "${title}"?`)) return;
+    try {
+      const res = await fetch(`/api/progetti?id=${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Errore eliminazione");
+      showToast("success", "Progetto eliminato");
+      loadAllData();
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
+    }
+  };
+
+  const handleToggleProjectPublish = async (proj: ProjectItem) => {
+    try {
+      const res = await fetch("/api/progetti", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...proj, published: !proj.published }),
+      });
+      if (!res.ok) throw new Error("Errore aggiornamento");
+      showToast("success", proj.published ? "Progetto salvato in bozza" : "Progetto pubblicato");
+      loadAllData();
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center font-mono text-xs text-slate-700">
@@ -343,6 +404,18 @@ export default function AdminDashboardPage() {
           >
             <GraduationCap className="w-3.5 h-3.5" />
             <span>Calendario Corsi ({courses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("progetti")}
+            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+              activeTab === "progetti"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>Progetti & Cantieri ({projects.length})</span>
           </button>
 
           <button
@@ -823,6 +896,164 @@ export default function AdminDashboardPage() {
                       <tr>
                         <td colSpan={6} className="p-8 text-center text-slate-600 font-light">
                           Nessuna sessione di corso configurata.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==============================================================
+           TAB: PROGETTI STRATEGICI & CANTIERI
+        ============================================================== */}
+        {activeTab === "progetti" && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light">
+                  Progetti Strategici & Cantieri 2027
+                </h2>
+                <p className="text-xs text-slate-700 font-light mt-1">
+                  Gestione dei cantieri operativi, spedizioni (Saint-Tropez, America&apos;s Cup, Trieste) e partenariati.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={loadAllData}
+                  disabled={loadingData}
+                  className="p-2.5 border border-slate-300 bg-white hover:border-[#0a1c2a] text-slate-700 transition-colors cursor-pointer"
+                  title="Ricarica"
+                >
+                  <RefreshCw className={`w-4 h-4 ${loadingData ? "animate-spin" : ""}`} />
+                </button>
+                <button
+                  onClick={() => {
+                    const nextNum = String(projects.length + 1).padStart(2, "0");
+                    setCurrentProject({
+                      number: nextNum,
+                      title: "",
+                      highlight: "",
+                      category: "Regata Internazionale",
+                      partner: "Campi Flegrei · Rete Partner",
+                      status: "In Corso",
+                      description: "",
+                      published: true,
+                    });
+                    setProjectModalOpen(true);
+                  }}
+                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-xs font-mono font-semibold uppercase tracking-wider hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Nuovo Progetto</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Tabella Progetti */}
+            <div className="bg-white border border-slate-300 overflow-hidden shadow-xs">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#fbfaf6] border-b border-slate-300 text-[10px] font-mono uppercase tracking-widest text-slate-700 font-bold">
+                    <tr>
+                      <th className="p-4 w-12 text-center">N.</th>
+                      <th className="p-4">Progetto & Traguardo</th>
+                      <th className="p-4">Categoria & Badge</th>
+                      <th className="p-4">Stato Avanzamento</th>
+                      <th className="p-4">Pubblicazione</th>
+                      <th className="p-4 text-right">Azioni</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 font-mono">
+                    {projects.map((proj) => (
+                      <tr key={proj.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 text-center font-bold text-[#0a1c2a]">
+                          {proj.number}
+                        </td>
+                        <td className="p-4 max-w-xs">
+                          <span className="font-sans font-semibold text-sm text-[#0a1c2a] block">
+                            {proj.title}
+                          </span>
+                          <span className="text-[11px] text-slate-600 italic font-serif block">
+                            {proj.highlight}
+                          </span>
+                          <span className="text-[10px] text-slate-500 block mt-0.5 truncate">
+                            {proj.partner || "Campi Flegrei"}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <span className="inline-block px-2 py-0.5 text-[9px] bg-slate-100 border border-slate-300 text-slate-800 font-bold mb-1">
+                            {proj.category}
+                          </span>
+                          {proj.badge && (
+                            <span className="block text-[10px] text-amber-900 font-semibold">
+                              ★ {proj.badge}
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-4">
+                          <span
+                            className={`inline-block px-2 py-0.5 text-[9px] font-bold border ${
+                              proj.status === "In Corso"
+                                ? "bg-sky-50 text-sky-800 border-sky-300"
+                                : proj.status === "Completato"
+                                ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                                : "bg-amber-50 text-amber-800 border-amber-300"
+                            }`}
+                          >
+                            {proj.status}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleProjectPublish(proj)}
+                            className="inline-flex items-center gap-1.5 cursor-pointer group"
+                            title="Clicca per invertire stato"
+                          >
+                            {proj.published ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 group-hover:underline">
+                                <Eye className="w-3 h-3 text-emerald-600" />
+                                Pubblicato
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500 group-hover:underline">
+                                <EyeOff className="w-3 h-3 text-slate-400" />
+                                Bozza
+                              </span>
+                            )}
+                          </button>
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => {
+                                setCurrentProject(proj);
+                                setProjectModalOpen(true);
+                              }}
+                              className="p-1.5 border border-slate-300 text-slate-700 hover:text-[#0a1c2a] hover:border-[#0a1c2a] transition-colors cursor-pointer"
+                              title="Modifica"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteProject(proj.id, proj.title)}
+                              className="p-1.5 border border-slate-300 text-rose-600 hover:text-rose-900 hover:border-rose-600 transition-colors cursor-pointer"
+                              title="Elimina"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {projects.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-slate-600 font-light">
+                          Nessun progetto strategico configurato.
                         </td>
                       </tr>
                     )}
@@ -1401,6 +1632,185 @@ export default function AdminDashboardPage() {
                   className="px-6 py-2 bg-[#0a1c2a] text-white text-xs font-mono font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
                 >
                   Salva Sessione
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ==============================================================
+         MODALE PROGETTO
+      ============================================================== */}
+      {projectModalOpen && currentProject && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light">
+                {currentProject.id ? "Modifica Progetto" : "Nuovo Progetto Strategico"}
+              </h3>
+              <button
+                onClick={() => setProjectModalOpen(false)}
+                className="text-slate-500 hover:text-[#0a1c2a] text-lg font-mono cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveProject} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="sm:col-span-1">
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Numero
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={currentProject.number || "01"}
+                    onChange={(e) => setCurrentProject({ ...currentProject, number: e.target.value })}
+                    placeholder="01"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono text-center font-bold"
+                  />
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Titolo del Progetto
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={currentProject.title || ""}
+                    onChange={(e) => setCurrentProject({ ...currentProject, title: e.target.value })}
+                    placeholder="Es. Progetto ROSA"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                  Highlight / Traguardo
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={currentProject.highlight || ""}
+                  onChange={(e) => setCurrentProject({ ...currentProject, highlight: e.target.value })}
+                  placeholder="Es. Saint-Tropez 2027 oppure Cerimonia d&apos;Apertura"
+                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Categoria
+                  </label>
+                  <select
+                    value={currentProject.category || "Regata Internazionale"}
+                    onChange={(e) =>
+                      setCurrentProject({
+                        ...currentProject,
+                        category: e.target.value as ProjectItem["category"],
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  >
+                    <option value="Regata Internazionale">Regata Internazionale</option>
+                    <option value="Cultura & Scienza">Cultura & Scienza</option>
+                    <option value="Inclusione">Inclusione</option>
+                    <option value="Rotte Storiche">Rotte Storiche</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Badge in Evidenza
+                  </label>
+                  <input
+                    type="text"
+                    value={currentProject.badge || ""}
+                    onChange={(e) => setCurrentProject({ ...currentProject, badge: e.target.value })}
+                    placeholder="Es. Equipaggio Femminile"
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                    Stato
+                  </label>
+                  <select
+                    value={currentProject.status || "In Corso"}
+                    onChange={(e) =>
+                      setCurrentProject({
+                        ...currentProject,
+                        status: e.target.value as ProjectItem["status"],
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                  >
+                    <option value="In Corso">In Corso</option>
+                    <option value="In Programmazione">In Programmazione</option>
+                    <option value="Completato">Completato</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                  Partner / Rete Territoriale
+                </label>
+                <input
+                  type="text"
+                  value={currentProject.partner || ""}
+                  onChange={(e) => setCurrentProject({ ...currentProject, partner: e.target.value })}
+                  placeholder="Es. Campi Flegrei · Rete Partner"
+                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
+                  Descrizione Dettagliata del Cantiere
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={currentProject.description || ""}
+                  onChange={(e) => setCurrentProject({ ...currentProject, description: e.target.value })}
+                  placeholder="Spiega gli obiettivi, il percorso formativo o le regate in programma..."
+                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-2">
+                <input
+                  type="checkbox"
+                  id="project-published"
+                  checked={currentProject.published !== false}
+                  onChange={(e) => setCurrentProject({ ...currentProject, published: e.target.checked })}
+                  className="h-4 w-4 border-slate-300 text-[#0a1c2a] focus:ring-[#0a1c2a]"
+                />
+                <label htmlFor="project-published" className="text-xs font-mono text-slate-700">
+                  Pubblica questo cantiere immediatamente nella pagina pubblica /progetti
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setProjectModalOpen(false)}
+                  className="px-4 py-2 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
+                >
+                  Annulla
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-[#0a1c2a] text-white text-xs font-mono font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
+                >
+                  Salva Progetto
                 </button>
               </div>
             </form>

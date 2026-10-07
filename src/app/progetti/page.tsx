@@ -1,11 +1,14 @@
-"use client";
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { STRATEGIC_PROJECTS, ProjectGoal } from "@/data/associationData";
+import { initDb, ProjectsRepo } from "@/lib/db";
 import { Compass, ArrowUpRight } from "lucide-react";
 
-export default function ProgettiPage() {
+export const revalidate = 60;
+
+export default async function ProgettiPage() {
+  await initDb();
+  const projects = await ProjectsRepo.getAll(true);
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
       <Header />
@@ -32,13 +35,13 @@ export default function ProgettiPage() {
         </div>
       </section>
 
-      {/* Griglia degli 8 Progetti Ufficiali */}
+      {/* Griglia dei Progetti Ufficiali dal Backend */}
       <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
-            {STRATEGIC_PROJECTS.map((proj: ProjectGoal) => (
+            {projects.map((proj) => (
               <div
-                key={proj.number}
+                key={proj.id}
                 className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] hover:border-[#0a1c2a] transition-all flex flex-col justify-between"
               >
                 <div>
@@ -66,12 +69,18 @@ export default function ProgettiPage() {
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-300 flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold">
-                  <span>Campi Flegrei · Rete Partner</span>
-                  <span className="text-[#1b5b80]">In Corso</span>
+                  <span>{proj.partner || "Campi Flegrei · Rete Partner"}</span>
+                  <span className="text-[#1b5b80]">{proj.status}</span>
                 </div>
               </div>
             ))}
           </div>
+
+          {projects.length === 0 && (
+            <div className="text-center py-16 text-slate-600 font-mono text-xs">
+              Nessun progetto pubblicato al momento.
+            </div>
+          )}
         </div>
       </section>
 

@@ -55,3 +55,19 @@ export interface AdminUser {
   role: "superadmin" | "admin" | "editor";
   createdAt: string;
 }
+
+export interface ProjectItem {
+  id: string;
+  number: string;
+  title: string;
+  highlight: string;
+  description: string;
+  category: "Regata Internazionale" | "Cultura & Scienza" | "Inclusione" | "Rotte Storiche";
+  badge?: string;
+  partner?: string;
+  status: "In Corso" | "In Programmazione" | "Completato";
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+

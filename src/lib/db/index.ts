@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
-import { EventItem, BlogPost, CourseSession, AdminUser } from "./types";
+import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem } from "./types";
 import { hashPassword } from "../auth";
 
 const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -215,6 +215,129 @@ const DEFAULT_COURSES: CourseSession[] = [
   },
 ];
 
+const DEFAULT_PROJECTS: ProjectItem[] = [
+  {
+    id: "proj-01-rosa",
+    number: "01",
+    title: "Progetto ROSA",
+    highlight: "Saint-Tropez 2027",
+    category: "Regata Internazionale",
+    badge: "Equipaggio Femminile",
+    partner: "Campi Flegrei · Rete Partner",
+    status: "In Corso",
+    description:
+      "Formazione del primo equipaggio stabile interamente femminile dell'Associazione. Un percorso intensivo di voga, conduzione di vela latina, manovre d'altura e sicurezza marittima con traguardo fissato a Les Voiles Latines di Saint-Tropez 2027.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-02-americas-cup",
+    number: "02",
+    title: "America's Cup Napoli",
+    highlight: "Cerimonia d'Apertura",
+    category: "Regata Internazionale",
+    badge: "Evento Mondiale",
+    partner: "Golfo di Napoli",
+    status: "In Programmazione",
+    description:
+      "Partecipazione ufficiale programmata con l'ammiraglia Janara alla cerimonia inaugurale dell'America's Cup nel Golfo di Napoli, portando le radici della vela tradizionale tra i colossi della vela moderna.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-03-barcolana",
+    number: "03",
+    title: "Barcolana di Trieste",
+    highlight: "La Lancia Quandel al via",
+    category: "Regata Internazionale",
+    badge: "Golfo di Trieste",
+    partner: "Società Velica di Barcola e Grignano",
+    status: "In Programmazione",
+    description:
+      "La grande lancia Ludovico Quandel, ex Amerigo Vespucci, sarà schierata sulla linea di partenza del Golfo di Trieste per testimoniare la potenza dell'armo a filucone e della marineria flegrea.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-04-quandel-gaeta",
+    number: "04",
+    title: "Operazione Quandel",
+    highlight: "Monte di Procida ↔ Gaeta",
+    category: "Rotte Storiche",
+    badge: "8ª Edizione",
+    partner: "Marinerie Flegree & Pontine",
+    status: "In Corso",
+    description:
+      "Traversata a vela latina in mare aperto che unisce Monte di Procida e Gaeta. Giunta all'8ª edizione, rinnova i secolari scambi commerciali, culturali e nautici tra le due storiche marinerie tirreniche.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-05-breccia-museo",
+    number: "05",
+    title: "Breccia Museo",
+    highlight: "Itinerario dal Mare",
+    category: "Cultura & Scienza",
+    badge: "Vulcanologia & Mare",
+    partner: "Campi Flegrei · Rete Culturale",
+    status: "In Corso",
+    description:
+      "Percorso turistico e scientifico fruibile via mare lungo la costa di Monte di Procida, dedicato alla formazione vulcanica della Breccia Museo e alla geologia millenaria dei Campi Flegrei.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-06-quandel-lab",
+    number: "06",
+    title: "Quandel Lab & Ricerca",
+    highlight: "Federico II & Suor Orsola",
+    category: "Cultura & Scienza",
+    badge: "Ricerca Scientifica",
+    partner: "Università Federico II & Suor Orsola",
+    status: "In Corso",
+    description:
+      "Sperimentazioni idrodinamiche, archeologia navale e rilievi costieri in collaborazione con l'Università degli Studi di Napoli Federico II, l'Università Suor Orsola Benincasa e il Museo Nazionale di Haifa.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-07-inclusione",
+    number: "07",
+    title: "Inclusione Mare",
+    highlight: "Centro Serapide",
+    category: "Inclusione",
+    badge: "Impatto Sociale",
+    partner: "Centro Serapide & Terzo Settore",
+    status: "In Corso",
+    description:
+      "Il mare come spazio educativo e terapeutico per bambini e ragazzi con disabilità o bisogni speciali. Attraverso la voga assistita a bordo del San Michele Arcangelo, promuoviamo l'accessibilità reale e il benessere.",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "proj-08-stintino",
+    number: "08",
+    title: "Raduno Nazionale Stintino",
+    highlight: "Meeting Vela Latina",
+    category: "Regata Internazionale",
+    badge: "Sardegna & Cilento",
+    partner: "Comitato Vela Latina Stintino",
+    status: "Completato",
+    description:
+      "Partecipazione ai raduni della vela latina a Stintino e al Trofeo Tre Torri di Marina di Pisciotta (dove l'equipaggio ha conquistato il prestigioso Trofeo Fair Play e podio di classe).",
+    published: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
 /* ==============================================================
    INIZIALIZZAZIONE SCHEMA TABELLE POSTGRESQL (NEON / VERCEL)
 ============================================================== */
@@ -230,6 +353,7 @@ export async function initDb(): Promise<void> {
       readLocalJson<EventItem[]>("eventi.json", DEFAULT_EVENTS);
       readLocalJson<BlogPost[]>("blog.json", DEFAULT_BLOG_POSTS);
       readLocalJson<CourseSession[]>("corsi.json", DEFAULT_COURSES);
+      readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
       const users = readLocalJson<AdminUser[]>("users.json", []);
       if (users.length === 0) {
         const defaultAdmin: AdminUser = {
@@ -325,6 +449,24 @@ export async function initDb(): Promise<void> {
         );
       `;
 
+      // Tabella Progetti Strategici & Cantieri
+      await sql`
+        CREATE TABLE IF NOT EXISTS progetti (
+          id VARCHAR(64) PRIMARY KEY,
+          number VARCHAR(32) NOT NULL,
+          title VARCHAR(255) NOT NULL,
+          highlight VARCHAR(255) NOT NULL,
+          category VARCHAR(64) NOT NULL DEFAULT 'Regata Internazionale',
+          badge VARCHAR(100),
+          partner VARCHAR(255) DEFAULT 'Campi Flegrei · Rete Partner',
+          status VARCHAR(64) NOT NULL DEFAULT 'In Corso',
+          description TEXT NOT NULL,
+          published BOOLEAN NOT NULL DEFAULT true,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+      `;
+
       // Controlla se esiste admin iniziale
       const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
       if (parseInt(existingUsers[0].count) === 0) {
@@ -366,6 +508,17 @@ export async function initDb(): Promise<void> {
           await sql`
             INSERT INTO corsi_calendar (id, course_key, course_title, start_date, end_date, schedule, total_seats, available_seats, status, instructor, notes, price, published)
             VALUES (${c.id}, ${c.courseKey}, ${c.courseTitle}, ${c.startDate}, ${c.endDate || null}, ${c.schedule}, ${c.totalSeats}, ${c.availableSeats}, ${c.status}, ${c.instructor}, ${c.notes || null}, ${c.price || null}, ${c.published});
+          `;
+        }
+      }
+
+      // Seed Progetti se vuota
+      const existingProjects = await sql`SELECT count(*) FROM progetti;`;
+      if (parseInt(existingProjects[0].count) === 0) {
+        for (const pr of DEFAULT_PROJECTS) {
+          await sql`
+            INSERT INTO progetti (id, number, title, highlight, category, badge, partner, status, description, published)
+            VALUES (${pr.id}, ${pr.number}, ${pr.title}, ${pr.highlight}, ${pr.category}, ${pr.badge || null}, ${pr.partner || null}, ${pr.status}, ${pr.description}, ${pr.published});
           `;
         }
       }
@@ -720,3 +873,114 @@ export const UsersRepo = {
     return true;
   },
 };
+
+// --- PROGETTI STRATEGICI ---
+export const ProjectsRepo = {
+  async getAll(publishedOnly = false): Promise<ProjectItem[]> {
+    if (!DB_URL) {
+      const items = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      const filtered = publishedOnly ? items.filter((i) => i.published) : items;
+      return filtered.sort((a, b) => a.number.localeCompare(b.number));
+    }
+    try {
+      const sql = neon(DB_URL);
+      const rows = publishedOnly
+        ? await sql`SELECT * FROM progetti WHERE published = true ORDER BY number ASC;`
+        : await sql`SELECT * FROM progetti ORDER BY number ASC;`;
+
+      return rows.map((r) => ({
+        id: r.id,
+        number: r.number,
+        title: r.title,
+        highlight: r.highlight,
+        category: r.category as ProjectItem["category"],
+        badge: r.badge || undefined,
+        partner: r.partner || undefined,
+        status: (r.status || "In Corso") as ProjectItem["status"],
+        description: r.description,
+        published: Boolean(r.published),
+        createdAt: r.created_at,
+        updatedAt: r.updated_at,
+      }));
+    } catch (err) {
+      console.error("[ProjectsRepo.getAll] Errore DB Neon, uso fallback statico:", err);
+      const items = DEFAULT_PROJECTS;
+      const filtered = publishedOnly ? items.filter((i) => i.published) : items;
+      return filtered.sort((a, b) => a.number.localeCompare(b.number));
+    }
+  },
+
+  async getById(id: string): Promise<ProjectItem | null> {
+    if (!DB_URL) {
+      const items = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      return items.find((i) => i.id === id) || null;
+    }
+    const sql = neon(DB_URL);
+    const rows = await sql`SELECT * FROM progetti WHERE id = ${id} LIMIT 1;`;
+    if (rows.length === 0) return null;
+    const r = rows[0];
+    return {
+      id: r.id,
+      number: r.number,
+      title: r.title,
+      highlight: r.highlight,
+      category: r.category as ProjectItem["category"],
+      badge: r.badge || undefined,
+      partner: r.partner || undefined,
+      status: (r.status || "In Corso") as ProjectItem["status"],
+      description: r.description,
+      published: Boolean(r.published),
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+    };
+  },
+
+  async save(project: Omit<ProjectItem, "createdAt" | "updatedAt">): Promise<ProjectItem> {
+    const now = new Date().toISOString();
+    if (!DB_URL) {
+      const items = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      const existingIdx = items.findIndex((i) => i.id === project.id);
+      let saved: ProjectItem;
+      if (existingIdx >= 0) {
+        saved = { ...items[existingIdx], ...project, updatedAt: now };
+        items[existingIdx] = saved;
+      } else {
+        saved = { ...project, createdAt: now, updatedAt: now };
+        items.push(saved);
+      }
+      writeLocalJson<ProjectItem[]>("progetti.json", items);
+      return saved;
+    }
+    const sql = neon(DB_URL);
+    await sql`
+      INSERT INTO progetti (id, number, title, highlight, category, badge, partner, status, description, published, updated_at)
+      VALUES (${project.id}, ${project.number}, ${project.title}, ${project.highlight}, ${project.category}, ${project.badge || null}, ${project.partner || null}, ${project.status}, ${project.description}, ${project.published}, ${now})
+      ON CONFLICT (id) DO UPDATE SET
+        number = EXCLUDED.number,
+        title = EXCLUDED.title,
+        highlight = EXCLUDED.highlight,
+        category = EXCLUDED.category,
+        badge = EXCLUDED.badge,
+        partner = EXCLUDED.partner,
+        status = EXCLUDED.status,
+        description = EXCLUDED.description,
+        published = EXCLUDED.published,
+        updated_at = EXCLUDED.updated_at;
+    `;
+    const found = await this.getById(project.id);
+    return found!;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    if (!DB_URL) {
+      const items = readLocalJson<ProjectItem[]>("progetti.json", DEFAULT_PROJECTS);
+      const filtered = items.filter((i) => i.id !== id);
+      writeLocalJson<ProjectItem[]>("progetti.json", filtered);
+      return true;
+    }
+    const sql = neon(DB_URL);
+    await sql`DELETE FROM progetti WHERE id = ${id};`;
+    return true;
+  },
+};
+
