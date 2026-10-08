@@ -22,6 +22,9 @@ export default function AssociazionePage() {
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
+    telefono: "",
+    dataLuogoNascita: "",
+    codiceFiscale: "",
     tipologia: "Socio Praticante (Voga & Vela Latina)",
   });
   const activeBoat: Boat = FLEET_DATA[selectedBoatIndex];
@@ -39,6 +42,9 @@ export default function AssociazionePage() {
           type: "tesseramento",
           name: formData.nome,
           email: formData.email,
+          phone: formData.telefono,
+          dataLuogoNascita: formData.dataLuogoNascita,
+          codiceFiscale: formData.codiceFiscale,
           itemTitle: formData.tipologia,
         }),
       });
@@ -281,12 +287,17 @@ export default function AssociazionePage() {
               <div className="py-8 text-center space-y-3">
                 <CheckCircle2 className="w-10 h-10 text-[#1b5b80] mx-auto" />
                 <h4 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a]">
-                  Richiesta di Tesseramento Inviata
+                  Domanda di Tesseramento Registrata
                 </h4>
-                <p className="text-xs text-slate-700 max-w-sm mx-auto">
-                  La segreteria dell&apos;Associazione ti contatterà per completare la
-                  domanda d&apos;iscrizione e accoglierti al porticciolo.
+                <p className="text-xs text-slate-700 max-w-md mx-auto leading-relaxed">
+                  Ti abbiamo inviato un&apos;email con il riepilogo e le indicazioni per il versamento della quota sociale annuale (€50).
+                  Non appena la segreteria convaliderà il pagamento (bonifico o contanti in sede), riceverai la conferma formale con il tuo <strong>Numero di Tessera Socio</strong>.
                 </p>
+                <div className="pt-2">
+                  <span className="inline-block px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-mono uppercase tracking-wider font-semibold rounded-xs">
+                    ⏳ In attesa di pagamento
+                  </span>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -295,13 +306,14 @@ export default function AssociazionePage() {
                     {submitError}
                   </div>
                 )}
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label
                       htmlFor="socio-nome"
                       className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
                     >
-                      Nome e Cognome
+                      Cognome e Nome *
                     </label>
                     <input
                       id="socio-nome"
@@ -321,7 +333,7 @@ export default function AssociazionePage() {
                       htmlFor="socio-email"
                       className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
                     >
-                      Email
+                      Email *
                     </label>
                     <input
                       id="socio-email"
@@ -337,33 +349,104 @@ export default function AssociazionePage() {
                     />
                   </div>
                 </div>
-                <div>
-                  <label
-                    htmlFor="socio-tipologia"
-                    className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
-                  >
-                    Tipologia di Socio
-                  </label>
-                  <select
-                    id="socio-tipologia"
-                    name="tipologia"
-                    value={formData.tipologia}
-                    onChange={(e) =>
-                      setFormData({ ...formData, tipologia: e.target.value })
-                    }
-                    className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
-                  >
-                    <option>Socio Praticante (Voga & Vela Latina)</option>
-                    <option>Socio Sostenitore Culturale</option>
-                    <option>Volontario Cantiere & Restauro</option>
-                  </select>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="socio-nascita"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
+                      Data & Luogo di Nascita *
+                    </label>
+                    <input
+                      id="socio-nascita"
+                      name="dataLuogoNascita"
+                      type="text"
+                      required
+                      value={formData.dataLuogoNascita}
+                      onChange={(e) =>
+                        setFormData({ ...formData, dataLuogoNascita: e.target.value })
+                      }
+                      placeholder="es. 15.07.1984 Napoli"
+                      className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="socio-telefono"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
+                      Recapito Telefonico *
+                    </label>
+                    <input
+                      id="socio-telefono"
+                      name="telefono"
+                      type="tel"
+                      required
+                      value={formData.telefono}
+                      onChange={(e) =>
+                        setFormData({ ...formData, telefono: e.target.value })
+                      }
+                      placeholder="+39 333 1234567"
+                      className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
+                    />
+                  </div>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="socio-tipologia"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
+                      Tipologia di Socio
+                    </label>
+                    <select
+                      id="socio-tipologia"
+                      name="tipologia"
+                      value={formData.tipologia}
+                      onChange={(e) =>
+                        setFormData({ ...formData, tipologia: e.target.value })
+                      }
+                      className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none"
+                    >
+                      <option>Socio Praticante (Voga & Vela Latina)</option>
+                      <option>Socio Ordinario Sostenitore</option>
+                      <option>Volontario Cantiere & Restauro</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="socio-cf"
+                      className="block text-[10px] uppercase font-mono tracking-widest text-slate-700 font-semibold mb-1"
+                    >
+                      Codice Fiscale (opzionale)
+                    </label>
+                    <input
+                      id="socio-cf"
+                      name="codiceFiscale"
+                      type="text"
+                      value={formData.codiceFiscale}
+                      onChange={(e) =>
+                        setFormData({ ...formData, codiceFiscale: e.target.value.toUpperCase() })
+                      }
+                      placeholder="RSSMRA80A01F839X"
+                      className="w-full px-4 py-2.5 bg-white border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-3 bg-amber-50/70 border border-amber-200 text-slate-700 text-xs leading-relaxed">
+                  <p className="font-semibold text-amber-900 mb-0.5">ℹ️ Modalità di convalida iscrizione:</p>
+                  A seguito dell&apos;invio riceverai via email le coordinate per il versamento della quota (€50). L&apos;iscrizione formale al Libro Soci e l&apos;assegnazione del numero di tessera avverranno a seguito della verifica del pagamento da parte della segreteria.
+                </div>
+
                 <button
                   type="submit"
                   disabled={submitting}
                   className="w-full py-3 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all cursor-pointer disabled:opacity-50"
                 >
-                  {submitting ? "Invio in corso..." : "Richiedi Tesseramento"}
+                  {submitting ? "Invio in corso..." : "Invia Domanda di Tesseramento"}
                 </button>
               </form>
             )}

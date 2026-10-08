@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     await initDb();
     const body = await req.json();
 
-    const { type, name, email, phone, itemTitle, experience, message } = body;
+    const { type, name, email, phone, itemTitle, experience, message, dataLuogoNascita, codiceFiscale } = body;
 
     if (!name || !email || !itemTitle) {
       return NextResponse.json(
@@ -35,32 +35,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const isTesseramento = type === "tesseramento";
+    const initialStatus = isTesseramento ? "in_attesa_pagamento" : "nuova";
+
     // Salva nel database (con fallback resiliente se il db temporaneamente non risponde)
     let booking: any = null;
     try {
       booking = await BookingsRepo.create({
-        type: type === "tesseramento" ? "tesseramento" : "corso",
+        type: isTesseramento ? "tesseramento" : "corso",
         name: String(name).trim(),
         email: String(email).trim().toLowerCase(),
         phone: phone ? String(phone).trim() : undefined,
         itemTitle: String(itemTitle).trim(),
         experience: experience ? String(experience).trim() : undefined,
         message: message ? String(message).trim() : undefined,
-        status: "nuova",
+        dataLuogoNascita: dataLuogoNascita ? String(dataLuogoNascita).trim() : undefined,
+        codiceFiscale: codiceFiscale ? String(codiceFiscale).trim().toUpperCase() : undefined,
+        status: initialStatus,
       });
     } catch (dbErr) {
       console.error("Errore salvataggio database/filesystem:", dbErr);
       const now = new Date().toISOString();
       booking = {
         id: `req-${Date.now()}`,
-        type: type === "tesseramento" ? "tesseramento" : "corso",
+        type: isTesseramento ? "tesseramento" : "corso",
         name: String(name).trim(),
         email: String(email).trim().toLowerCase(),
         phone: phone ? String(phone).trim() : undefined,
         itemTitle: String(itemTitle).trim(),
         experience: experience ? String(experience).trim() : undefined,
         message: message ? String(message).trim() : undefined,
-        status: "nuova",
+        dataLuogoNascita: dataLuogoNascita ? String(dataLuogoNascita).trim() : undefined,
+        codiceFiscale: codiceFiscale ? String(codiceFiscale).trim().toUpperCase() : undefined,
+        status: initialStatus,
         createdAt: now,
         updatedAt: now,
       };
@@ -77,6 +84,8 @@ export async function POST(req: NextRequest) {
       itemTitle: booking.itemTitle,
       experience: booking.experience,
       message: booking.message,
+      dataLuogoNascita: booking.dataLuogoNascita,
+      codiceFiscale: booking.codiceFiscale,
       createdAt: booking.createdAt,
     };
 

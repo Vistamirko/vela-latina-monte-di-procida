@@ -232,11 +232,11 @@ export async function sendBookingNotification(data: BookingNotificationData) {
 /**
  * Ricevuta / Mail di riepilogo inviata all'utente che si è registrato
  */
-export async function sendUserConfirmation(data: BookingNotificationData) {
+export async function sendUserConfirmation(data: BookingNotificationData & { dataLuogoNascita?: string; codiceFiscale?: string }) {
   const isCorso = data.type === "corso";
   const subject = isCorso
     ? `Conferma ricezione richiesta: ${data.itemTitle} | Vela Latina Monte di Procida`
-    : `Ricezione domanda di tesseramento socio | Vela Latina Monte di Procida`;
+    : `Domanda di Tesseramento Ricevuta (In attesa di pagamento) | Vela Latina Monte di Procida`;
 
   const formattedDate = new Date(data.createdAt).toLocaleString("it-IT", {
     timeZone: "Europe/Rome",
@@ -246,6 +246,8 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const ibanCode = process.env.ASSOCIATION_IBAN || "IBAN in fase di aggiornamento segreteria (rispondi alla mail per riceverlo)";
 
   const html = `
 <!DOCTYPE html>
@@ -261,7 +263,9 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
     .header h1 { margin: 0; font-size: 20px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: #ffffff; }
     .header p { margin: 8px 0 0; font-size: 12px; opacity: 0.85; letter-spacing: 1px; color: #cbd5e1; }
     .body { padding: 32px 28px; }
-    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px; }
+    .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px; }
+    .badge-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-ok { background: #e0f2fe; color: #0369a1; }
     .greeting { font-size: 18px; font-weight: 600; color: #0a1c2a; margin: 0 0 12px 0; }
     .intro { font-size: 14px; line-height: 1.6; color: #334155; margin-bottom: 24px; }
     .summary-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px; }
@@ -270,6 +274,13 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
     .summary-row:last-child { border-bottom: none; }
     .summary-label { width: 140px; color: #64748b; font-weight: 500; font-size: 12px; }
     .summary-value { flex: 1; color: #0a1c2a; font-weight: 600; }
+    
+    .payment-box { background: #fffbeb; border: 1px solid #fcd34d; border-left: 4px solid #b45309; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px; }
+    .payment-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: #92400e; margin-bottom: 12px; }
+    .payment-item { margin-bottom: 8px; font-size: 13px; color: #78350f; }
+    .payment-item strong { color: #0a1c2a; }
+    .iban-code { font-family: monospace; font-size: 13px; font-weight: bold; background: #ffffff; padding: 6px 10px; border: 1px dashed #d97706; display: inline-block; margin-top: 4px; border-radius: 4px; color: #0a1c2a; }
+
     .steps-box { background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 20px; margin-bottom: 24px; }
     .steps-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: #854d0e; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
     .step-item { font-size: 13px; line-height: 1.5; color: #451a03; margin-bottom: 10px; }
@@ -284,17 +295,40 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
 <body>
   <div class="card">
     <div class="header">
-      <div class="header-logo">Vela Latina Monte di Procida</div>
-      <h1>Scuola di Mare & Marineria Tradizionale</h1>
+      <div class="header-logo">Vela Latina Monte di Procida APS</div>
+      <h1>${isCorso ? "Scuola di Mare & Marineria Tradizionale" : "Domanda di Tesseramento Socio"}</h1>
       <p>Porticciolo di Acquamorta · Campi Flegrei</p>
     </div>
     <div class="body">
-      <span class="badge">✓ Ricevuta Richiesta</span>
+      <span class="badge ${isCorso ? "badge-ok" : "badge-pending"}">
+        ${isCorso ? "✓ Richiesta Ricevuta" : "⏳ In Attesa di Pagamento Quota"}
+      </span>
       <h2 class="greeting">Gentile ${data.name},</h2>
       <p class="intro">
-        Abbiamo registrato con successo la tua richiesta di partecipazione per <strong>"${data.itemTitle}"</strong>.
-        Grazie per l'interesse dimostrato verso la nostra associazione e la salvaguardia dell'arte marinaresca tradizionale flegrea.
+        ${
+          isCorso
+            ? `Abbiamo registrato con successo la tua richiesta di partecipazione per <strong>"${data.itemTitle}"</strong>. Grazie per l'interesse dimostrato verso la nostra associazione!`
+            : `Abbiamo ricevuto la tua domanda di tesseramento come <strong>"${data.itemTitle}"</strong> per l'Associazione Vela Latina Monte di Procida APS. Come previsto dallo statuto, l'iscrizione formale al <strong>Libro Soci Ufficiale</strong> e l'assegnazione del <strong>Numero di Tessera</strong> si perfezionano a seguito del versamento della quota associativa.`
+        }
       </p>
+
+      ${
+        !isCorso
+          ? `
+      <div class="payment-box">
+        <div class="payment-title">💳 Istruzioni per il Versamento della Quota Sociale</div>
+        <div class="payment-item"><strong>Beneficiario:</strong> Associazione Vela Latina Monte di Procida APS</div>
+        <div class="payment-item"><strong>Quota associativa annuale:</strong> € 50,00</div>
+        <div class="payment-item"><strong>Causale:</strong> Quota Sociale 2026 - ${data.name}</div>
+        <div class="payment-item"><strong>Coordinate IBAN:</strong><br>
+          <span class="iban-code">${ibanCode}</span>
+        </div>
+        <div style="margin-top: 10px; font-size: 12px; color: #78350f; font-style: italic;">
+          Nota: Se preferisci, puoi effettuare il versamento anche in contanti direttamente presso il porticciolo di Acquamorta concordando l'orario con la segreteria.
+        </div>
+      </div>`
+          : ""
+      }
 
       <div class="summary-card">
         <div class="summary-title">Riepilogo dei dettagli inseriti</div>
@@ -310,6 +344,15 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
           <div class="summary-label">Nome e Cognome</div>
           <div class="summary-value">${data.name}</div>
         </div>
+        ${
+          data.dataLuogoNascita
+            ? `
+        <div class="summary-row">
+          <div class="summary-label">Nascita</div>
+          <div class="summary-value">${data.dataLuogoNascita}</div>
+        </div>`
+            : ""
+        }
         <div class="summary-row">
           <div class="summary-label">Email</div>
           <div class="summary-value">${data.email}</div>
@@ -320,15 +363,6 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
         <div class="summary-row">
           <div class="summary-label">Telefono</div>
           <div class="summary-value">${data.phone}</div>
-        </div>`
-            : ""
-        }
-        ${
-          data.experience
-            ? `
-        <div class="summary-row">
-          <div class="summary-label">Esperienza</div>
-          <div class="summary-value">${data.experience}</div>
         </div>`
             : ""
         }
@@ -351,15 +385,17 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
 
       <div class="steps-box">
         <div class="steps-title">🧭 Cosa succede adesso?</div>
-        <div class="step-item">
-          <span class="step-number">1. Verifica e Calendario:</span> I nostri istruttori e la segreteria verificano la disponibilità a bordo e i calendari di uscita in mare previsti per la stagione.
-        </div>
-        <div class="step-item">
-          <span class="step-number">2. Contatto Diretto:</span> Ti ricontatteremo via email o al tuo recapito telefonico per confermare la partecipazione e concordare date e orari.
-        </div>
-        <div class="step-item">
-          <span class="step-number">3. Domande o Aggiornamenti?</span> Se hai bisogno di informazioni aggiuntive o modifiche, puoi rispondere direttamente a questa email.
-        </div>
+        ${
+          isCorso
+            ? `
+        <div class="step-item"><span class="step-number">1. Verifica e Calendario:</span> I nostri istruttori verificano disponibilità e calendario.</div>
+        <div class="step-item"><span class="step-number">2. Contatto Diretto:</span> Ti ricontatteremo via email o WhatsApp per definire le uscite.</div>
+        <div class="step-item"><span class="step-number">3. Domande?</span> Puoi rispondere direttamente a questa email.</div>`
+            : `
+        <div class="step-item"><span class="step-number">1. Esecuzione Pagamento:</span> Esegui il bonifico con la causale indicata sopra o salda in sede.</div>
+        <div class="step-item"><span class="step-number">2. Convalida Segreteria:</span> La segreteria riscontra l'avvenuto accredito bancario o contante.</div>
+        <div class="step-item"><span class="step-number">3. Emissione Tessera:</span> Riceverai una mail di conferma con l'attribuzione del tuo Numero di Tessera ufficiale e l'iscrizione nel Libro Soci 2026.</div>`
+        }
       </div>
 
       <div class="cta-area">
@@ -368,7 +404,7 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
 
       <div class="signoff">
         Buon Vento,<br>
-        <strong>Il Direttivo e gli Istruttori</strong><br>
+        <strong>Il Consiglio Direttivo</strong><br>
         <em>Associazione Vela Latina Monte di Procida APS</em>
       </div>
     </div>
@@ -376,8 +412,7 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
     <div class="footer">
       Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
-      Email di contatto: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="https://velalatinamontediprocida.it" style="color: #64748b;">velalatinamontediprocida.it</a><br>
-      <span style="font-size: 10px; opacity: 0.8; margin-top: 4px; display: inline-block;">Ricevi questa email di conferma a seguito della compilazione del modulo sul nostro sito.</span>
+      Email di contatto: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="https://velalatinamontediprocida.it" style="color: #64748b;">velalatinamontediprocida.it</a>
     </div>
   </div>
 </body>
@@ -390,6 +425,118 @@ export async function sendUserConfirmation(data: BookingNotificationData) {
     subject,
     html,
     tag: "USER_CONFIRMATION",
+  });
+}
+
+/**
+ * Notifica di Benvenuto e Approvazione Tessera Socio a pagamento avvenuto
+ */
+export async function sendMembershipApprovedNotification(params: {
+  nome: string;
+  email: string;
+  anno: number;
+  numeroTessera?: string | number;
+  tipologia?: string;
+  metodoPagamento?: string;
+  importo?: number | string;
+}) {
+  const subject = `🎉 Benvenuto/a nel Libro Soci! Tessera #${params.numeroTessera || ""} (${params.anno}) | Vela Latina Monte di Procida`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #fbfaf6; color: #0a1c2a; margin: 0; padding: 24px; }
+    .card { max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .header { background: #0a1c2a; color: #ffffff; padding: 32px 24px; text-align: center; border-bottom: 3px solid #c99a45; }
+    .header-logo { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #c99a45; font-weight: 700; margin-bottom: 8px; }
+    .header h1 { margin: 0; font-size: 20px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: #ffffff; }
+    .body { padding: 32px 28px; }
+    .badge-success { display: inline-block; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px; }
+    .tessera-card { background: linear-gradient(135deg, #0a1c2a 0%, #1b5b80 100%); color: #ffffff; border-radius: 8px; padding: 24px; margin: 20px 0; border: 1px solid #c99a45; text-align: center; box-shadow: 0 4px 10px rgba(10,28,42,0.15); }
+    .tessera-num { font-size: 36px; font-weight: 700; color: #c99a45; letter-spacing: 2px; margin: 8px 0; font-family: monospace; }
+    .tessera-name { font-size: 18px; font-weight: 600; color: #ffffff; letter-spacing: 1px; }
+    .tessera-sub { font-size: 12px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1.5px; }
+    .info-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+    .info-table td { padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+    .info-label { color: #64748b; font-weight: 500; width: 45%; }
+    .info-val { color: #0a1c2a; font-weight: 600; }
+    .footer { padding: 20px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; text-align: center; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="header-logo">Vela Latina Monte di Procida APS</div>
+      <h1>Tessera Socio Ufficiale</h1>
+      <p>Anno Sociale ${params.anno}</p>
+    </div>
+    <div class="body">
+      <span class="badge-success">✓ Pagamento Confermato & Iscritto</span>
+      <h2 style="font-size: 20px; margin: 0 0 12px 0;">Benvenuto/a a bordo, ${params.nome}!</h2>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        Con grande piacere ti comunichiamo che il pagamento della tua quota associativa è stato registrato con successo. Sei ufficialmente iscritto/a al <strong>Libro Soci dell'Associazione Vela Latina Monte di Procida</strong> per l'anno sociale <strong>${params.anno}</strong>.
+      </p>
+
+      <div class="tessera-card">
+        <div class="tessera-sub">Tessera Socio Ordinario · Anno ${params.anno}</div>
+        <div class="tessera-num">#${params.numeroTessera || "---"}</div>
+        <div class="tessera-name">${params.nome}</div>
+        <div style="font-size: 11px; color: #94a3b8; margin-top: 8px;">Porticciolo di Acquamorta · Campi Flegrei</div>
+      </div>
+
+      <table class="info-table">
+        <tr>
+          <td class="info-label">Numero Tessera</td>
+          <td class="info-val">#${params.numeroTessera || "Assegnata"}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Anno Sociale</td>
+          <td class="info-val">${params.anno}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Qualifica Socio</td>
+          <td class="info-val">${params.tipologia || "Socio Ordinario"}</td>
+        </tr>
+        <tr>
+          <td class="info-label">Metodo Pagamento Registrato</td>
+          <td class="info-val">${params.metodoPagamento === "bonifico" ? "Bonifico Bancario" : (params.metodoPagamento === "contanti" ? "Contanti in sede" : "Registrato")}</td>
+        </tr>
+      </table>
+
+      <div style="background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 18px; margin-top: 24px; font-size: 13px; line-height: 1.6; color: #451a03;">
+        <strong>⚓ Cosa puoi fare adesso come socio:</strong>
+        <ul style="margin: 8px 0 0; padding-left: 20px;">
+          <li>Partecipare alle assemblee sociali e alle iniziative culturali e di voga.</li>
+          <li>Frequentare le attività di cantiere e navigazione a bordo dei gozzi della flotta (Janara, San Michele Arcangelo, Quandel).</li>
+          <li>Contribuire alla salvaguardia dell'arte marinaresca tradizionale flegrea.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 24px; font-size: 13px; color: #334155; line-height: 1.5;">
+        Buon Vento e ci vediamo presto in banchina ad Acquamorta!<br>
+        <strong>Il Consiglio Direttivo</strong><br>
+        <em>Associazione Vela Latina Monte di Procida APS</em>
+      </div>
+    </div>
+    <div class="footer">
+      Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
+      Porticciolo di Acquamorta, 80070 Monte di Procida (NA)
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  return sendEmailMessage({
+    to: params.email,
+    replyTo: "vistamirko@gmail.com",
+    subject,
+    html,
+    tag: "MEMBERSHIP_APPROVED",
   });
 }
 

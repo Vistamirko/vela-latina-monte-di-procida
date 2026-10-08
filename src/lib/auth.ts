@@ -77,3 +77,23 @@ export async function getCurrentUser(): Promise<TokenPayload | null> {
   if (!token) return null;
   return await verifySessionToken(token);
 }
+
+export const SITE_ACCESS_COOKIE = "vl_site_access";
+export const DEFAULT_SITE_PASSWORD = process.env.SITE_PASSWORD || "velalatina2026";
+
+export async function createSiteAccessToken(): Promise<string> {
+  return await new SignJWT({ access: "granted" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("30d")
+    .sign(JWT_SECRET);
+}
+
+export async function verifySiteAccessToken(token: string): Promise<boolean> {
+  try {
+    const { payload } = await jwtVerify(token, JWT_SECRET);
+    return payload.access === "granted";
+  } catch {
+    return false;
+  }
+}

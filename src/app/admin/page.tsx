@@ -27,8 +27,11 @@ import {
   MessageSquare,
   Check,
   User,
+  Users,
 } from "lucide-react";
-import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest } from "@/lib/db/types";
+import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem } from "@/lib/db/types";
+import LibroSociManager from "@/components/admin/LibroSociManager";
+import ApproveMemberModal from "@/components/admin/ApproveMemberModal";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -40,8 +43,8 @@ export default function AdminDashboardPage() {
   } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Active Tab: 'richieste' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
-  const [activeTab, setActiveTab] = useState<"richieste" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
+  // Active Tab: 'richieste' | 'soci' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
+  const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
 
   // Data states
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -49,7 +52,8 @@ export default function AdminDashboardPage() {
   const [courses, setCourses] = useState<CourseSession[]>([]);
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [bookings, setBookings] = useState<BookingRequest[]>([]);
-  const [bookingFilter, setBookingFilter] = useState<"tutte" | "nuova" | "contattato" | "iscritto">("tutte");
+  const [soci, setSoci] = useState<SocioItem[]>([]);
+  const [bookingFilter, setBookingFilter] = useState<"tutte" | "nuova" | "in_attesa_pagamento" | "contattato" | "iscritto">("tutte");
   const [loadingData, setLoadingData] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -66,6 +70,10 @@ export default function AdminDashboardPage() {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState<Partial<ProjectItem> | null>(null);
 
+  // Approve member modal state
+  const [approveModalOpen, setApproveModalOpen] = useState(false);
+  const [selectedBookingToApprove, setSelectedBookingToApprove] = useState<BookingRequest | null>(null);
+
   const showToast = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 4000);
@@ -74,12 +82,13 @@ export default function AdminDashboardPage() {
   const loadAllData = useCallback(async () => {
     setLoadingData(true);
     try {
-      const [resEvt, resBlog, resCourses, resProj, resBookings] = await Promise.all([
+      const [resEvt, resBlog, resCourses, resProj, resBookings, resSoci] = await Promise.all([
         fetch("/api/eventi?all=true"),
         fetch("/api/blog?all=true"),
         fetch("/api/corsi-calendar?all=true"),
         fetch("/api/progetti?all=true"),
         fetch("/api/iscrizioni"),
+        fetch("/api/soci"),
       ]);
 
       if (resEvt.ok) {
@@ -101,6 +110,10 @@ export default function AdminDashboardPage() {
       if (resBookings.ok) {
         const d = await resBookings.json();
         setBookings(d.data || []);
+      }
+      if (resSoci.ok) {
+        const d = await resSoci.json();
+        setSoci(d.data || []);
       }
     } catch {
       showToast("error", "Errore nel caricamento dei dati");
@@ -420,9 +433,26 @@ export default function AdminDashboardPage() {
           >
             <Inbox className="w-3.5 h-3.5" />
             <span>Iscrizioni & Richieste ({bookings.length})</span>
-            {bookings.filter((b) => b.status === "nuova").length > 0 && (
-              <span className="px-1.5 py-0.5 text-[9px] bg-red-600 text-white rounded-full font-bold animate-pulse">
-                {bookings.filter((b) => b.status === "nuova").length} nuove
+            {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
+              <span className="px-1.5 py-0.5 text-[9px] bg-amber-600 text-white rounded-full font-bold">
+                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length} attive
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("soci")}
+            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+              activeTab === "soci"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span>Libro Soci ({soci.length})</span>
+            {soci.filter((s) => s.anno === 2026).length > 0 && (
+              <span className="px-1.5 py-0.5 text-[9px] bg-emerald-700 text-white rounded-full font-bold">
+                {soci.filter((s) => s.anno === 2026).length} (2026)
               </span>
             )}
           </button>
@@ -551,16 +581,29 @@ export default function AdminDashboardPage() {
                 Tutte ({bookings.length})
               </button>
               <button
-                onClick={() => setBookingFilter("nuova")}
+                onClick={() => setBookingFilter("in_attesa_pagamento")}
                 className={`px-3 py-1.5 border text-xs cursor-pointer transition-colors flex items-center gap-1.5 ${
-                  bookingFilter === "nuova"
+                  bookingFilter === "in_attesa_pagamento"
                     ? "bg-amber-600 text-white border-amber-600 font-bold"
                     : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
                 }`}
               >
-                <span>Da Contattare ({bookings.filter((b) => b.status === "nuova").length})</span>
+                <span>In Attesa Pagamento ({bookings.filter((b) => b.status === "in_attesa_pagamento").length})</span>
+                {bookings.filter((b) => b.status === "in_attesa_pagamento").length > 0 && (
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                )}
+              </button>
+              <button
+                onClick={() => setBookingFilter("nuova")}
+                className={`px-3 py-1.5 border text-xs cursor-pointer transition-colors flex items-center gap-1.5 ${
+                  bookingFilter === "nuova"
+                    ? "bg-sky-600 text-white border-sky-600 font-bold"
+                    : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
+                }`}
+              >
+                <span>Nuove Corsi ({bookings.filter((b) => b.status === "nuova").length})</span>
                 {bookings.filter((b) => b.status === "nuova").length > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                  <span className="w-2 h-2 rounded-full bg-sky-500" />
                 )}
               </button>
               <button
@@ -621,8 +664,10 @@ export default function AdminDashboardPage() {
                       <div
                         key={item.id}
                         className={`p-6 bg-white border transition-all ${
-                          item.status === "nuova"
-                            ? "border-amber-400 shadow-xs bg-amber-50/10"
+                          item.status === "in_attesa_pagamento"
+                            ? "border-amber-400 shadow-xs bg-amber-50/20"
+                            : item.status === "nuova"
+                            ? "border-sky-300 shadow-xs bg-sky-50/10"
                             : "border-slate-200"
                         }`}
                       >
@@ -640,16 +685,18 @@ export default function AdminDashboardPage() {
 
                             <span
                               className={`px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-semibold rounded-xs ${
-                                item.status === "nuova"
+                                item.status === "in_attesa_pagamento"
                                   ? "bg-amber-100 text-amber-900 border border-amber-300 font-bold"
+                                  : item.status === "nuova"
+                                  ? "bg-sky-100 text-sky-900 border border-sky-300 font-bold"
                                   : item.status === "contattato"
                                   ? "bg-blue-100 text-blue-900 border border-blue-200"
                                   : item.status === "iscritto"
-                                  ? "bg-emerald-100 text-emerald-900 border border-emerald-200"
+                                  ? "bg-emerald-100 text-emerald-900 border border-emerald-200 font-bold"
                                   : "bg-slate-100 text-slate-700"
                               }`}
                             >
-                              ● {item.status.toUpperCase()}
+                              ● {item.status === "in_attesa_pagamento" ? "IN ATTESA PAGAMENTO" : item.status.toUpperCase()}
                             </span>
 
                             <span className="text-[10px] font-mono text-slate-600">
@@ -673,6 +720,7 @@ export default function AdminDashboardPage() {
                               }
                               className="px-2.5 py-1 bg-[#fbfaf6] border border-slate-300 text-xs text-[#0a1c2a] font-semibold focus:border-[#0a1c2a] outline-none cursor-pointer"
                             >
+                              <option value="in_attesa_pagamento">In attesa pagamento</option>
                               <option value="nuova">Nuova (Da contattare)</option>
                               <option value="contattato">Contattato</option>
                               <option value="iscritto">Iscritto / Confermato</option>
@@ -691,13 +739,23 @@ export default function AdminDashboardPage() {
 
                         {/* Corpo della richiesta */}
                         <div className="pt-4 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                          <div className="md:col-span-4 space-y-1">
+                          <div className="md:col-span-5 space-y-1">
                             <h4 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-medium leading-snug">
                               {item.name}
                             </h4>
                             <div className="text-xs font-mono font-bold text-[#1b5b80]">
                               {item.itemTitle}
                             </div>
+                            {item.dataLuogoNascita && (
+                              <div className="text-[11px] font-mono text-slate-700">
+                                🎂 Nascita: <span className="font-semibold text-slate-900">{item.dataLuogoNascita}</span>
+                              </div>
+                            )}
+                            {item.codiceFiscale && (
+                              <div className="text-[11px] font-mono text-slate-700">
+                                🪪 C.F.: <span className="font-semibold text-slate-900 font-mono">{item.codiceFiscale}</span>
+                              </div>
+                            )}
                             {item.experience && (
                               <div className="text-[11px] font-mono text-slate-600">
                                 Livello: <span className="capitalize">{item.experience}</span>
@@ -705,7 +763,7 @@ export default function AdminDashboardPage() {
                             )}
                           </div>
 
-                          <div className="md:col-span-4 space-y-2 text-xs font-mono">
+                          <div className="md:col-span-3 space-y-2 text-xs font-mono">
                             {item.phone && (
                               <div className="flex items-center gap-2">
                                 <Phone className="w-3.5 h-3.5 text-slate-500" />
@@ -720,7 +778,7 @@ export default function AdminDashboardPage() {
                             <div className="flex items-center gap-2">
                               <Mail className="w-3.5 h-3.5 text-slate-500" />
                               <a
-                                href={`mailto:${item.email}`}
+                                  href={`mailto:${item.email}`}
                                 className="text-[#0a1c2a] hover:underline"
                               >
                                 {item.email}
@@ -728,8 +786,29 @@ export default function AdminDashboardPage() {
                             </div>
                           </div>
 
-                          {/* Azioni Rapide Contatto */}
-                          <div className="md:col-span-4 flex flex-wrap lg:justify-end gap-2">
+                          {/* Azioni Rapide Contatto & Approvazione */}
+                          <div className="md:col-span-4 flex flex-wrap lg:justify-end gap-2 items-center">
+                            {item.type === "tesseramento" && item.status !== "iscritto" && (
+                              <button
+                                onClick={() => {
+                                  setSelectedBookingToApprove(item);
+                                  setApproveModalOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#b8860b] hover:bg-[#996f08] text-white text-[10px] uppercase font-mono tracking-wider font-bold transition-colors cursor-pointer shadow-2xs"
+                                title="Conferma pagamento quota e iscrivi al Libro Soci"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Conferma Pagamento & Iscrivi</span>
+                              </button>
+                            )}
+
+                            {item.type === "tesseramento" && item.status === "iscritto" && (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 text-[10px] uppercase font-mono tracking-wider font-bold">
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                <span>Iscritto nel Libro Soci</span>
+                              </span>
+                            )}
+
                             {waLink && (
                               <a
                                 href={waLink}
@@ -769,6 +848,17 @@ export default function AdminDashboardPage() {
               );
             })()}
           </div>
+        )}
+
+        {/* ==============================================================
+           TAB: LIBRO SOCI
+        ============================================================== */}
+        {activeTab === "soci" && (
+          <LibroSociManager
+            soci={soci}
+            onReload={loadAllData}
+            showToast={showToast}
+          />
         )}
 
         {/* ==============================================================
@@ -2209,6 +2299,18 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Modal Approvazione Pagamento e Iscrizione Libro Soci */}
+      <ApproveMemberModal
+        isOpen={approveModalOpen}
+        booking={selectedBookingToApprove}
+        onClose={() => {
+          setApproveModalOpen(false);
+          setSelectedBookingToApprove(null);
+        }}
+        onSuccess={loadAllData}
+        showToast={showToast}
+      />
     </div>
   );
 }

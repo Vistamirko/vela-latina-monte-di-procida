@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
-import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem, BookingRequest } from "./types";
+import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem, BookingRequest, SocioItem } from "./types";
 import { hashPassword } from "../auth";
 
 const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -662,11 +662,60 @@ export async function initDb(): Promise<void> {
           item_title VARCHAR(255) NOT NULL,
           experience VARCHAR(100),
           message TEXT,
+          data_luogo_nascita VARCHAR(255),
+          codice_fiscale VARCHAR(64),
           status VARCHAR(32) NOT NULL DEFAULT 'nuova',
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
         );
       `;
+
+      try {
+        await sql`ALTER TABLE iscrizioni_richieste ADD COLUMN IF NOT EXISTS data_luogo_nascita VARCHAR(255);`;
+        await sql`ALTER TABLE iscrizioni_richieste ADD COLUMN IF NOT EXISTS codice_fiscale VARCHAR(64);`;
+      } catch {}
+
+      // Tabella Soci / Libro Soci Ufficiale
+      await sql`
+        CREATE TABLE IF NOT EXISTS soci (
+          id VARCHAR(64) PRIMARY KEY,
+          anno INT NOT NULL,
+          progressivo INT,
+          nome VARCHAR(255) NOT NULL,
+          data_luogo_nascita VARCHAR(255),
+          codice_fiscale VARCHAR(64),
+          numero_tessera VARCHAR(64),
+          quota_contanti VARCHAR(32),
+          quota_bonifico VARCHAR(32),
+          socio_onorario BOOLEAN DEFAULT false,
+          tipologia VARCHAR(100),
+          email VARCHAR(255),
+          telefono VARCHAR(64),
+          data_iscrizione VARCHAR(64),
+          metodo_pagamento VARCHAR(32),
+          importo_pagato NUMERIC(10, 2),
+          note TEXT,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+      `;
+
+      // Seed Soci da file seed locale se tabella vuota
+      try {
+        const existingSoci = await sql`SELECT count(*) FROM soci;`;
+        if (parseInt(existingSoci[0].count) === 0) {
+          const seedSoci = readLocalJson<SocioItem[]>("soci.json", []);
+          for (const s of seedSoci) {
+            await sql`
+              INSERT INTO soci (id, anno, progressivo, nome, data_luogo_nascita, codice_fiscale, numero_tessera, quota_contanti, quota_bonifico, socio_onorario, tipologia, email, telefono, data_iscrizione, metodo_pagamento, note, created_at, updated_at)
+              VALUES (${s.id}, ${s.anno}, ${s.progressivo || null}, ${s.nome}, ${s.dataLuogoNascita || null}, ${s.codiceFiscale || null}, ${s.numeroTessera ? String(s.numeroTessera) : null}, ${s.quotaContanti ? String(s.quotaContanti) : null}, ${s.quotaBonifico ? String(s.quotaBonifico) : null}, ${Boolean(s.socioOnorario)}, ${s.tipologia || 'Socio Ordinario'}, ${s.email || null}, ${s.telefono || null}, ${s.dataIscrizione || null}, ${s.metodoPagamento || null}, ${s.note || null}, ${s.createdAt || new Date().toISOString()}, ${s.updatedAt || new Date().toISOString()})
+              ON CONFLICT (id) DO NOTHING;
+            `;
+          }
+        }
+      } catch (errSoci) {
+        console.warn("[initDb] Avviso seed soci:", errSoci);
+      }
 
       // Controlla se esiste admin iniziale
       const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
@@ -1256,7 +1305,7 @@ export const BookingsRepo = {
     }
     const sql = neon(DB_URL);
     const rows = await sql`
-      SELECT id, type, name, email, phone, item_title, experience, message, status, created_at, updated_at
+      SELECT id, type, name, email, phone, item_title, experience, message, data_luogo_nascita, codice_fiscale, status, created_at, updated_at
       FROM iscrizioni_richieste
       ORDER BY created_at DESC;
     `;
@@ -1269,6 +1318,8 @@ export const BookingsRepo = {
       itemTitle: r.item_title,
       experience: r.experience || undefined,
       message: r.message || undefined,
+      dataLuogoNascita: r.data_luogo_nascita || undefined,
+      codiceFiscale: r.codice_fiscale || undefined,
       status: r.status as BookingRequest["status"],
       createdAt: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
       updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : new Date().toISOString(),
@@ -1300,8 +1351,8 @@ export const BookingsRepo = {
 
     const sql = neon(DB_URL);
     await sql`
-      INSERT INTO iscrizioni_richieste (id, type, name, email, phone, item_title, experience, message, status, created_at, updated_at)
-      VALUES (${id}, ${item.type}, ${item.name}, ${item.email}, ${item.phone || null}, ${item.itemTitle}, ${item.experience || null}, ${item.message || null}, ${item.status}, ${now}, ${now});
+      INSERT INTO iscrizioni_richieste (id, type, name, email, phone, item_title, experience, message, data_luogo_nascita, codice_fiscale, status, created_at, updated_at)
+      VALUES (${id}, ${item.type}, ${item.name}, ${item.email}, ${item.phone || null}, ${item.itemTitle}, ${item.experience || null}, ${item.message || null}, ${item.dataLuogoNascita || null}, ${item.codiceFiscale || null}, ${item.status}, ${now}, ${now});
     `;
     return item;
   },
@@ -1335,6 +1386,156 @@ export const BookingsRepo = {
     }
     const sql = neon(DB_URL);
     await sql`DELETE FROM iscrizioni_richieste WHERE id = ${id};`;
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: LIBRO SOCI / REGISTRO ISCRITTI
+============================================================== */
+export const SociRepo = {
+  async getAll(anno?: number): Promise<SocioItem[]> {
+    if (!DB_URL) {
+      const items = readLocalJson<SocioItem[]>("soci.json", []);
+      const filtered = anno ? items.filter((s) => s.anno === anno) : items;
+      return filtered.sort((a, b) => {
+        if (b.anno !== a.anno) return b.anno - a.anno;
+        return (a.progressivo || 9999) - (b.progressivo || 9999);
+      });
+    }
+    try {
+      const sql = neon(DB_URL);
+      const rows = anno
+        ? await sql`SELECT * FROM soci WHERE anno = ${anno} ORDER BY progressivo ASC NULLS LAST, created_at ASC;`
+        : await sql`SELECT * FROM soci ORDER BY anno DESC, progressivo ASC NULLS LAST, created_at ASC;`;
+
+      return rows.map((r: any) => ({
+        id: r.id,
+        anno: Number(r.anno),
+        progressivo: r.progressivo ? Number(r.progressivo) : undefined,
+        nome: r.nome,
+        dataLuogoNascita: r.data_luogo_nascita || undefined,
+        codiceFiscale: r.codice_fiscale || undefined,
+        numeroTessera: r.numero_tessera || undefined,
+        quotaContanti: r.quota_contanti || undefined,
+        quotaBonifico: r.quota_bonifico || undefined,
+        socioOnorario: Boolean(r.socio_onorario),
+        tipologia: r.tipologia || "Socio Ordinario",
+        email: r.email || undefined,
+        telefono: r.telefono || undefined,
+        dataIscrizione: r.data_iscrizione || "",
+        metodoPagamento: r.metodo_pagamento || undefined,
+        importoPagato: r.importo_pagato ? Number(r.importo_pagato) : undefined,
+        note: r.note || undefined,
+        createdAt: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : new Date().toISOString(),
+      }));
+    } catch (err) {
+      console.error("[SociRepo.getAll] Errore DB Neon, uso fallback:", err);
+      const items = readLocalJson<SocioItem[]>("soci.json", []);
+      const filtered = anno ? items.filter((s) => s.anno === anno) : items;
+      return filtered.sort((a, b) => {
+        if (b.anno !== a.anno) return b.anno - a.anno;
+        return (a.progressivo || 9999) - (b.progressivo || 9999);
+      });
+    }
+  },
+
+  async getById(id: string): Promise<SocioItem | null> {
+    const all = await this.getAll();
+    return all.find((s) => s.id === id) || null;
+  },
+
+  async getNextTessera(anno: number): Promise<{ nextProgressivo: number; nextTessera: number }> {
+    const list = await this.getAll(anno);
+    let maxProgressivo = 0;
+    let maxTessera = 0;
+    for (const item of list) {
+      if (item.progressivo && item.progressivo > maxProgressivo) {
+        maxProgressivo = item.progressivo;
+      }
+      if (item.numeroTessera) {
+        const num = parseInt(String(item.numeroTessera), 10);
+        if (!isNaN(num) && num > maxTessera) {
+          maxTessera = num;
+        }
+      }
+    }
+
+    // Se per l'anno in corso non ci sono ancora tessere, cerca il massimo storico complessivo
+    if (maxTessera === 0) {
+      const all = await this.getAll();
+      for (const item of all) {
+        if (item.numeroTessera) {
+          const num = parseInt(String(item.numeroTessera), 10);
+          if (!isNaN(num) && num > maxTessera) {
+            maxTessera = num;
+          }
+        }
+      }
+    }
+
+    return {
+      nextProgressivo: maxProgressivo + 1,
+      nextTessera: maxTessera > 0 ? maxTessera + 1 : maxProgressivo + 1,
+    };
+  },
+
+  async save(socio: Omit<SocioItem, "id" | "createdAt" | "updatedAt"> & { id?: string; createdAt?: string }): Promise<SocioItem> {
+    const now = new Date().toISOString();
+    const id = socio.id || `socio-${socio.anno}-${Date.now()}`;
+    const createdAt = socio.createdAt || now;
+
+    if (!DB_URL) {
+      const items = readLocalJson<SocioItem[]>("soci.json", []);
+      const idx = items.findIndex((s) => s.id === id);
+      let saved: SocioItem;
+      if (idx >= 0) {
+        saved = { ...items[idx], ...socio, id, updatedAt: now };
+        items[idx] = saved;
+      } else {
+        saved = { ...socio, id, createdAt, updatedAt: now };
+        items.push(saved);
+      }
+      writeLocalJson<SocioItem[]>("soci.json", items);
+      return saved;
+    }
+
+    const sql = neon(DB_URL);
+    await sql`
+      INSERT INTO soci (id, anno, progressivo, nome, data_luogo_nascita, codice_fiscale, numero_tessera, quota_contanti, quota_bonifico, socio_onorario, tipologia, email, telefono, data_iscrizione, metodo_pagamento, importo_pagato, note, created_at, updated_at)
+      VALUES (${id}, ${socio.anno}, ${socio.progressivo || null}, ${socio.nome}, ${socio.dataLuogoNascita || null}, ${socio.codiceFiscale || null}, ${socio.numeroTessera ? String(socio.numeroTessera) : null}, ${socio.quotaContanti ? String(socio.quotaContanti) : null}, ${socio.quotaBonifico ? String(socio.quotaBonifico) : null}, ${Boolean(socio.socioOnorario)}, ${socio.tipologia || 'Socio Ordinario'}, ${socio.email || null}, ${socio.telefono || null}, ${socio.dataIscrizione || null}, ${socio.metodoPagamento || null}, ${socio.importoPagato || null}, ${socio.note || null}, ${createdAt}, ${now})
+      ON CONFLICT (id) DO UPDATE SET
+        anno = EXCLUDED.anno,
+        progressivo = EXCLUDED.progressivo,
+        nome = EXCLUDED.nome,
+        data_luogo_nascita = EXCLUDED.data_luogo_nascita,
+        codice_fiscale = EXCLUDED.codice_fiscale,
+        numero_tessera = EXCLUDED.numero_tessera,
+        quota_contanti = EXCLUDED.quota_contanti,
+        quota_bonifico = EXCLUDED.quota_bonifico,
+        socio_onorario = EXCLUDED.socio_onorario,
+        tipologia = EXCLUDED.tipologia,
+        email = EXCLUDED.email,
+        telefono = EXCLUDED.telefono,
+        data_iscrizione = EXCLUDED.data_iscrizione,
+        metodo_pagamento = EXCLUDED.metodo_pagamento,
+        importo_pagato = EXCLUDED.importo_pagato,
+        note = EXCLUDED.note,
+        updated_at = EXCLUDED.updated_at;
+    `;
+    const found = await this.getById(id);
+    return found!;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    if (!DB_URL) {
+      const items = readLocalJson<SocioItem[]>("soci.json", []);
+      writeLocalJson<SocioItem[]>("soci.json", items.filter((s) => s.id !== id));
+      return true;
+    }
+    const sql = neon(DB_URL);
+    await sql`DELETE FROM soci WHERE id = ${id};`;
     return true;
   },
 };

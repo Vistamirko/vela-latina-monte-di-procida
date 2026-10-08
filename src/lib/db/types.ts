@@ -76,6 +76,28 @@ export interface ProjectItem {
   updatedAt: string;
 }
 
+export interface SocioItem {
+  id: string;
+  anno: number;
+  progressivo?: number;
+  nome: string;
+  dataLuogoNascita?: string;
+  codiceFiscale?: string;
+  numeroTessera?: string | number;
+  quotaContanti?: string | number;
+  quotaBonifico?: string | number;
+  socioOnorario?: boolean;
+  tipologia?: string;
+  email?: string;
+  telefono?: string;
+  dataIscrizione: string;
+  metodoPagamento?: "bonifico" | "contanti" | "onorario" | "altro";
+  importoPagato?: number;
+  note?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BookingRequest {
   id: string;
   type: "corso" | "tesseramento";
@@ -85,7 +107,9 @@ export interface BookingRequest {
   itemTitle: string;
   experience?: string;
   message?: string;
-  status: "nuova" | "contattato" | "iscritto" | "archiviata";
+  dataLuogoNascita?: string;
+  codiceFiscale?: string;
+  status: "nuova" | "in_attesa_pagamento" | "contattato" | "iscritto" | "archiviata";
   createdAt: string;
   updatedAt: string;
 }
