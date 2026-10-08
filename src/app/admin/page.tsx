@@ -28,10 +28,12 @@ import {
   Check,
   User,
   Users,
+  Building2,
 } from "lucide-react";
-import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem } from "@/lib/db/types";
+import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione } from "@/lib/db/types";
 import LibroSociManager from "@/components/admin/LibroSociManager";
 import ApproveMemberModal from "@/components/admin/ApproveMemberModal";
+import AnagraficaManager from "@/components/admin/AnagraficaManager";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -43,8 +45,8 @@ export default function AdminDashboardPage() {
   } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Active Tab: 'richieste' | 'soci' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
-  const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
+  // Active Tab: 'richieste' | 'soci' | 'anagrafica' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
+  const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
 
   // Data states
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -53,6 +55,7 @@ export default function AdminDashboardPage() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [bookings, setBookings] = useState<BookingRequest[]>([]);
   const [soci, setSoci] = useState<SocioItem[]>([]);
+  const [anagrafica, setAnagrafica] = useState<AnagraficaAssociazione | null>(null);
   const [bookingFilter, setBookingFilter] = useState<"tutte" | "nuova" | "in_attesa_pagamento" | "contattato" | "iscritto">("tutte");
   const [loadingData, setLoadingData] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
@@ -82,13 +85,14 @@ export default function AdminDashboardPage() {
   const loadAllData = useCallback(async () => {
     setLoadingData(true);
     try {
-      const [resEvt, resBlog, resCourses, resProj, resBookings, resSoci] = await Promise.all([
+      const [resEvt, resBlog, resCourses, resProj, resBookings, resSoci, resAnagrafica] = await Promise.all([
         fetch("/api/eventi?all=true"),
         fetch("/api/blog?all=true"),
         fetch("/api/corsi-calendar?all=true"),
         fetch("/api/progetti?all=true"),
         fetch("/api/iscrizioni"),
         fetch("/api/soci"),
+        fetch("/api/anagrafica"),
       ]);
 
       if (resEvt.ok) {
@@ -114,6 +118,10 @@ export default function AdminDashboardPage() {
       if (resSoci.ok) {
         const d = await resSoci.json();
         setSoci(d.data || []);
+      }
+      if (resAnagrafica.ok) {
+        const d = await resAnagrafica.json();
+        setAnagrafica(d.data || null);
       }
     } catch {
       showToast("error", "Errore nel caricamento dei dati");
@@ -453,6 +461,23 @@ export default function AdminDashboardPage() {
             {soci.filter((s) => s.anno === 2026).length > 0 && (
               <span className="px-1.5 py-0.5 text-[9px] bg-emerald-700 text-white rounded-full font-bold">
                 {soci.filter((s) => s.anno === 2026).length} (2026)
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("anagrafica")}
+            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+              activeTab === "anagrafica"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <Building2 className="w-3.5 h-3.5 text-[#c99a45]" />
+            <span>Anagrafica & RUNTS</span>
+            {anagrafica?.documenti && (
+              <span className="px-1.5 py-0.5 text-[9px] bg-amber-50 text-amber-900 border border-amber-300 rounded-full font-bold">
+                {anagrafica.documenti.length} doc
               </span>
             )}
           </button>
@@ -856,6 +881,17 @@ export default function AdminDashboardPage() {
         {activeTab === "soci" && (
           <LibroSociManager
             soci={soci}
+            onReload={loadAllData}
+            showToast={showToast}
+          />
+        )}
+
+        {/* ==============================================================
+           TAB: ANAGRAFICA & DOCUMENTI RUNTS
+        ============================================================== */}
+        {activeTab === "anagrafica" && (
+          <AnagraficaManager
+            initialData={anagrafica || ({} as any)}
             onReload={loadAllData}
             showToast={showToast}
           />
@@ -1340,6 +1376,13 @@ export default function AdminDashboardPage() {
                 <button
                   onClick={() => {
                     const nextNum = String(projects.length + 1).padStart(2, "0");
+                    const defaultRef = {
+                      nome: "",
+                      ruolo: "Coordinatore di Progetto",
+                      telefono: "+39 333 000 0000",
+                      email: "progetto@velalatinamontediprocida.it",
+                      note: "",
+                    };
                     setCurrentProject({
                       number: nextNum,
                       title: "",
@@ -1349,6 +1392,14 @@ export default function AdminDashboardPage() {
                       status: "In Corso",
                       description: "",
                       published: true,
+                      referente: defaultRef,
+                      anagrafica: {
+                        codiceProgetto: `PRJ-2027-${nextNum}`,
+                        referente: defaultRef,
+                        entePromotore: "Associazione Vela Latina Monte di Procida APS",
+                        statoAvanzamento: 15,
+                        budgetStimato: "Da definire",
+                      },
                     });
                     setProjectModalOpen(true);
                   }}
@@ -1369,7 +1420,8 @@ export default function AdminDashboardPage() {
                       <th className="p-4 w-12 text-center">N.</th>
                       <th className="p-4">Progetto & Traguardo</th>
                       <th className="p-4">Categoria & Badge</th>
-                      <th className="p-4">Stato Avanzamento</th>
+                      <th className="p-4">Referente & Contatti</th>
+                      <th className="p-4">Stato / Avanzamento</th>
                       <th className="p-4">Pubblicazione</th>
                       <th className="p-4 text-right">Azioni</th>
                     </tr>
@@ -1402,6 +1454,36 @@ export default function AdminDashboardPage() {
                           )}
                         </td>
                         <td className="p-4">
+                          {proj.referente ? (
+                            <div>
+                              <span className="font-sans font-bold text-xs text-[#0a1c2a] block">
+                                {proj.referente.nome}
+                              </span>
+                              <span className="text-[10px] text-slate-600 block truncate max-w-[200px]">
+                                {proj.referente.ruolo}
+                              </span>
+                              <div className="flex items-center gap-2 mt-1 text-[10px] font-mono">
+                                <a
+                                  href={`tel:${proj.referente.telefono}`}
+                                  className="text-[#0a1c2a] hover:underline font-semibold"
+                                >
+                                  {proj.referente.telefono}
+                                </a>
+                              </div>
+                              <div className="text-[10px] text-slate-500 font-mono truncate max-w-[200px]">
+                                {proj.referente.email}
+                              </div>
+                              {proj.anagrafica?.codiceProgetto && (
+                                <span className="inline-block mt-1 px-1.5 py-0.5 text-[9px] bg-[#0a1c2a] text-[#c99a45] font-mono font-bold">
+                                  {proj.anagrafica.codiceProgetto}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-slate-400 text-[11px] italic">Da assegnare</span>
+                          )}
+                        </td>
+                        <td className="p-4">
                           <span
                             className={`inline-block px-2 py-0.5 text-[9px] font-bold border ${
                               proj.status === "In Corso"
@@ -1413,6 +1495,20 @@ export default function AdminDashboardPage() {
                           >
                             {proj.status}
                           </span>
+                          {typeof proj.anagrafica?.statoAvanzamento === "number" && (
+                            <div className="mt-1.5 w-24">
+                              <div className="flex justify-between text-[9px] text-slate-500 font-mono mb-0.5">
+                                <span>Progresso</span>
+                                <span>{proj.anagrafica.statoAvanzamento}%</span>
+                              </div>
+                              <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                                <div
+                                  className="bg-[#0a1c2a] h-full"
+                                  style={{ width: `${proj.anagrafica.statoAvanzamento}%` }}
+                                />
+                              </div>
+                            </div>
+                          )}
                         </td>
                         <td className="p-4">
                           <button
@@ -2265,6 +2361,240 @@ export default function AdminDashboardPage() {
                   placeholder="Inserisci la relazione dettagliata di cantiere: storia, percorso tecnico, imbarcazioni, obiettivi... Supporta titoli con '### ' ed elenchi puntati con '- '."
                   className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed font-mono"
                 />
+              </div>
+
+              {/* ANAGRAFICA E REFERENTE PROGETTO */}
+              <div className="bg-[#fbfaf6] border border-slate-300 p-4 space-y-4">
+                <div className="border-b border-slate-200 pb-2">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">
+                    Scheda Anagrafica & Governance di Cantiere
+                  </span>
+                  <h4 className="text-sm font-bold text-[#0a1c2a]">
+                    Referente del Progetto & Contatti Operativi
+                  </h4>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Nome e Cognome Referente *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Es. Maria Scotto di Santolo"
+                      value={currentProject.referente?.nome || ""}
+                      onChange={(e) => {
+                        const newRef = {
+                          ...(currentProject.referente || {
+                            ruolo: "Coordinatore di Progetto",
+                            telefono: "",
+                            email: "",
+                          }),
+                          nome: e.target.value,
+                        };
+                        setCurrentProject({
+                          ...currentProject,
+                          referente: newRef,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
+                            }),
+                            referente: newRef,
+                          },
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 border border-slate-300 text-xs text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Ruolo / Incarico Referente *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Es. Coordinatrice Team Femminile & Resp. Logistica"
+                      value={currentProject.referente?.ruolo || ""}
+                      onChange={(e) => {
+                        const newRef = {
+                          ...(currentProject.referente || {
+                            nome: "",
+                            telefono: "",
+                            email: "",
+                          }),
+                          ruolo: e.target.value,
+                        };
+                        setCurrentProject({
+                          ...currentProject,
+                          referente: newRef,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
+                            }),
+                            referente: newRef,
+                          },
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 border border-slate-300 text-xs text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Telefono Referente
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="+39 340 000 0000"
+                      value={currentProject.referente?.telefono || ""}
+                      onChange={(e) => {
+                        const newRef = {
+                          ...(currentProject.referente || {
+                            nome: "",
+                            ruolo: "",
+                            email: "",
+                          }),
+                          telefono: e.target.value,
+                        };
+                        setCurrentProject({
+                          ...currentProject,
+                          referente: newRef,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
+                            }),
+                            referente: newRef,
+                          },
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 border border-slate-300 text-xs font-mono text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Email Referente
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="referente@velalatinamontediprocida.it"
+                      value={currentProject.referente?.email || ""}
+                      onChange={(e) => {
+                        const newRef = {
+                          ...(currentProject.referente || {
+                            nome: "",
+                            ruolo: "",
+                            telefono: "",
+                          }),
+                          email: e.target.value,
+                        };
+                        setCurrentProject({
+                          ...currentProject,
+                          referente: newRef,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
+                            }),
+                            referente: newRef,
+                          },
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 border border-slate-300 text-xs font-mono text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Codice Progetto / Sigla
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="PRJ-ROSA-2027"
+                      value={currentProject.anagrafica?.codiceProgetto || ""}
+                      onChange={(e) => {
+                        setCurrentProject({
+                          ...currentProject,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              referente: currentProject.referente || {
+                                nome: "",
+                                ruolo: "",
+                                telefono: "",
+                                email: "",
+                              },
+                            }),
+                            codiceProgetto: e.target.value,
+                          },
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 border border-slate-300 text-xs font-mono font-bold text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Budget Stimato / Finanziamento
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Es. € 15.000 (Fondi privati e sponsor)"
+                      value={currentProject.anagrafica?.budgetStimato || ""}
+                      onChange={(e) => {
+                        setCurrentProject({
+                          ...currentProject,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              referente: currentProject.referente || {
+                                nome: "",
+                                ruolo: "",
+                                telefono: "",
+                                email: "",
+                              },
+                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
+                            }),
+                            budgetStimato: e.target.value,
+                          },
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 border border-slate-300 text-xs text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
+                      Avanzamento (%: {currentProject.anagrafica?.statoAvanzamento ?? 50}%)
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="5"
+                      value={currentProject.anagrafica?.statoAvanzamento ?? 50}
+                      onChange={(e) => {
+                        setCurrentProject({
+                          ...currentProject,
+                          anagrafica: {
+                            ...(currentProject.anagrafica || {
+                              referente: currentProject.referente || {
+                                nome: "",
+                                ruolo: "",
+                                telefono: "",
+                                email: "",
+                              },
+                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
+                            }),
+                            statoAvanzamento: Number(e.target.value),
+                          },
+                        });
+                      }}
+                      className="w-full accent-[#0a1c2a] cursor-pointer"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center gap-2 pt-2">

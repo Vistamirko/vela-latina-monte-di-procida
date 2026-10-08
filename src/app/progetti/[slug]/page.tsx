@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Sailboat,
   Mail,
+  Phone,
 } from "lucide-react";
 import {
   NauticalBorderRuler,
@@ -306,6 +307,63 @@ export default async function ProjectDetailPage({
               <p className="leading-relaxed">{project.description}</p>
             )}
           </div>
+
+          {/* Scheda Anagrafica & Referente del Progetto */}
+          {project.referente && (
+            <div className="mt-12 p-6 sm:p-8 rounded-xs bg-[#fbfaf6] border border-slate-300">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">
+                    Governance & Referente Operativo
+                  </span>
+                  <h3 className="font-['Cinzel'] text-lg font-bold text-[#0a1c2a] uppercase mt-0.5">
+                    {project.referente.nome}
+                  </h3>
+                  <span className="text-xs text-slate-600 font-mono block mt-0.5">
+                    {project.referente.ruolo}
+                  </span>
+                </div>
+                {project.anagrafica?.codiceProgetto && (
+                  <span className="px-2.5 py-1 text-xs font-mono font-bold bg-[#0a1c2a] text-[#c99a45] shrink-0 self-start sm:self-auto">
+                    {project.anagrafica.codiceProgetto}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 text-xs font-mono">
+                {project.referente.telefono && (
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-[#0a1c2a] shrink-0" />
+                    <a
+                      href={`tel:${project.referente.telefono}`}
+                      className="text-[#0a1c2a] hover:underline font-bold"
+                    >
+                      {project.referente.telefono}
+                    </a>
+                  </div>
+                )}
+                {project.referente.email && (
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-[#0a1c2a] shrink-0" />
+                    <a
+                      href={`mailto:${project.referente.email}`}
+                      className="text-[#0a1c2a] hover:underline"
+                    >
+                      {project.referente.email}
+                    </a>
+                  </div>
+                )}
+                {project.anagrafica?.budgetStimato && (
+                  <div className="flex items-center gap-2 text-slate-600">
+                    <span className="text-slate-400">Budget:</span>
+                    <span className="font-semibold text-[#0a1c2a]">
+                      {project.anagrafica.budgetStimato}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Box Partnership / Sostegno al Cantiere */}
           <div className="mt-16 p-8 sm:p-10 rounded-xs bg-[#0a1c2a] text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-md">

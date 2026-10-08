@@ -16,7 +16,38 @@
     "content": "Il Progetto ROSA rappresenta una delle sfide sportive, umane e culturali più ambiziose intraprese dall'Associazione Vela Latina Monte di Procida. Nato dalla volontà di superare secoli di tradizioni marinare a prevalenza maschile, il cantiere mira a formare il primo equipaggio stabile interamente femminile capace di condurre in sicurezza e con ambizioni di vertice un gozzo a vela latina in mare aperto.\n\n### Il Percorso Tecnico e Atletico\nLa conduzione di una barca armata a vela latina richiede forza, sincronismo e profonda sensibilità marina. A differenza delle moderne imbarcazioni provviste di verricelli e boma orizzontali, la vela triangolare si governa con l'antenna inclinata sull'albero a calcese, manovrando carnao, osti e scotta a forza di braccia. Il programma del Progetto ROSA include:\n- Addestramento alla voga tradizionale in piedi sul gozzo a remi nel porto di Acquamorta, per sviluppare stabilità del baricentro, potenza dorsale e sincronismo di voga.\n- Manovre complesse di bordo: issata e ammainata dell'antenna, virata di bordo con passaggio dell'antenna da un lato all'altro dell'albero (imbroglio e cambio mura).\n- Navigazione tattica e lettura delle brezze termiche nel Canale di Procida e tra le secche dei Campi Flegrei.\n- Sicurezza marittima, nodi tradizionali, primo soccorso e carteggio nautico cartografico.\n\n### L'Obiettivo: Les Voiles Latines di Saint-Tropez 2027\nIl traguardo fissato per l'equipaggio è la partecipazione ufficiale a Les Voiles Latines di Saint-Tropez nel maggio 2027, la più prestigiosa rassegna del Mediterraneo. L'equipaggio femminile montese gareggerà a bordo dell'ammiraglia Janara, già vincitrice assoluta dell'edizione 2024, portando in Costa Azzurra il valore della determinazione e della marineria campana.\n\n### Impatto Comunitario e Borse di Studio\nIl progetto non si esaurisce nell'agonismo: l'Associazione ha istituito borse formative per giovani ragazze del territorio flegreo e dell'area metropolitana di Napoli, garantendo l'accesso gratuito ai corsi di vela e voga, sostenuto da sponsor etici e dalla rete dei partner territoriali.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Maria Scotto di Santolo",
+      "ruolo": "Coordinatrice Progetto ROSA & Resp. Team Femminile",
+      "telefono": "+39 340 888 7766",
+      "email": "rosa@velalatinamontediprocida.it",
+      "note": "Delegata Direttivo per le pari opportunità e formazione atlete"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-ROSA-2027",
+      "referente": {
+        "nome": "Maria Scotto di Santolo",
+        "ruolo": "Coordinatrice Progetto ROSA & Resp. Team Femminile",
+        "telefono": "+39 340 888 7766",
+        "email": "rosa@velalatinamontediprocida.it",
+        "note": "Delegata Direttivo per le pari opportunità e formazione atlete"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Comune di Monte di Procida",
+        "Rete Donne del Mare",
+        "Circolo Nautico Acquamorta"
+      ],
+      "sedeOperativa": "Banchina Pescatori, Porticciolo di Acquamorta (NA)",
+      "budgetStimato": "€ 18.000 (Formazione, trasferta Francia e divise)",
+      "statoAvanzamento": 65,
+      "obiettiviChiave": [
+        "Selezione e arruolamento 12 atlete",
+        "Corso intensivo di voga tradizionale e sicurezza",
+        "Trasferta e regata a Saint-Tropez 2027"
+      ]
+    }
   },
   {
     "id": "proj-02-americas-cup",
@@ -35,7 +66,38 @@
     "content": "La presenza della vela latina montese nel contesto dell'America's Cup a Napoli rappresenta un ponte simbolico e visivo tra le radici millenarie della marineria mediterranea e l'apice della tecnologia velica contemporanea.\n\n### Il Dialogo tra Legno e Carbonio\nMentre gli AC75 solcano le acque del Golfo volando su foil in fibra di carbonio a oltre 50 nodi di velocità, l'ammiraglia Janara e la flotta storica montese sfileranno con le loro vele triangolari bianche e le carene in legno massello intagliate a mano dai maestri d'ascia di Monte di Procida. È il tributo che la modernità deve alle origini: senza la vela triangolare che permise ai navigatori flegrei e mediterranei di risalire il vento, l'evoluzione della nautica mondiale non sarebbe mai esistita.\n\n### La Parata d'Onore sul Lungomare Caracciolo\nIn accordo con le istituzioni regionali e il comitato organizzatore, l'Associazione curerà una parata speciale lungo il litorale tra Castel dell'Ovo, Mergellina e Posillipo. L'equipaggio di Janara effettuerà manovre tradizionali a ridosso della costa, offrendo a migliaia di appassionati e delegazioni internazionali una cartolina vivente del Patrimonio Culturale Immateriale della Campania (D.D. n. 239/2020).\n\n### Workshop e Mostra del Mare Aperto\nDurante le giornate di regata, presso il Villaggio dell'America's Cup verrà allestito uno spazio divulgativo dedicato alla carpenteria navale campana, con dimostrazioni pratiche di calafateria, nodi storici e modelli in scala del gozzo flegreo.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Luigi Pugliese",
+      "ruolo": "Comandante Armatore & Resp. Relazioni Istituzionali Regata",
+      "telefono": "+39 347 555 1234",
+      "email": "americascup@velalatinamontediprocida.it",
+      "note": "Coordinatore flotta e parata inaugurale Lungomare Caracciolo"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-AC-2027",
+      "referente": {
+        "nome": "Luigi Pugliese",
+        "ruolo": "Comandante Armatore & Resp. Relazioni Istituzionali Regata",
+        "telefono": "+39 347 555 1234",
+        "email": "americascup@velalatinamontediprocida.it",
+        "note": "Coordinatore flotta e parata inaugurale Lungomare Caracciolo"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Regione Campania - Assessorato al Turismo",
+        "Autorità di Sistema Portuale del Mar Tirreno Centrale",
+        "Comitato America's Cup Napoli"
+      ],
+      "sedeOperativa": "Molo Luise Mergellina & Acquamorta",
+      "budgetStimato": "€ 12.000 (Allestimenti, autorizzazioni marittime e parata)",
+      "statoAvanzamento": 40,
+      "obiettiviChiave": [
+        "Accordo di protocollo con il comitato organizzatore",
+        "Allestimento speciale delle vele d'onore di Janara",
+        "Dimostrazione in mare di fronte al villaggio regate"
+      ]
+    }
   },
   {
     "id": "proj-03-barcolana",
@@ -54,7 +116,38 @@
     "content": "La Barcolana di Trieste è la regata con il maggior numero di imbarcazioni iscritte al mondo: oltre 2.000 vele che trasformano il golfo giuliano in una distesa bianca spettacolare. Nel 2026, l'Associazione Vela Latina Monte di Procida porterà sulla linea di partenza la sua barca più imponente: la lancia storica Ludovico Quandel.\n\n### La Lancia Ludovico Quandel del 1968\nLunga oltre 8,5 metri e costruita originariamente nei cantieri dell'Arsenale della Marina Militare per l'addestramento della nave scuola Amerigo Vespucci, la lancia Quandel è stata salvata e armata con una monumentale vela a filucone dall'Associazione. Una barca pesante, potente e marina, concepita sia per la navigazione a vela sia per dieci remi al banco.\n\n### La Sfida nelle Acque dell'Alto Adriatico\nPartecipare alla Barcolana richiede una complessa operazione logistica di trasporto stradale eccezionale da Monte di Procida a Trieste e un meticoloso piano di allestimento sul molo Audace. In mare, l'equipaggio montese affronterà le imprevedibili condizioni del Golfo di Trieste, preparandosi sia alle brezze leggere sia ai colpi di Bora, dimostrando la tenuta marina e l'efficacia dell'armo tradizionale di fronte a una platea velica internazionale.\n\n### Fratellanza tra Tirreno e Adriatico\nL'iniziativa consolida i legami storici e culturali con i circoli dell'Alto Adriatico, celebrando la marineria d'epoca come bene comune della nazione.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Domenico Scotto di Vetta",
+      "ruolo": "Responsabile Logistica Trasferte & Capobarca Quandel",
+      "telefono": "+39 339 123 4567",
+      "email": "barcolana@velalatinamontediprocida.it",
+      "note": "Coordinatore trasporto stradale eccezionale e ormeggio a Trieste"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-BARCOLANA-2026",
+      "referente": {
+        "nome": "Domenico Scotto di Vetta",
+        "ruolo": "Responsabile Logistica Trasferte & Capobarca Quandel",
+        "telefono": "+39 339 123 4567",
+        "email": "barcolana@velalatinamontediprocida.it",
+        "note": "Coordinatore trasporto stradale eccezionale e ormeggio a Trieste"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Società Velica di Barcola e Grignano",
+        "Lega Navale Italiana",
+        "Marina Militare Italiana"
+      ],
+      "sedeOperativa": "Molo Audace, Bacino San Giusto (Trieste)",
+      "budgetStimato": "€ 14.500 (Trasporto barca andata/ritorno e iscrizione)",
+      "statoAvanzamento": 30,
+      "obiettiviChiave": [
+        "Definizione logistica con trasportatore navale",
+        "Iscrizione alla classe Vele d'Epoca / Tradizionali Barcolana",
+        "Punto informativo marineria campana sulle rive di Trieste"
+      ]
+    }
   },
   {
     "id": "proj-04-quandel-gaeta",
@@ -73,7 +166,38 @@
     "content": "L'Operazione Quandel è la tradizionale traversata d'altura a vela latina che unisce annualmente il porticciolo di Acquamorta a Monte di Procida con la città marinara di Gaeta. Giunta alla sua ottava edizione, la navigazione rinnova una rotta commerciale e culturale attiva da oltre tre secoli tra le due comunità tirreniche.\n\n### 42 Miglia di Mare Aperto Senza Motore\nLa rotta attraversa l'intero Golfo di Gaeta e la costa domiziana per una distanza di oltre 42 miglia nautiche. L'equipaggio naviga rigorosamente senza ausilio del motore entrobordo: la barca risponde solo alle manovre delle scotte, alle virate all'antenna e alla saggezza dei marinai nel leggere i cambi di vento tra terra e mare aperto. In caso di bonaccia improvvisa, si armano i lunghi remi di faggio per mantenere l'avanzamento a colpi di voga cadenzata.\n\n### Il Legame Storico con la Famiglia Quandel\nL'operazione è intitolata alla memoria di Ludovico Quandel, nobile ufficiale borbonico, parlamentare e figura legata sia alla storia militare di Gaeta sia alle terre di Monte di Procida. La traversata diventa così un atto di rievocazione storiografica viva, in cui la barca in legno diventa archivio galleggiante.\n\n### Gemellaggio e Cerimonia a Gaeta Medievale\nAll'arrivo nelle acque della base nautica di Gaeta, la flotta viene accolta dalle autorità locali, dalle marinerie pontine e dagli appassionati di nautica d'epoca, suggellando una festa dell'amicizia marittima con scambi enogastronomici flegrei e pontini.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Antonio Pugliese",
+      "ruolo": "Direttore di Rotta & Comandante della Traversata",
+      "telefono": "+39 338 763 3350",
+      "email": "gaeta@velalatinamontediprocida.it",
+      "note": "Presidente APS e coordinatore navigazione a vela d'altura"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-QUANDEL-GAETA-8",
+      "referente": {
+        "nome": "Antonio Pugliese",
+        "ruolo": "Direttore di Rotta & Comandante della Traversata",
+        "telefono": "+39 338 763 3350",
+        "email": "gaeta@velalatinamontediprocida.it",
+        "note": "Presidente APS e coordinatore navigazione a vela d'altura"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Comune di Gaeta",
+        "Guardia Costiera - Capitanerie di Porto",
+        "Base Nautica Flavio Gioia"
+      ],
+      "sedeOperativa": "Canale di Procida, Litorale Domiziano e Golfo di Gaeta",
+      "budgetStimato": "€ 6.500 (Assistenza radio, sicurezza in mare e cerimoniale)",
+      "statoAvanzamento": 80,
+      "obiettiviChiave": [
+        "Briefing nautico e tracciamento rotta di 42 miglia",
+        "Attraversamento no-engine con supporto flotta",
+        "Convegno storico e gemellaggio al Bastione di Gaeta"
+      ]
+    }
   },
   {
     "id": "proj-05-breccia-museo",
@@ -92,7 +216,38 @@
     "content": "La costa di Monte di Procida è uno dei siti vulcanologici e geomorfologici più importanti e spettacolari d'Europa. La cosiddetta 'Breccia Museo' è una straordinaria formazione rocciosa a falesia, generata dal deposito vulcanico dell'Ignimbrite Campana circa 39.000 anni fa, che racchiude al suo interno blocchi di tufo, lave e pomici provenienti da tutte le formazioni geologiche precedenti dei Campi Flegrei.\n\n### La Prospettiva Esclusiva dalla Barca a Vela\nLa grandiosità di questa parete rocciosa a picco sul mare non è apprezzabile da terra: solo scivolando sull'acqua silenziosamente, senza il rumore e i gas di scarico di un motore a scoppio, è possibile contemplare la policromia degli strati tufacei, le colate piroclastiche e gli anfratti naturali intagliati dal moto ondoso millenario.\n\n### Un Progetto di Turismo Scientifico ed Eco-Sostenibile\nIn sinergia con vulcanologi, geologi e guide ambientali della Campania, l'Associazione ha strutturato un percorso tematico via mare accessibile a studenti, ricercatori universitari e viaggiatori consapevoli. A bordo dei gozzi storici, i partecipanti imparano contemporaneamente i rudimenti della vela latina e la storia dell'evoluzione tettonica del Mediterraneo.\n\n### Monitoraggio e Tutela della Costa\nDurante le uscite scientifiche, gli equipaggi eseguono rilievi fotografici periodici dello stato della falesia per monitorare i fenomeni di erosione costiera e l'impatto del moto ondoso, collaborando attivamente con gli enti di tutela del paesaggio flegreo.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Dott. Marco Di Meo",
+      "ruolo": "Coordinatore Scientifico & Guida Geologica dal Mare",
+      "telefono": "+39 331 445 6789",
+      "email": "breccia@velalatinamontediprocida.it",
+      "note": "Geologo esperto del vulcanismo flegreo e guida ambientale escursionistica"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-BRECCIA-MUSEO",
+      "referente": {
+        "nome": "Dott. Marco Di Meo",
+        "ruolo": "Coordinatore Scientifico & Guida Geologica dal Mare",
+        "telefono": "+39 331 445 6789",
+        "email": "breccia@velalatinamontediprocida.it",
+        "note": "Geologo esperto del vulcanismo flegreo e guida ambientale escursionistica"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Parco Regionale dei Campi Flegrei",
+        "Istituto Nazionale di Geofisica e Vulcanologia (INGV)",
+        "Associazione Italiana Guide Ambientali"
+      ],
+      "sedeOperativa": "Costa della Falesia di Torregaveta e Acquamorta",
+      "budgetStimato": "€ 8.500 (Pannelli divulgativi, guide multimediali e uscite scolastiche)",
+      "statoAvanzamento": 70,
+      "obiettiviChiave": [
+        "Mappatura delle stazioni geologiche visibili dalla barca",
+        "Creazione del libretto divulgativo cartaceo e digitale",
+        "Ciclo di uscite con le scolaresche dei Campi Flegrei"
+      ]
+    }
   },
   {
     "id": "proj-06-quandel-lab",
@@ -111,7 +266,38 @@
     "content": "Il Quandel Lab è il polo di ricerca scientifica e archeologia navale istituito dall'Associazione Vela Latina Monte di Procida in stretta collaborazione con l'Università degli Studi di Napoli Federico II (Dipartimento di Ingegneria Industriale e Navale), l'Università Suor Orsola Benincasa e il Museo Nazionale Marittimo di Haifa.\n\n### Scansioni Laser 3D e Digital Twin delle Carene\nGli scafi tradizionali in legno flegrei sono stati costruiti per secoli senza piani cartacei formali, affidandosi esclusivamente al 'garbo' (la dima ricurva) e all'occhio esperto del maestro d'ascia. Attraverso rilievi fotogrammetrici ad altissima risoluzione e scansioni laser 3D, il progetto sta digitalizzando le carene di Janara, San Giuda Taddeo, San Michele Arcangelo e Ludovico Quandel, creando i loro 'gemelli digitali' per preservarne le linee d'acqua per i secoli futuri.\n\n### Simulazioni Idrodinamiche CFD\nI ricercatori universitari applicano la fluidodinamica computazionale (CFD) per analizzare la resistenza all'avanzamento, l'angolo di scarroccio e la portanza aerodinamica dell'armo a vela latina rispetto alle moderne vele bermudiane. I risultati confermano l'eccezionale efficienza energetica del profilo alare triangolare nelle andature portanti e di bolina larga con brezze costiere.\n\n### Archivio Orale e Formazione delle Nuove Maestranze\nIl laboratorio raccoglie inoltre testimonianze video, interviste orali e glossari dialettali marinari dei vecchi maestri d'ascia e calafati montesi, organizzando tirocini formativi per giovani studenti di architettura navale e beni culturali.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Prof. Ing. Salvatore Russo",
+      "ruolo": "Responsabile Ricerca Idrodinamica & Archeologia Navale",
+      "telefono": "+39 348 990 1122",
+      "email": "ricerca@velalatinamontediprocida.it",
+      "note": "Docente di Ingegneria Navale, responsabile digital twin scafi"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-LAB-QUANDEL",
+      "referente": {
+        "nome": "Prof. Ing. Salvatore Russo",
+        "ruolo": "Responsabile Ricerca Idrodinamica & Archeologia Navale",
+        "telefono": "+39 348 990 1122",
+        "email": "ricerca@velalatinamontediprocida.it",
+        "note": "Docente di Ingegneria Navale, responsabile digital twin scafi"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Università degli Studi di Napoli Federico II",
+        "Università Suor Orsola Benincasa",
+        "National Maritime Museum of Haifa"
+      ],
+      "sedeOperativa": "Cantiere Navale Tradizionale di Monte di Procida & Poli Accademici",
+      "budgetStimato": "€ 25.000 (Scansioni laser 3D, borse di ricerca e pubblicazioni)",
+      "statoAvanzamento": 55,
+      "obiettiviChiave": [
+        "Rilievo 3D ad alta definizione dei 5 scafi storici",
+        "Simulazioni fluidodinamiche CFD del piano velico latino",
+        "Pubblicazione del volume monografico di archeologia navale"
+      ]
+    }
   },
   {
     "id": "proj-07-inclusione",
@@ -130,7 +316,38 @@
     "content": "Il mare è uno straordinario maestro di uguaglianza: a bordo di una barca a remi e a vela, le differenze svaniscono per lasciare spazio alla collaborazione, alla fiducia reciproca e alla gioia della condivisione. 'Inclusione Mare' è il progetto a forte impatto sociale sviluppato dall'Associazione Vela Latina Monte di Procida in collaborazione stabile con il Centro Serapide e le associazioni del Terzo Settore flegreo.\n\n### La Terapia del Mare e del Ritmo\nIl progetto offre percorsi continui di voga tradizionale e uscite in mare dedicate a bambini, adolescenti e adulti con disturbi dello spettro autistico, disabilità cognitive e motorie. A bordo della lancia San Michele Arcangelo, appositamente attrezzata per garantire la massima stabilità e sicurezza, i ragazzi impugnano i remi insieme agli istruttori: il ritmo cadenzato della remata stimola la concentrazione, favorisce la regolazione sensoriale e rafforza l'autostima personale.\n\n### Un'Esperienza Multi-Sensoriale Unica\nIl contatto diretto con l'acqua salmastra, il suono del vento tra le sartie di canapa, il profumo del legno stagionato e la luce naturale del Canale di Procida offrono stimoli terapeutici profondi, documentati dai neuropsicomotricisti del Centro Serapide che accompagnano costantemente i gruppi durante le uscite.\n\n### Attività Totalmente Gratuita per le Famiglie\nFedele ai propri principi fondativi, l'Associazione garantisce la totale gratuità di tutte le sessioni di Inclusione Mare. Il progetto è finanziato attraverso donazioni private, quote solidali dei soci e il supporto di aziende etiche del territorio campano.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Dott.ssa Chiara Lubrano",
+      "ruolo": "Responsabile Terapia del Mare & Coordinatrice Serapide",
+      "telefono": "+39 334 223 3445",
+      "email": "inclusione@velalatinamontediprocida.it",
+      "note": "Neuropsicomotricista, responsabile protocolli inclusivi a bordo"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-INCLUSIONE-SERAPIDE",
+      "referente": {
+        "nome": "Dott.ssa Chiara Lubrano",
+        "ruolo": "Responsabile Terapia del Mare & Coordinatrice Serapide",
+        "telefono": "+39 334 223 3445",
+        "email": "inclusione@velalatinamontediprocida.it",
+        "note": "Neuropsicomotricista, responsabile protocolli inclusivi a bordo"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Centro Serapide Pozzuoli / Bacoli",
+        "Fondazione con il Sud",
+        "Ambito Territoriale Sociale Napoli 2"
+      ],
+      "sedeOperativa": "Banchina di Acquamorta & Acque del Canale di Procida",
+      "budgetStimato": "€ 15.000 (Dispositivi di sicurezza, giubbotti auto-gonfiabili e sedute)",
+      "statoAvanzamento": 90,
+      "obiettiviChiave": [
+        "Oltre 60 uscite terapeutiche erogate a costo zero",
+        "Formazione specifica marinara per operatori socio-sanitari",
+        "Festa annuale del mare inclusivo a Monte di Procida"
+      ]
+    }
   },
   {
     "id": "proj-08-stintino",
@@ -149,6 +366,37 @@
     "content": "I raduni nazionali della vela latina rappresentano i momenti cardine in cui armatori, marinai e maestri d'ascia di tutta Italia si ritrovano per confrontarsi sul piano sportivo e celebrare l'identità marinara comune. Monte di Procida è da anni protagonista attiva e stimata nei due principali teatri storici del Tirreno: Stintino in Sardegna e Marina di Pisciotta nel Cilento.\n\n### Il Legame con Stintino, Capitale della Vela Latina\nNel mare limpido delle Pelose e dell'Asinara, la flotta flegrea si confronta con le 'lance stintinesi' e i 'gozzi carlofortini'. La partecipazione ai meeting sardi ha permesso di affinare le regolazioni dell'antenna e di condividere le tecniche di taglio e cucitura delle vele in cotone d'Egitto, creando legami indissolubili tra marinai campani e sardi.\n\n### Il Trofeo Fair Play a Marina di Pisciotta\nNel corso delle edizioni del celebre 'Trofeo Tre Torri' nelle acque del Parco Nazionale del Cilento, l'equipaggio di Monte di Procida ha ottenuto non solo piazzamenti sul podio di categoria, ma soprattutto il prestigioso 'Trofeo Fair Play'. Questo riconoscimento speciale premia l'etica della marineria: la disponibilità ad assistere imbarcazioni in difficoltà, la lealtà sul campo di regata e la generosità nel trasmettere le manovre ai più giovani.\n\n### Una Tradizione Viva che Guarda al Futuro\nI raduni nazionali non sono sfilate statiche, ma vere competizioni ad armi pari dove la vela latina dimostra la propria vitalità. L'Associazione continua a programmare le proprie trasferte per portare il vessillo di Monte di Procida nei porti storici d'Italia.",
     "published": true,
     "createdAt": "2026-10-07T12:09:01.001Z",
-    "updatedAt": "2026-10-07T12:54:00.000Z"
+    "updatedAt": "2026-10-08T14:35:00.000Z",
+    "referente": {
+      "nome": "Giovanni Forte",
+      "ruolo": "Segretario Sportivo & Delegato Circuiti Nazionali",
+      "telefono": "+39 333 987 6543",
+      "email": "stintino@velalatinamontediprocida.it",
+      "note": "Referente AIVE e rapporti istituzionali con circoli velici tirrenici"
+    },
+    "anagrafica": {
+      "codiceProgetto": "PRJ-RADUNI-STINTINO",
+      "referente": {
+        "nome": "Giovanni Forte",
+        "ruolo": "Segretario Sportivo & Delegato Circuiti Nazionali",
+        "telefono": "+39 333 987 6543",
+        "email": "stintino@velalatinamontediprocida.it",
+        "note": "Referente AIVE e rapporti istituzionali con circoli velici tirrenici"
+      },
+      "entePromotore": "Associazione Vela Latina Monte di Procida APS",
+      "partnerIstituzionali": [
+        "Comitato Vela Latina Stintino",
+        "Associazione Italiana Vele d'Epoca (AIVE)",
+        "Circolo Nautico Marina di Pisciotta"
+      ],
+      "sedeOperativa": "Stintino (SS) & Marina di Pisciotta (SA)",
+      "budgetStimato": "€ 9.000 (Iscrizioni regate, ormeggi e logistica trasferta)",
+      "statoAvanzamento": 100,
+      "obiettiviChiave": [
+        "Conquista del Trofeo Fair Play a Marina di Pisciotta",
+        "Gemellaggio nautico con i maestri d'ascia sardi di Stintino",
+        "Presenza istituzionale negli annali della vela latina"
+      ]
+    }
   }
 ]

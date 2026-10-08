@@ -12,8 +12,9 @@ export async function proxy(req: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/images") ||
-    pathname.startsWith("/api/site-access") ||
-    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/docs") ||
+    pathname.startsWith("/uploads") ||
+    pathname.startsWith("/api/") ||
     pathname.startsWith("/admin") ||
     pathname === "/access" ||
     pathname === "/favicon.ico" ||

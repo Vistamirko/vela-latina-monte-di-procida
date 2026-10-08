@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
-import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem, BookingRequest, SocioItem } from "./types";
+import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione, DocumentoIstituzionale } from "./types";
 import { hashPassword } from "../auth";
 
 const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -518,6 +518,8 @@ export async function initDb(): Promise<void> {
           imageUrl: found.imageUrl || def.imageUrl,
           location: found.location || def.location,
           timeline: found.timeline || def.timeline,
+          anagrafica: found.anagrafica || def.anagrafica,
+          referente: found.referente || def.referente,
         };
       });
       writeLocalJson<ProjectItem[]>("progetti.json", mergedProjects);
@@ -647,6 +649,8 @@ export async function initDb(): Promise<void> {
         await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS image_url TEXT;`;
         await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS location VARCHAR(255);`;
         await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS timeline VARCHAR(100);`;
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS anagrafica JSONB;`;
+        await sql`ALTER TABLE progetti ADD COLUMN IF NOT EXISTS referente JSONB;`;
       } catch {
         // Ignora se le colonne esistono già
       }
@@ -1539,4 +1543,50 @@ export const SociRepo = {
     return true;
   },
 };
+
+/* ==============================================================
+   REPOSITORY: ANAGRAFICA & DOCUMENTI ISTITUZIONALI RUNTS
+============================================================== */
+export const AnagraficaRepo = {
+  async get(): Promise<AnagraficaAssociazione> {
+    return readLocalJson<AnagraficaAssociazione>("anagrafica.json", {} as AnagraficaAssociazione);
+  },
+
+  async save(data: Partial<AnagraficaAssociazione>): Promise<AnagraficaAssociazione> {
+    const current = await this.get();
+    const updated: AnagraficaAssociazione = {
+      ...current,
+      ...data,
+      runts: { ...current.runts, ...(data.runts || {}) },
+      banca: { ...current.banca, ...(data.banca || {}) },
+      presidente: {
+        ...current.presidente,
+        ...(data.presidente || {}),
+        documentoIdentita: {
+          ...current.presidente?.documentoIdentita,
+          ...(data.presidente?.documentoIdentita || {}),
+        },
+      },
+      consiglioDirettivo: data.consiglioDirettivo || current.consiglioDirettivo || [],
+      documenti: data.documenti || current.documenti || [],
+      updatedAt: new Date().toISOString(),
+    };
+    writeLocalJson<AnagraficaAssociazione>("anagrafica.json", updated);
+    return updated;
+  },
+
+  async addDocument(doc: DocumentoIstituzionale): Promise<AnagraficaAssociazione> {
+    const current = await this.get();
+    const existing = (current.documenti || []).filter((d) => d.id !== doc.id);
+    const updatedDocs = [doc, ...existing];
+    return this.save({ documenti: updatedDocs });
+  },
+
+  async deleteDocument(id: string): Promise<AnagraficaAssociazione> {
+    const current = await this.get();
+    const updatedDocs = (current.documenti || []).filter((d) => d.id !== id);
+    return this.save({ documenti: updatedDocs });
+  },
+};
+
 

@@ -24,19 +24,25 @@ export async function POST(request: Request) {
       "image/gif",
       "image/svg+xml",
       "image/avif",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.oasis.opendocument.text",
+      "text/plain",
+      "application/zip",
     ];
 
     if (!validTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: "Formato file non supportato. Usa JPG, PNG, WEBP o SVG." },
+        { error: "Formato file non supportato. Usa PDF, DOC, DOCX, JPG, PNG o WEBP." },
         { status: 400 }
       );
     }
 
-    // 10 MB limit
-    if (file.size > 10 * 1024 * 1024) {
+    // 25 MB limit per documenti e scansioni
+    if (file.size > 25 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "Il file supera la dimensione massima di 10MB." },
+        { error: "Il file supera la dimensione massima consentita di 25MB." },
         { status: 400 }
       );
     }
