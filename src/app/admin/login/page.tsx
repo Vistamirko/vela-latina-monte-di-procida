@@ -8,8 +8,8 @@ import { Lock, Mail, ArrowRight, ShieldCheck, Compass, AlertCircle } from "lucid
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@velalatinamontediprocida.it");
-  const [password, setPassword] = useState("velalatina2026!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,6 +97,8 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="nome@velalatinamontediprocida.it"
+                autoComplete="username"
                 className="w-full pl-9 pr-4 py-2.5 bg-[#fbfaf6] border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none font-mono"
               />
               <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
@@ -118,6 +120,8 @@ export default function AdminLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                autoComplete="current-password"
                 className="w-full pl-9 pr-4 py-2.5 bg-[#fbfaf6] border border-slate-300 text-xs text-[#0a1c2a] focus:border-[#0a1c2a] outline-none font-mono"
               />
               <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
