@@ -88,14 +88,18 @@ function ProjectEditorContent() {
         body: JSON.stringify(isEdit ? { ...projectData, id: projectId } : projectData),
       });
 
-      if (!res.ok) throw new Error("Errore durante il salvataggio");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Errore durante il salvataggio");
 
       setNotification({ type: "success", message: "Progetto salvato con successo! Reindirizzamento..." });
       setTimeout(() => {
         router.push("/admin?tab=progetti");
       }, 700);
-    } catch {
-      setNotification({ type: "error", message: "Impossibile salvare il progetto" });
+    } catch (err: unknown) {
+      setNotification({
+        type: "error",
+        message: err instanceof Error ? err.message : "Impossibile salvare il progetto",
+      });
       setSaving(false);
     }
   };

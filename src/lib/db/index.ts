@@ -1163,6 +1163,8 @@ export const ProjectsRepo = {
         published: Boolean(r.published),
         createdAt: r.created_at,
         updatedAt: r.updated_at,
+        anagrafica: r.anagrafica || undefined,
+        referente: r.referente || undefined,
       }));
     } catch (err) {
       console.error("[ProjectsRepo.getAll] Errore DB Neon, uso fallback statico:", err);
@@ -1199,6 +1201,8 @@ export const ProjectsRepo = {
       published: Boolean(r.published),
       createdAt: r.created_at,
       updatedAt: r.updated_at,
+      anagrafica: r.anagrafica || undefined,
+      referente: r.referente || undefined,
     };
   },
 
@@ -1230,6 +1234,8 @@ export const ProjectsRepo = {
         published: Boolean(r.published),
         createdAt: r.created_at,
         updatedAt: r.updated_at,
+        anagrafica: r.anagrafica || undefined,
+        referente: r.referente || undefined,
       };
     } catch (err) {
       console.error("[ProjectsRepo.getBySlug] Errore DB Neon, uso fallback statico:", err);
@@ -1262,8 +1268,8 @@ export const ProjectsRepo = {
     }
     const sql = neon(DB_URL);
     await sql`
-      INSERT INTO progetti (id, slug, number, title, highlight, category, badge, partner, status, description, content, image_url, location, timeline, published, updated_at)
-      VALUES (${project.id}, ${slug}, ${project.number}, ${project.title}, ${project.highlight}, ${project.category}, ${project.badge || null}, ${project.partner || null}, ${project.status}, ${project.description}, ${project.content || null}, ${project.imageUrl || null}, ${project.location || null}, ${project.timeline || null}, ${project.published}, ${now})
+      INSERT INTO progetti (id, slug, number, title, highlight, category, badge, partner, status, description, content, image_url, location, timeline, published, anagrafica, referente, updated_at)
+      VALUES (${project.id}, ${slug}, ${project.number}, ${project.title}, ${project.highlight}, ${project.category}, ${project.badge || null}, ${project.partner || null}, ${project.status}, ${project.description}, ${project.content || null}, ${project.imageUrl || null}, ${project.location || null}, ${project.timeline || null}, ${project.published}, ${project.anagrafica ? JSON.stringify(project.anagrafica) : null}, ${project.referente ? JSON.stringify(project.referente) : null}, ${now})
       ON CONFLICT (id) DO UPDATE SET
         slug = EXCLUDED.slug,
         number = EXCLUDED.number,
@@ -1279,6 +1285,8 @@ export const ProjectsRepo = {
         location = EXCLUDED.location,
         timeline = EXCLUDED.timeline,
         published = EXCLUDED.published,
+        anagrafica = EXCLUDED.anagrafica,
+        referente = EXCLUDED.referente,
         updated_at = EXCLUDED.updated_at;
     `;
     const found = await this.getById(project.id);
