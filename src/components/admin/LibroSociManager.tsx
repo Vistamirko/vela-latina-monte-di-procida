@@ -490,26 +490,35 @@ export default function LibroSociManager({
 
       {/* Modal Aggiungi / Modifica Socio */}
       {modalOpen && currentSocio && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white border border-slate-200 max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-8">
-            <button
-              onClick={() => {
-                setModalOpen(false);
-                setCurrentSocio(null);
-              }}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white border-t sm:border border-slate-200 max-w-xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
+            {/* Mobile Drag Indicator */}
+            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
 
-            <h3 className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-light text-[#0a1c2a] mb-1">
-              {currentSocio.id ? "Modifica Dati Socio" : "Nuova Iscrizione Libro Soci"}
-            </h3>
-            <p className="text-xs text-slate-600 font-light mb-6">
-              Inserisci i dati anagrafici e la quota registrata nel registro soci.
-            </p>
+            {/* Sticky Header */}
+            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
+              <div>
+                <h3 className="font-['Cormorant_Garamond'] text-xl sm:text-2xl font-semibold text-[#0a1c2a] leading-tight">
+                  {currentSocio.id ? "Modifica Dati Socio" : "Nuova Iscrizione Libro Soci"}
+                </h3>
+                <p className="text-[10px] sm:text-xs text-slate-500 font-light hidden sm:block">
+                  Inserisci i dati anagrafici e la quota registrata nel registro soci.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setModalOpen(false);
+                  setCurrentSocio(null);
+                }}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                title="Chiudi"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-            <form onSubmit={handleSaveSocio} className="space-y-4">
+            <form onSubmit={handleSaveSocio} className="flex-1 flex flex-col overflow-hidden min-h-0">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
@@ -684,21 +693,24 @@ export default function LibroSociManager({
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+              </div>
+
+              {/* Sticky Bottom Footer */}
+              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
                 <button
                   type="button"
                   onClick={() => {
                     setModalOpen(false);
                     setCurrentSocio(null);
                   }}
-                  className="px-4 py-2 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
+                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
                 >
                   Annulla
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-6 py-2 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-xs font-mono font-bold tracking-wider uppercase transition-colors cursor-pointer disabled:opacity-50"
+                  className="flex-1 sm:flex-none px-6 py-2.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-xs font-mono font-bold tracking-wider uppercase transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {submitting ? "Salvataggio..." : "Salva Socio"}
                 </button>

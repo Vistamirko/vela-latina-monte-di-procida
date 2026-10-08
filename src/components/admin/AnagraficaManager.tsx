@@ -1707,9 +1707,13 @@ export default function AnagraficaManager({
           MODALE CARICAMENTO NUOVO DOCUMENTO
       ============================================================== */}
       {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-300 max-w-lg w-full p-6 shadow-2xl relative">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-200 mb-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white border-t sm:border border-slate-300 max-w-lg w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
+            {/* Mobile Drag Indicator */}
+            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
+
+            {/* Sticky Header */}
+            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
               <div className="flex items-center gap-2">
                 <Upload className="w-4 h-4 text-[#c99a45]" />
                 <h3 className="font-['Cinzel'] font-bold text-sm text-[#0a1c2a] uppercase">
@@ -1718,13 +1722,15 @@ export default function AnagraficaManager({
               </div>
               <button
                 onClick={() => setUploadModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                title="Chiudi"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleUploadSubmit} className="space-y-4">
+            <form onSubmit={handleUploadSubmit} className="flex-1 flex flex-col overflow-hidden min-h-0">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
               <div>
                 <label className="text-[10px] font-mono uppercase font-bold text-slate-600 block mb-1">
                   Titolo Documento *
@@ -1805,18 +1811,21 @@ export default function AnagraficaManager({
                 )}
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-slate-200">
+              </div>
+
+              {/* Sticky Bottom Footer */}
+              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
                 <button
                   type="button"
                   onClick={() => setUploadModalOpen(false)}
-                  className="px-4 py-2 border border-slate-300 text-xs font-mono text-slate-700 hover:bg-slate-100 cursor-pointer"
+                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono text-slate-700 hover:bg-slate-100 cursor-pointer"
                 >
                   Annulla
                 </button>
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="px-5 py-2 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer"
+                  className="flex-1 sm:flex-none px-5 py-2.5 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   <Upload className="w-3.5 h-3.5 text-[#c99a45]" />
                   <span>{uploading ? "Caricamento in corso..." : "Salva nell'Archivio"}</span>
