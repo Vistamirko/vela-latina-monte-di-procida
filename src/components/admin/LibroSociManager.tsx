@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useState, useMemo } from "react";
 import { SocioItem } from "@/lib/db/types";
 import {
@@ -29,9 +29,6 @@ export default function LibroSociManager({
 }: LibroSociManagerProps) {
   const [selectedYear, setSelectedYear] = useState<number | "tutti">("tutti");
   const [search, setSearch] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [currentSocio, setCurrentSocio] = useState<Partial<SocioItem> | null>(null);
-  const [submitting, setSubmitting] = useState(false);
 
   // Anni disponibili
   const availableYears = useMemo(() => {
@@ -71,35 +68,6 @@ export default function LibroSociManager({
     const y2023 = soci.filter((s) => s.anno === 2023).length;
     return { total, y2026, y2024, y2023 };
   }, [soci]);
-
-  // Salvataggio / Modifica Socio
-  const handleSaveSocio = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentSocio?.nome) return;
-    setSubmitting(true);
-
-    try {
-      const res = await fetch("/api/soci", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentSocio),
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Errore durante il salvataggio");
-      }
-
-      showToast("success", currentSocio.id ? "Socio aggiornato con successo" : "Nuovo socio registrato");
-      setModalOpen(false);
-      setCurrentSocio(null);
-      onReload();
-    } catch (err: any) {
-      showToast("error", err.message || "Errore");
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   // Eliminazione
   const handleDeleteSocio = async (id: string, nome: string) => {
@@ -148,21 +116,13 @@ export default function LibroSociManager({
             <span>Esporta Excel (.csv)</span>
           </button>
 
-          <button
-            onClick={() => {
-              setCurrentSocio({
-                anno: selectedYear !== "tutti" ? selectedYear : 2026,
-                tipologia: "Socio Ordinario",
-                dataIscrizione: new Date().toISOString().split("T")[0],
-                socioOnorario: false,
-              });
-              setModalOpen(true);
-            }}
+          <Link
+            href="/admin/soci/editor"
             className="px-3.5 py-2 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Aggiungi Socio</span>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -313,16 +273,13 @@ export default function LibroSociManager({
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={() => {
-                        setCurrentSocio(item);
-                        setModalOpen(true);
-                      }}
-                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition-colors cursor-pointer"
+                    <Link
+                      href={`/admin/soci/editor?id=${item.id}`}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition-colors cursor-pointer inline-flex items-center justify-center"
                       title="Modifica socio"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleDeleteSocio(item.id, item.nome)}
                       className="p-2 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-700 border border-slate-300 transition-colors cursor-pointer"
@@ -461,16 +418,13 @@ export default function LibroSociManager({
                     </td>
                     <td className="py-2.5 px-3 text-center">
                       <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => {
-                            setCurrentSocio(item);
-                            setModalOpen(true);
-                          }}
-                          className="p-1 text-slate-500 hover:text-[#0a1c2a] transition-colors cursor-pointer"
+                        <Link
+                          href={`/admin/soci/editor?id=${item.id}`}
+                          className="p-1 text-slate-500 hover:text-[#0a1c2a] transition-colors cursor-pointer inline-flex items-center justify-center"
                           title="Modifica socio"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
-                        </button>
+                        </Link>
                         <button
                           onClick={() => handleDeleteSocio(item.id, item.nome)}
                           className="p-1 text-slate-400 hover:text-red-700 transition-colors cursor-pointer"
@@ -488,237 +442,7 @@ export default function LibroSociManager({
         </div>
       )}
 
-      {/* Modal Aggiungi / Modifica Socio */}
-      {modalOpen && currentSocio && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white border-t sm:border border-slate-200 max-w-xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
 
-            {/* Sticky Header */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
-              <div>
-                <h3 className="font-['Cormorant_Garamond'] text-xl sm:text-2xl font-semibold text-[#0a1c2a] leading-tight">
-                  {currentSocio.id ? "Modifica Dati Socio" : "Nuova Iscrizione Libro Soci"}
-                </h3>
-                <p className="text-[10px] sm:text-xs text-slate-500 font-light hidden sm:block">
-                  Inserisci i dati anagrafici e la quota registrata nel registro soci.
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setModalOpen(false);
-                  setCurrentSocio(null);
-                }}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                title="Chiudi"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveSocio} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Cognome e Nome *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentSocio.nome || ""}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, nome: e.target.value })}
-                    placeholder="es. Mario Rossi"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Anno Sociale *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={currentSocio.anno || 2026}
-                    onChange={(e) =>
-                      setCurrentSocio({ ...currentSocio, anno: parseInt(e.target.value, 10) || 2026 })
-                    }
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] font-mono outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Data & Luogo di Nascita
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSocio.dataLuogoNascita || ""}
-                    onChange={(e) =>
-                      setCurrentSocio({ ...currentSocio, dataLuogoNascita: e.target.value })
-                    }
-                    placeholder="es. 15.7.1984 Napoli"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Codice Fiscale
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSocio.codiceFiscale || ""}
-                    onChange={(e) =>
-                      setCurrentSocio({ ...currentSocio, codiceFiscale: e.target.value.toUpperCase() })
-                    }
-                    placeholder="RSSMRA84L15F839X"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] font-mono outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Nr. Tessera
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSocio.numeroTessera || ""}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, numeroTessera: e.target.value })}
-                    placeholder="es. 94"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] font-mono outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Quota Contanti (€)
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSocio.quotaContanti || ""}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, quotaContanti: e.target.value })}
-                    placeholder="es. 50"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] font-mono outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Quota Bonifico (Bon)
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSocio.quotaBonifico || ""}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, quotaBonifico: e.target.value })}
-                    placeholder="es. 50"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] font-mono outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={currentSocio.email || ""}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, email: e.target.value })}
-                    placeholder="socio@esempio.it"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Telefono
-                  </label>
-                  <input
-                    type="tel"
-                    value={currentSocio.telefono || ""}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, telefono: e.target.value })}
-                    placeholder="+39 333 1234567"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                <div>
-                  <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Tipologia Socio
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSocio.tipologia || "Socio Ordinario"}
-                    onChange={(e) => setCurrentSocio({ ...currentSocio, tipologia: e.target.value })}
-                    placeholder="Socio Ordinario / Praticante"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div className="pt-4">
-                  <label className="flex items-center gap-2 cursor-pointer text-xs font-mono">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(currentSocio.socioOnorario)}
-                      onChange={(e) =>
-                        setCurrentSocio({ ...currentSocio, socioOnorario: e.target.checked })
-                      }
-                      className="h-4 w-4 border-slate-300 text-[#0a1c2a] focus:ring-[#0a1c2a]"
-                    />
-                    <span>Socio Onorario (S.O.)</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Note
-                </label>
-                <input
-                  type="text"
-                  value={currentSocio.note || ""}
-                  onChange={(e) => setCurrentSocio({ ...currentSocio, note: e.target.value })}
-                  placeholder="Note varie..."
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              </div>
-
-              {/* Sticky Bottom Footer */}
-              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setModalOpen(false);
-                    setCurrentSocio(null);
-                  }}
-                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
-                >
-                  Annulla
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 sm:flex-none px-6 py-2.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-xs font-mono font-bold tracking-wider uppercase transition-colors cursor-pointer disabled:opacity-50"
-                >
-                  {submitting ? "Salvataggio..." : "Salva Socio"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

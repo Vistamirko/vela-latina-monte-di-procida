@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import ImageUploader from "@/components/ImageUploader";
 import {
   Calendar,
   BookOpen,
@@ -33,11 +32,13 @@ import {
 } from "lucide-react";
 import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione } from "@/lib/db/types";
 import LibroSociManager from "@/components/admin/LibroSociManager";
-import ApproveMemberModal from "@/components/admin/ApproveMemberModal";
 import AnagraficaManager from "@/components/admin/AnagraficaManager";
 
-export default function AdminDashboardPage() {
+function AdminDashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
   const [currentUser, setCurrentUser] = useState<{
     id: string;
     email: string;
@@ -48,6 +49,12 @@ export default function AdminDashboardPage() {
 
   // Active Tab: 'richieste' | 'soci' | 'anagrafica' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
   const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
+
+  useEffect(() => {
+    if (tabParam && ["richieste", "soci", "anagrafica", "eventi", "blog", "corsi", "progetti", "db"].includes(tabParam)) {
+      setActiveTab(tabParam as any);
+    }
+  }, [tabParam]);
 
   // Data states
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -60,23 +67,6 @@ export default function AdminDashboardPage() {
   const [bookingFilter, setBookingFilter] = useState<"tutte" | "nuova" | "in_attesa_pagamento" | "contattato" | "iscritto">("tutte");
   const [loadingData, setLoadingData] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
-
-  // Modals state
-  const [eventModalOpen, setEventModalOpen] = useState(false);
-  const [currentEvent, setCurrentEvent] = useState<Partial<EventItem> | null>(null);
-
-  const [blogModalOpen, setBlogModalOpen] = useState(false);
-  const [currentBlogPost, setCurrentBlogPost] = useState<Partial<BlogPost> | null>(null);
-
-  const [courseModalOpen, setCourseModalOpen] = useState(false);
-  const [currentCourse, setCurrentCourse] = useState<Partial<CourseSession> | null>(null);
-
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
-  const [currentProject, setCurrentProject] = useState<Partial<ProjectItem> | null>(null);
-
-  // Approve member modal state
-  const [approveModalOpen, setApproveModalOpen] = useState(false);
-  const [selectedBookingToApprove, setSelectedBookingToApprove] = useState<BookingRequest | null>(null);
 
   const showToast = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
@@ -187,27 +177,6 @@ export default function AdminDashboardPage() {
   /* ==============================================================
      EVENTI ACTIONS
   ============================================================== */
-  const handleSaveEvent = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentEvent?.title || !currentEvent.date) return;
-
-    try {
-      const isNew = !currentEvent.id;
-      const res = await fetch("/api/eventi", {
-        method: isNew ? "POST" : "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentEvent),
-      });
-
-      if (!res.ok) throw new Error("Errore nel salvataggio");
-      showToast("success", isNew ? "Evento creato con successo" : "Evento aggiornato");
-      setEventModalOpen(false);
-      loadAllData();
-    } catch (err: unknown) {
-      showToast("error", err instanceof Error ? err.message : "Errore");
-    }
-  };
-
   const handleDeleteEvent = async (id: string, title: string) => {
     if (!confirm(`Sei sicuro di voler eliminare l'evento "${title}"?`)) return;
     try {
@@ -238,27 +207,6 @@ export default function AdminDashboardPage() {
   /* ==============================================================
      BLOG ACTIONS
   ============================================================== */
-  const handleSaveBlogPost = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentBlogPost?.title || !currentBlogPost.content) return;
-
-    try {
-      const isNew = !currentBlogPost.id;
-      const res = await fetch("/api/blog", {
-        method: isNew ? "POST" : "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentBlogPost),
-      });
-
-      if (!res.ok) throw new Error("Errore nel salvataggio");
-      showToast("success", isNew ? "Articolo pubblicato" : "Articolo aggiornato");
-      setBlogModalOpen(false);
-      loadAllData();
-    } catch (err: unknown) {
-      showToast("error", err instanceof Error ? err.message : "Errore");
-    }
-  };
-
   const handleDeleteBlogPost = async (id: string, title: string) => {
     if (!confirm(`Eliminare l'articolo "${title}"?`)) return;
     try {
@@ -289,27 +237,6 @@ export default function AdminDashboardPage() {
   /* ==============================================================
      CORSI ACTIONS
   ============================================================== */
-  const handleSaveCourse = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentCourse?.courseTitle || !currentCourse.startDate) return;
-
-    try {
-      const isNew = !currentCourse.id;
-      const res = await fetch("/api/corsi-calendar", {
-        method: isNew ? "POST" : "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentCourse),
-      });
-
-      if (!res.ok) throw new Error("Errore salvataggio corso");
-      showToast("success", isNew ? "Sessione corso creata" : "Sessione corso aggiornata");
-      setCourseModalOpen(false);
-      loadAllData();
-    } catch (err: unknown) {
-      showToast("error", err instanceof Error ? err.message : "Errore");
-    }
-  };
-
   const handleDeleteCourse = async (id: string, title: string) => {
     if (!confirm(`Eliminare la sessione "${title}"?`)) return;
     try {
@@ -325,27 +252,6 @@ export default function AdminDashboardPage() {
   /* ==============================================================
      PROGETTI ACTIONS
   ============================================================== */
-  const handleSaveProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentProject) return;
-
-    try {
-      const isNew = !currentProject.id;
-      const res = await fetch("/api/progetti", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentProject),
-      });
-
-      if (!res.ok) throw new Error("Errore salvataggio progetto");
-      showToast("success", isNew ? "Progetto creato con successo" : "Progetto aggiornato");
-      setProjectModalOpen(false);
-      loadAllData();
-    } catch (err: unknown) {
-      showToast("error", err instanceof Error ? err.message : "Errore");
-    }
-  };
-
   const handleDeleteProject = async (id: string, title: string) => {
     if (!confirm(`Sei sicuro di voler eliminare il progetto "${title}"?`)) return;
     try {
@@ -815,17 +721,14 @@ export default function AdminDashboardPage() {
                           {/* Azioni Rapide Contatto & Approvazione */}
                           <div className="md:col-span-4 flex flex-wrap lg:justify-end gap-2 items-center">
                             {item.type === "tesseramento" && item.status !== "iscritto" && (
-                              <button
-                                onClick={() => {
-                                  setSelectedBookingToApprove(item);
-                                  setApproveModalOpen(true);
-                                }}
+                              <Link
+                                href={`/admin/iscrizioni/approva?id=${item.id}`}
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#b8860b] hover:bg-[#996f08] text-white text-[10px] uppercase font-mono tracking-wider font-bold transition-colors cursor-pointer shadow-2xs"
                                 title="Conferma pagamento quota e iscrivi al Libro Soci"
                               >
                                 <CheckCircle2 className="w-3.5 h-3.5" />
                                 <span>Conferma Pagamento & Iscrivi</span>
-                              </button>
+                              </Link>
                             )}
 
                             {item.type === "tesseramento" && item.status === "iscritto" && (
@@ -922,26 +825,13 @@ export default function AdminDashboardPage() {
                 >
                   <RefreshCw className={`w-4 h-4 ${loadingData ? "animate-spin" : ""}`} />
                 </button>
-                <button
-                  onClick={() => {
-                    setCurrentEvent({
-                      title: "",
-                      date: "",
-                      location: "Canale di Procida",
-                      category: "regata",
-                      description: "",
-                      badge: "",
-                      result: "",
-                      imageUrl: "/images/hero-sailing.webp",
-                      published: true,
-                    });
-                    setEventModalOpen(true);
-                  }}
-                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-[11px] uppercase tracking-wider font-semibold hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer"
+                <Link
+                  href="/admin/eventi/editor"
+                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-[11px] uppercase tracking-wider font-semibold hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Nuovo Evento</span>
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -1008,39 +898,22 @@ export default function AdminDashboardPage() {
                       <ExternalLink className="w-3 h-3" />
                     </Link>
                   ) : (
-                    <button
-                      onClick={() => {
-                        const slug = `racconto-${evt.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "")}`;
-                        setCurrentBlogPost({
-                          title: `Diario di Bordo & Racconto: ${evt.title}`,
-                          slug,
-                          category: "Reportage Regata",
-                          author: currentUser?.name || "Vela Latina",
-                          excerpt: `Cronaca, emozioni e manovre dell'evento ${evt.title} a ${evt.location} (${evt.date}).`,
-                          content: `L'evento ${evt.title} si è svolto a ${evt.location}.\n\nLe imbarcazioni dell'Associazione Vela Latina Monte di Procida hanno preso parte alla manifestazione affrontando il vento e le correnti con determinazione.\n\n[Inserisci qui il racconto dettagliato delle prove in mare, impressioni dell'equipaggio e fotografie...]`,
-                          coverImage: evt.imageUrl || "/images/hero-sailing.webp",
-                          published: true,
-                        });
-                        setActiveTab("blog");
-                        setBlogModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/blog/editor?title=${encodeURIComponent(`Diario di Bordo: ${evt.title}`)}&category=Reportage+Regata`}
                       className="text-[10px] font-mono text-slate-700 hover:text-[#0a1c2a] font-bold underline cursor-pointer"
                     >
                       + Scrivi Articolo Blog
-                    </button>
+                    </Link>
                   )}
 
                   <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
-                    <button
-                      onClick={() => {
-                        setCurrentEvent(evt);
-                        setEventModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/eventi/editor?id=${evt.id}`}
                       className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                       <span>Modifica</span>
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleDeleteEvent(evt.id, evt.title)}
                       className="py-2 px-3 border border-slate-300 text-red-600 bg-white hover:bg-red-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
@@ -1128,40 +1001,23 @@ export default function AdminDashboardPage() {
                               <ExternalLink className="w-2.5 h-2.5" />
                             </Link>
                           ) : (
-                            <button
-                              onClick={() => {
-                                const slug = `racconto-${evt.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "")}`;
-                                setCurrentBlogPost({
-                                  title: `Diario di Bordo & Racconto: ${evt.title}`,
-                                  slug,
-                                  category: "Reportage Regata",
-                                  author: currentUser?.name || "Vela Latina",
-                                  excerpt: `Cronaca, emozioni e manovre dell'evento ${evt.title} a ${evt.location} (${evt.date}).`,
-                                  content: `L'evento ${evt.title} si è svolto a ${evt.location}.\n\nLe imbarcazioni dell'Associazione Vela Latina Monte di Procida hanno preso parte alla manifestazione affrontando il vento e le correnti con determinazione.\n\n[Inserisci qui il racconto dettagliato delle prove in mare, impressioni dell'equipaggio e fotografie...]`,
-                                  coverImage: evt.imageUrl || "/images/hero-sailing.webp",
-                                  published: true,
-                                });
-                                setActiveTab("blog");
-                                setBlogModalOpen(true);
-                              }}
+                            <Link
+                              href={`/admin/blog/editor?title=${encodeURIComponent(`Diario di Bordo: ${evt.title}`)}&category=Reportage+Regata`}
                               className="text-[9px] text-slate-700 hover:text-[#0a1c2a] font-bold underline mt-1 block cursor-pointer"
                             >
                               + Scrivi Articolo
-                            </button>
+                            </Link>
                           )}
                         </td>
                         <td className="p-4 text-right whitespace-nowrap">
                           <div className="flex items-center justify-end gap-2">
-                            <button
-                              onClick={() => {
-                                setCurrentEvent(evt);
-                                setEventModalOpen(true);
-                              }}
-                              className="p-1.5 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer"
+                            <Link
+                              href={`/admin/eventi/editor?id=${evt.id}`}
+                              className="p-1.5 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer inline-flex items-center justify-center"
                               title="Modifica"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
-                            </button>
+                            </Link>
                             <button
                               onClick={() => handleDeleteEvent(evt.id, evt.title)}
                               className="p-1.5 border border-slate-300 hover:border-red-600 text-slate-700 hover:text-red-600 bg-white cursor-pointer"
@@ -1211,25 +1067,13 @@ export default function AdminDashboardPage() {
                 >
                   <RefreshCw className={`w-4 h-4 ${loadingData ? "animate-spin" : ""}`} />
                 </button>
-                <button
-                  onClick={() => {
-                    setCurrentBlogPost({
-                      title: "",
-                      slug: "",
-                      excerpt: "",
-                      content: "",
-                      category: "Cultura & Mare",
-                      author: currentUser?.name || "Vela Latina Redazione",
-                      coverImage: "/images/janara-crew.jpeg",
-                      published: true,
-                    });
-                    setBlogModalOpen(true);
-                  }}
-                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-[11px] uppercase tracking-wider font-semibold hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer"
+                <Link
+                  href="/admin/blog/editor"
+                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-[11px] uppercase tracking-wider font-semibold hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Nuovo Articolo</span>
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -1294,16 +1138,13 @@ export default function AdminDashboardPage() {
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Vedi</span>
                     </Link>
-                    <button
-                      onClick={() => {
-                        setCurrentBlogPost(post);
-                        setBlogModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/blog/editor?id=${post.id}`}
                       className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                       <span>Modifica</span>
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleDeleteBlogPost(post.id, post.title)}
                       className="py-2 px-3 border border-slate-300 text-red-600 bg-white hover:bg-red-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
@@ -1381,16 +1222,13 @@ export default function AdminDashboardPage() {
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </Link>
-                            <button
-                              onClick={() => {
-                                setCurrentBlogPost(post);
-                                setBlogModalOpen(true);
-                              }}
-                              className="p-1.5 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer"
+                            <Link
+                              href={`/admin/blog/editor?id=${post.id}`}
+                              className="p-1.5 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer inline-flex items-center justify-center"
                               title="Modifica"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
-                            </button>
+                            </Link>
                             <button
                               onClick={() => handleDeleteBlogPost(post.id, post.title)}
                               className="p-1.5 border border-slate-300 hover:border-red-600 text-slate-700 hover:text-red-600 bg-white cursor-pointer"
@@ -1440,28 +1278,13 @@ export default function AdminDashboardPage() {
                 >
                   <RefreshCw className={`w-4 h-4 ${loadingData ? "animate-spin" : ""}`} />
                 </button>
-                <button
-                  onClick={() => {
-                    setCurrentCourse({
-                      courseKey: "voga",
-                      courseTitle: "Scuola di Voga Tradizionale Flegrea",
-                      startDate: new Date().toISOString().split("T")[0],
-                      schedule: "Sabato mattina ore 09:30 – 12:30",
-                      totalSeats: 12,
-                      availableSeats: 6,
-                      status: "aperte",
-                      instructor: "Maestri Vogatori Montesi",
-                      notes: "Porticciolo di Acquamorta",
-                      price: "Incluso con tesseramento socio",
-                      published: true,
-                    });
-                    setCourseModalOpen(true);
-                  }}
-                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-[11px] uppercase tracking-wider font-semibold hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer"
+                <Link
+                  href="/admin/corsi/editor"
+                  className="px-4 py-2.5 bg-[#0a1c2a] text-white text-[11px] uppercase tracking-wider font-semibold hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Nuova Sessione</span>
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -1520,16 +1343,13 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
-                    <button
-                      onClick={() => {
-                        setCurrentCourse(c);
-                        setCourseModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/corsi/editor?id=${c.id}`}
                       className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                       <span>Modifica</span>
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleDeleteCourse(c.id, c.courseTitle)}
                       className="py-2 px-3 border border-slate-300 text-red-600 bg-white hover:bg-red-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
@@ -1599,16 +1419,13 @@ export default function AdminDashboardPage() {
                         </td>
                         <td className="p-4 text-right whitespace-nowrap">
                           <div className="flex items-center justify-end gap-2">
-                            <button
-                              onClick={() => {
-                                setCurrentCourse(c);
-                                setCourseModalOpen(true);
-                              }}
-                              className="p-1.5 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer"
+                            <Link
+                              href={`/admin/corsi/editor?id=${c.id}`}
+                              className="p-1.5 border border-slate-300 hover:border-[#0a1c2a] text-slate-700 hover:text-[#0a1c2a] bg-white cursor-pointer inline-flex items-center justify-center"
                               title="Modifica"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
-                            </button>
+                            </Link>
                             <button
                               onClick={() => handleDeleteCourse(c.id, c.courseTitle)}
                               className="p-1.5 border border-slate-300 hover:border-red-600 text-slate-700 hover:text-red-600 bg-white cursor-pointer"
@@ -1658,41 +1475,13 @@ export default function AdminDashboardPage() {
                 >
                   <RefreshCw className={`w-4 h-4 ${loadingData ? "animate-spin" : ""}`} />
                 </button>
-                <button
-                  onClick={() => {
-                    const nextNum = String(projects.length + 1).padStart(2, "0");
-                    const defaultRef = {
-                      nome: "",
-                      ruolo: "Coordinatore di Progetto",
-                      telefono: "+39 333 000 0000",
-                      email: "progetto@velalatinamontediprocida.it",
-                      note: "",
-                    };
-                    setCurrentProject({
-                      number: nextNum,
-                      title: "",
-                      highlight: "",
-                      category: "Regata Internazionale",
-                      partner: "Campi Flegrei · Rete Partner",
-                      status: "In Corso",
-                      description: "",
-                      published: true,
-                      referente: defaultRef,
-                      anagrafica: {
-                        codiceProgetto: `PRJ-2027-${nextNum}`,
-                        referente: defaultRef,
-                        entePromotore: "Associazione Vela Latina Monte di Procida APS",
-                        statoAvanzamento: 15,
-                        budgetStimato: "Da definire",
-                      },
-                    });
-                    setProjectModalOpen(true);
-                  }}
+                <Link
+                  href="/admin/progetti/editor"
                   className="px-4 py-2.5 bg-[#0a1c2a] text-white text-xs font-mono font-semibold uppercase tracking-wider hover:bg-[#b8860b] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Nuovo Progetto</span>
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -1835,16 +1624,13 @@ export default function AdminDashboardPage() {
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Vedi</span>
                     </Link>
-                    <button
-                      onClick={() => {
-                        setCurrentProject(proj);
-                        setProjectModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/progetti/editor?id=${proj.id}`}
                       className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                       <span>Modifica</span>
-                    </button>
+                    </Link>
                     <button
                       onClick={() => handleDeleteProject(proj.id, proj.title)}
                       className="py-2 px-3 border border-slate-300 text-rose-600 bg-white hover:bg-rose-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
@@ -1992,16 +1778,13 @@ export default function AdminDashboardPage() {
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </Link>
-                            <button
-                              onClick={() => {
-                                setCurrentProject(proj);
-                                setProjectModalOpen(true);
-                              }}
-                              className="p-1.5 border border-slate-300 text-slate-700 hover:text-[#0a1c2a] hover:border-[#0a1c2a] transition-colors cursor-pointer"
+                            <Link
+                              href={`/admin/progetti/editor?id=${proj.id}`}
+                              className="p-1.5 border border-slate-300 text-slate-700 hover:text-[#0a1c2a] hover:border-[#0a1c2a] transition-colors cursor-pointer inline-flex items-center justify-center"
                               title="Modifica"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
-                            </button>
+                            </Link>
                             <button
                               onClick={() => handleDeleteProject(proj.id, proj.title)}
                               className="p-1.5 border border-slate-300 text-rose-600 hover:text-rose-900 hover:border-rose-600 transition-colors cursor-pointer"
@@ -2078,1056 +1861,15 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </main>
-
-      {/* ==============================================================
-         MODALE EVENTO
-      ============================================================== */}
-      {eventModalOpen && currentEvent && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white border-t sm:border border-slate-300 max-w-2xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
-
-            {/* Sticky Header */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
-              <h3 className="font-['Cormorant_Garamond'] text-xl sm:text-2xl font-semibold text-[#0a1c2a] leading-tight">
-                {currentEvent.id ? "Modifica Evento" : "Nuovo Evento"}
-              </h3>
-              <button
-                onClick={() => setEventModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                title="Chiudi"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveEvent} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Titolo dell&apos;Evento
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentEvent.title || ""}
-                    onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
-                    placeholder="Es. Les Voiles Latines de Saint-Tropez"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                      Data o Periodo
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={currentEvent.date || ""}
-                      onChange={(e) => setCurrentEvent({ ...currentEvent, date: e.target.value })}
-                      placeholder="Es. Maggio 2026 oppure 14-16 Giugno 2026"
-                      className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                      Luogo / Bacino
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={currentEvent.location || ""}
-                      onChange={(e) => setCurrentEvent({ ...currentEvent, location: e.target.value })}
-                      placeholder="Es. Saint-Tropez, Costa Azzurra"
-                      className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                      Categoria
-                    </label>
-                    <select
-                      value={currentEvent.category || "regata"}
-                      onChange={(e) => setCurrentEvent({ ...currentEvent, category: e.target.value as EventItem["category"] })}
-                      className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                    >
-                      <option value="regata">Regata</option>
-                      <option value="manifestazione">Manifestazione</option>
-                      <option value="raduno">Raduno</option>
-                      <option value="cultura">Cultura & TV</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                      Badge / Evidenza
-                    </label>
-                    <input
-                      type="text"
-                      value={currentEvent.badge || ""}
-                      onChange={(e) => setCurrentEvent({ ...currentEvent, badge: e.target.value })}
-                      placeholder="Es. 1° Posto Assoluto"
-                      className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                      Risultato / Podio
-                    </label>
-                    <input
-                      type="text"
-                      value={currentEvent.result || ""}
-                      onChange={(e) => setCurrentEvent({ ...currentEvent, result: e.target.value })}
-                      placeholder="Es. Vincitore Classe Gozzi"
-                      className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-                </div>
-
-                <ImageUploader
-                  label="Immagine dell'Evento"
-                  value={currentEvent.imageUrl || ""}
-                  onChange={(url) => setCurrentEvent({ ...currentEvent, imageUrl: url })}
-                  placeholder="/images/hero-sailing.webp"
-                />
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Descrizione dell&apos;Evento
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    value={currentEvent.description || ""}
-                    onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
-                    placeholder="Racconto e dettagli dell'evento sportivo o culturale..."
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Articolo / Reportage Collegato nel Blog (Slug URL)
-                  </label>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <input
-                      type="text"
-                      value={currentEvent.articleSlug || ""}
-                      onChange={(e) => setCurrentEvent({ ...currentEvent, articleSlug: e.target.value })}
-                      placeholder="Es. anima-di-legno-il-segreto-del-gozzo-flegreo"
-                      className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono"
-                    />
-                    {blogPosts.length > 0 && (
-                      <select
-                        value={currentEvent.articleSlug || ""}
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            setCurrentEvent({ ...currentEvent, articleSlug: e.target.value });
-                          }
-                        }}
-                        className="px-3 py-2 border border-slate-300 text-xs text-slate-700 bg-white outline-none shrink-0"
-                      >
-                        <option value="">Scegli articolo esistente...</option>
-                        {blogPosts.map((p) => (
-                          <option key={p.id} value={p.slug}>
-                            {p.title}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                  </div>
-                  <span className="text-[10px] text-slate-600 font-mono mt-1 block">
-                    Collega un articolo del blog per mostrare il pulsante &quot;Leggi il Racconto dell&apos;Evento&quot; nella pagina pubblica degli Eventi.
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 pt-2">
-                  <input
-                    type="checkbox"
-                    id="evt-published"
-                    checked={currentEvent.published !== false}
-                    onChange={(e) => setCurrentEvent({ ...currentEvent, published: e.target.checked })}
-                    className="w-4 h-4 cursor-pointer"
-                  />
-                  <label htmlFor="evt-published" className="text-xs font-mono font-bold text-[#0a1c2a] cursor-pointer">
-                    Pubblica immediatamente sul sito (visibile a tutti)
-                  </label>
-                </div>
-              </div>
-
-              {/* Sticky Bottom Footer */}
-              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setEventModalOpen(false)}
-                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
-                >
-                  Annulla
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 sm:flex-none px-6 py-2.5 bg-[#0a1c2a] text-white text-xs font-mono font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
-                >
-                  Salva Evento
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ==============================================================
-         MODALE BLOG
-      ============================================================== */}
-      {blogModalOpen && currentBlogPost && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white border-t sm:border border-slate-300 max-w-3xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
-
-            {/* Sticky Header */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
-              <h3 className="font-['Cormorant_Garamond'] text-xl sm:text-2xl font-semibold text-[#0a1c2a] leading-tight">
-                {currentBlogPost.id ? "Modifica Articolo Blog" : "Nuovo Articolo"}
-              </h3>
-              <button
-                onClick={() => setBlogModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                title="Chiudi"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveBlogPost} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Titolo Articolo
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={currentBlogPost.title || ""}
-                  onChange={(e) => {
-                    const title = e.target.value;
-                    const slug = title
-                      .toLowerCase()
-                      .replace(/[^a-z0-9]+/g, "-")
-                      .replace(/(^-|-$)+/g, "");
-                    setCurrentBlogPost({
-                      ...currentBlogPost,
-                      title,
-                      slug: currentBlogPost.id ? currentBlogPost.slug : slug,
-                    });
-                  }}
-                  placeholder="Es. Il fascino eterno del gozzo montese"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Slug URL
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentBlogPost.slug || ""}
-                    onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, slug: e.target.value })}
-                    placeholder="il-fascino-eterno"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Autore
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentBlogPost.author || ""}
-                    onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, author: e.target.value })}
-                    placeholder="Antonio Pugliese"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Categoria
-                  </label>
-                  <input
-                    type="text"
-                    value={currentBlogPost.category || "Cultura & Mare"}
-                    onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, category: e.target.value })}
-                    placeholder="Cultura & Mare"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <ImageUploader
-                label="Immagine di Copertina"
-                value={currentBlogPost.coverImage || ""}
-                onChange={(url) => setCurrentBlogPost({ ...currentBlogPost, coverImage: url })}
-                placeholder="/images/janara-regatta.jpeg"
-              />
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Estratto Breve (Sintesi anteprima)
-                </label>
-                <textarea
-                  required
-                  rows={2}
-                  value={currentBlogPost.excerpt || ""}
-                  onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, excerpt: e.target.value })}
-                  placeholder="Breve sintesi di due righe che appare nella scheda del blog..."
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Contenuto Completo dell&apos;Articolo
-                </label>
-                <textarea
-                  required
-                  rows={8}
-                  value={currentBlogPost.content || ""}
-                  onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, content: e.target.value })}
-                  placeholder="Testo completo dell'articolo o racconto marinaro..."
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 pt-2">
-                <input
-                  type="checkbox"
-                  id="blog-published"
-                  checked={currentBlogPost.published !== false}
-                  onChange={(e) => setCurrentBlogPost({ ...currentBlogPost, published: e.target.checked })}
-                  className="w-4 h-4 cursor-pointer"
-                />
-                <label htmlFor="blog-published" className="text-xs font-mono font-bold text-[#0a1c2a] cursor-pointer">
-                  Articolo visibile pubblicamente sul sito
-                </label>
-              </div>
-
-              </div>
-
-              {/* Sticky Bottom Footer */}
-              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setBlogModalOpen(false)}
-                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
-                >
-                  Annulla
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 sm:flex-none px-6 py-2.5 bg-[#0a1c2a] text-white text-xs font-mono font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
-                >
-                  Salva Articolo
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ==============================================================
-         MODALE CORSO
-      ============================================================== */}
-      {courseModalOpen && currentCourse && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white border-t sm:border border-slate-300 max-w-2xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
-
-            {/* Sticky Header */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
-              <h3 className="font-['Cormorant_Garamond'] text-xl sm:text-2xl font-semibold text-[#0a1c2a] leading-tight">
-                {currentCourse.id ? "Modifica Sessione Corso" : "Nuova Sessione Corso"}
-              </h3>
-              <button
-                onClick={() => setCourseModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                title="Chiudi"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveCourse} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Tipo di Corso
-                  </label>
-                  <select
-                    value={currentCourse.courseKey || "voga"}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, courseKey: e.target.value as CourseSession["courseKey"] })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  >
-                    <option value="voga">01 · Voga in Piedi Tradizionale</option>
-                    <option value="vela">02 · Vela Latina Classica</option>
-                    <option value="rosa">03 · Progetto ROSA (Femminile)</option>
-                    <option value="inclusione">04 · Inclusione Mare</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Stato Iscrizioni
-                  </label>
-                  <select
-                    value={currentCourse.status || "aperte"}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, status: e.target.value as CourseSession["status"] })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  >
-                    <option value="aperte">Iscrizioni Aperte</option>
-                    <option value="in-esaurimento">Posti in Esaurimento</option>
-                    <option value="sold-out">Sold Out / Al Completo</option>
-                    <option value="concluso">Sessione Conclusa</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Titolo Sessione / Percorso
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={currentCourse.courseTitle || ""}
-                  onChange={(e) => setCurrentCourse({ ...currentCourse, courseTitle: e.target.value })}
-                  placeholder="Es. Corso Primaverile di Voga in Piedi"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Data di Inizio
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={currentCourse.startDate || ""}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, startDate: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Orari e Frequenza
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentCourse.schedule || ""}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, schedule: e.target.value })}
-                    placeholder="Es. Ogni Sabato ore 09:30 – 12:30"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Posti Totali
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    value={currentCourse.totalSeats || 10}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, totalSeats: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Posti Rimasti
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={currentCourse.availableSeats || 0}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, availableSeats: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Istruttore / Barca
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentCourse.instructor || ""}
-                    onChange={(e) => setCurrentCourse({ ...currentCourse, instructor: e.target.value })}
-                    placeholder="Es. San Michele Arcangelo"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Quota / Note Aggiuntive
-                </label>
-                <input
-                  type="text"
-                  value={currentCourse.notes || ""}
-                  onChange={(e) => setCurrentCourse({ ...currentCourse, notes: e.target.value })}
-                  placeholder="Es. Riservato a soci · Requisiti di base al galleggiamento"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              </div>
-
-              {/* Sticky Bottom Footer */}
-              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setCourseModalOpen(false)}
-                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
-                >
-                  Annulla
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 sm:flex-none px-6 py-2.5 bg-[#0a1c2a] text-white text-xs font-mono font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
-                >
-                  Salva Sessione
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ==============================================================
-         MODALE PROGETTO
-      ============================================================== */}
-      {projectModalOpen && currentProject && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white border-t sm:border border-slate-300 max-w-2xl w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
-
-            {/* Sticky Header */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
-              <h3 className="font-['Cormorant_Garamond'] text-xl sm:text-2xl font-semibold text-[#0a1c2a] leading-tight">
-                {currentProject.id ? "Modifica Progetto" : "Nuovo Progetto Strategico"}
-              </h3>
-              <button
-                onClick={() => setProjectModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                title="Chiudi"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveProject} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div className="sm:col-span-1">
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Numero
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentProject.number || "01"}
-                    onChange={(e) => setCurrentProject({ ...currentProject, number: e.target.value })}
-                    placeholder="01"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono text-center font-bold"
-                  />
-                </div>
-
-                <div className="sm:col-span-3">
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Titolo del Progetto
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={currentProject.title || ""}
-                    onChange={(e) => setCurrentProject({ ...currentProject, title: e.target.value })}
-                    placeholder="Es. Progetto ROSA"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Highlight / Traguardo
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={currentProject.highlight || ""}
-                  onChange={(e) => setCurrentProject({ ...currentProject, highlight: e.target.value })}
-                  placeholder="Es. Saint-Tropez 2027 oppure Cerimonia d&apos;Apertura"
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Categoria
-                  </label>
-                  <select
-                    value={currentProject.category || "Regata Internazionale"}
-                    onChange={(e) =>
-                      setCurrentProject({
-                        ...currentProject,
-                        category: e.target.value as ProjectItem["category"],
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  >
-                    <option value="Regata Internazionale">Regata Internazionale</option>
-                    <option value="Cultura & Scienza">Cultura & Scienza</option>
-                    <option value="Inclusione">Inclusione</option>
-                    <option value="Rotte Storiche">Rotte Storiche</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Badge in Evidenza
-                  </label>
-                  <input
-                    type="text"
-                    value={currentProject.badge || ""}
-                    onChange={(e) => setCurrentProject({ ...currentProject, badge: e.target.value })}
-                    placeholder="Es. Equipaggio Femminile"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Stato
-                  </label>
-                  <select
-                    value={currentProject.status || "In Corso"}
-                    onChange={(e) =>
-                      setCurrentProject({
-                        ...currentProject,
-                        status: e.target.value as ProjectItem["status"],
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  >
-                    <option value="In Corso">In Corso</option>
-                    <option value="In Programmazione">In Programmazione</option>
-                    <option value="Completato">Completato</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Slug URL Pagina Dedicata
-                  </label>
-                  <input
-                    type="text"
-                    value={currentProject.slug || ""}
-                    onChange={(e) => setCurrentProject({ ...currentProject, slug: e.target.value })}
-                    placeholder="Es. progetto-rosa-saint-tropez-2027"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs font-mono text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                  <span className="text-[10px] font-mono text-slate-500 mt-0.5 block">
-                    URL: /progetti/{currentProject.slug || "slug-automatico"}
-                  </span>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Partner / Rete Territoriale
-                  </label>
-                  <input
-                    type="text"
-                    value={currentProject.partner || ""}
-                    onChange={(e) => setCurrentProject({ ...currentProject, partner: e.target.value })}
-                    placeholder="Es. Campi Flegrei · Rete Partner"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Orizzonte Temporale
-                  </label>
-                  <input
-                    type="text"
-                    value={currentProject.timeline || ""}
-                    onChange={(e) => setCurrentProject({ ...currentProject, timeline: e.target.value })}
-                    placeholder="Es. 2026 – 2027"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                    Teatro Operativo / Luogo
-                  </label>
-                  <input
-                    type="text"
-                    value={currentProject.location || ""}
-                    onChange={(e) => setCurrentProject({ ...currentProject, location: e.target.value })}
-                    placeholder="Es. Acquamorta & Saint-Tropez"
-                    className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a]"
-                  />
-                </div>
-              </div>
-
-              {/* Upload o inserimento Immagine di Copertina */}
-              <ImageUploader
-                label="Fotografia di Copertina del Progetto"
-                value={currentProject.imageUrl || ""}
-                onChange={(url) => setCurrentProject({ ...currentProject, imageUrl: url })}
-                placeholder="/images/janara-crew.jpeg"
-              />
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Sintesi Breve (Anteprima nelle Schede)
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={currentProject.description || ""}
-                  onChange={(e) => setCurrentProject({ ...currentProject, description: e.target.value })}
-                  placeholder="Spiega in breve gli obiettivi del cantiere (mostrato nella griglia)..."
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1">
-                  Spiegazione Approfondita della Pagina Dedicata (/progetti/[slug])
-                </label>
-                <textarea
-                  rows={8}
-                  value={currentProject.content || ""}
-                  onChange={(e) => setCurrentProject({ ...currentProject, content: e.target.value })}
-                  placeholder="Inserisci la relazione dettagliata di cantiere: storia, percorso tecnico, imbarcazioni, obiettivi... Supporta titoli con '### ' ed elenchi puntati con '- '."
-                  className="w-full px-3 py-2 border border-slate-300 text-xs text-[#0a1c2a] outline-none focus:border-[#0a1c2a] leading-relaxed font-mono"
-                />
-              </div>
-
-              {/* ANAGRAFICA E REFERENTE PROGETTO */}
-              <div className="bg-[#fbfaf6] border border-slate-300 p-4 space-y-4">
-                <div className="border-b border-slate-200 pb-2">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">
-                    Scheda Anagrafica & Governance di Cantiere
-                  </span>
-                  <h4 className="text-sm font-bold text-[#0a1c2a]">
-                    Referente del Progetto & Contatti Operativi
-                  </h4>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Nome e Cognome Referente *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Es. Maria Scotto di Santolo"
-                      value={currentProject.referente?.nome || ""}
-                      onChange={(e) => {
-                        const newRef = {
-                          ...(currentProject.referente || {
-                            ruolo: "Coordinatore di Progetto",
-                            telefono: "",
-                            email: "",
-                          }),
-                          nome: e.target.value,
-                        };
-                        setCurrentProject({
-                          ...currentProject,
-                          referente: newRef,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
-                            }),
-                            referente: newRef,
-                          },
-                        });
-                      }}
-                      className="w-full px-3 py-1.5 border border-slate-300 text-xs text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Ruolo / Incarico Referente *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Es. Coordinatrice Team Femminile & Resp. Logistica"
-                      value={currentProject.referente?.ruolo || ""}
-                      onChange={(e) => {
-                        const newRef = {
-                          ...(currentProject.referente || {
-                            nome: "",
-                            telefono: "",
-                            email: "",
-                          }),
-                          ruolo: e.target.value,
-                        };
-                        setCurrentProject({
-                          ...currentProject,
-                          referente: newRef,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
-                            }),
-                            referente: newRef,
-                          },
-                        });
-                      }}
-                      className="w-full px-3 py-1.5 border border-slate-300 text-xs text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Telefono Referente
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="+39 340 000 0000"
-                      value={currentProject.referente?.telefono || ""}
-                      onChange={(e) => {
-                        const newRef = {
-                          ...(currentProject.referente || {
-                            nome: "",
-                            ruolo: "",
-                            email: "",
-                          }),
-                          telefono: e.target.value,
-                        };
-                        setCurrentProject({
-                          ...currentProject,
-                          referente: newRef,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
-                            }),
-                            referente: newRef,
-                          },
-                        });
-                      }}
-                      className="w-full px-3 py-1.5 border border-slate-300 text-xs font-mono text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Email Referente
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="referente@velalatinamontediprocida.it"
-                      value={currentProject.referente?.email || ""}
-                      onChange={(e) => {
-                        const newRef = {
-                          ...(currentProject.referente || {
-                            nome: "",
-                            ruolo: "",
-                            telefono: "",
-                          }),
-                          email: e.target.value,
-                        };
-                        setCurrentProject({
-                          ...currentProject,
-                          referente: newRef,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
-                            }),
-                            referente: newRef,
-                          },
-                        });
-                      }}
-                      className="w-full px-3 py-1.5 border border-slate-300 text-xs font-mono text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Codice Progetto / Sigla
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="PRJ-ROSA-2027"
-                      value={currentProject.anagrafica?.codiceProgetto || ""}
-                      onChange={(e) => {
-                        setCurrentProject({
-                          ...currentProject,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              referente: currentProject.referente || {
-                                nome: "",
-                                ruolo: "",
-                                telefono: "",
-                                email: "",
-                              },
-                            }),
-                            codiceProgetto: e.target.value,
-                          },
-                        });
-                      }}
-                      className="w-full px-3 py-1.5 border border-slate-300 text-xs font-mono font-bold text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Budget Stimato / Finanziamento
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Es. € 15.000 (Fondi privati e sponsor)"
-                      value={currentProject.anagrafica?.budgetStimato || ""}
-                      onChange={(e) => {
-                        setCurrentProject({
-                          ...currentProject,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              referente: currentProject.referente || {
-                                nome: "",
-                                ruolo: "",
-                                telefono: "",
-                                email: "",
-                              },
-                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
-                            }),
-                            budgetStimato: e.target.value,
-                          },
-                        });
-                      }}
-                      className="w-full px-3 py-1.5 border border-slate-300 text-xs text-[#0a1c2a] bg-white outline-none focus:border-[#0a1c2a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] uppercase font-mono tracking-wider text-slate-600 font-bold mb-1">
-                      Avanzamento (%: {currentProject.anagrafica?.statoAvanzamento ?? 50}%)
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      step="5"
-                      value={currentProject.anagrafica?.statoAvanzamento ?? 50}
-                      onChange={(e) => {
-                        setCurrentProject({
-                          ...currentProject,
-                          anagrafica: {
-                            ...(currentProject.anagrafica || {
-                              referente: currentProject.referente || {
-                                nome: "",
-                                ruolo: "",
-                                telefono: "",
-                                email: "",
-                              },
-                              codiceProgetto: `PRJ-${currentProject.number || "01"}`,
-                            }),
-                            statoAvanzamento: Number(e.target.value),
-                          },
-                        });
-                      }}
-                      className="w-full accent-[#0a1c2a] cursor-pointer"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 pt-2">
-                <input
-                  type="checkbox"
-                  id="project-published"
-                  checked={currentProject.published !== false}
-                  onChange={(e) => setCurrentProject({ ...currentProject, published: e.target.checked })}
-                  className="h-4 w-4 border-slate-300 text-[#0a1c2a] focus:ring-[#0a1c2a]"
-                />
-                <label htmlFor="project-published" className="text-xs font-mono text-slate-700">
-                  Pubblica questo cantiere immediatamente nella pagina pubblica /progetti
-                </label>
-              </div>
-
-              </div>
-
-              {/* Sticky Bottom Footer */}
-              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setProjectModalOpen(false)}
-                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono font-semibold hover:border-slate-800 transition-colors cursor-pointer"
-                >
-                  Annulla
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 sm:flex-none px-6 py-2.5 bg-[#0a1c2a] text-white text-xs font-mono font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
-                >
-                  Salva Progetto
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Approvazione Pagamento e Iscrizione Libro Soci */}
-      <ApproveMemberModal
-        isOpen={approveModalOpen}
-        booking={selectedBookingToApprove}
-        onClose={() => {
-          setApproveModalOpen(false);
-          setSelectedBookingToApprove(null);
-        }}
-        onSuccess={loadAllData}
-        showToast={showToast}
-      />
     </div>
   );
 }
+
+export default function AdminDashboardPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#fbfaf6] flex items-center justify-center p-6 text-xs font-mono text-slate-500">Caricamento pannello di amministrazione...</div>}>
+      <AdminDashboardContent />
+    </Suspense>
+  );
+}
+

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useMemo } from "react";
 import { AnagraficaAssociazione, DocumentoIstituzionale } from "@/lib/db/types";
 import {
@@ -48,17 +49,7 @@ export default function AnagraficaManager({
   const [docCategoryFilter, setDocCategoryFilter] = useState<string>("tutti");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  // Modal caricamento nuovo documento
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [newDoc, setNewDoc] = useState<Partial<DocumentoIstituzionale>>({
-    titolo: "",
-    categoria: "runts",
-    descrizione: "",
-    riservato: false,
-    formato: "PDF",
-  });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+
 
   // Edit Mode per le varie sezioni
   const [isEditingEnte, setIsEditingEnte] = useState(false);
@@ -95,76 +86,7 @@ export default function AnagraficaManager({
     };
   }, [data.documenti]);
 
-  // Gestione Upload Nuovo Documento
-  const handleUploadSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newDoc.titolo?.trim()) {
-      showToast("error", "Inserisci il titolo del documento");
-      return;
-    }
-    if (!selectedFile && !newDoc.fileUrl) {
-      showToast("error", "Seleziona un file da caricare o indica una URL");
-      return;
-    }
 
-    setUploading(true);
-    try {
-      let finalUrl = newDoc.fileUrl || "";
-      let finalName = newDoc.fileName || selectedFile?.name || "documento.pdf";
-      let finalSize = newDoc.dimensione || "1.0 MB";
-
-      if (selectedFile) {
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const uploadJson = await uploadRes.json();
-        if (!uploadRes.ok || !uploadJson.success) {
-          throw new Error(uploadJson.error || "Errore nel caricamento del file");
-        }
-        finalUrl = uploadJson.url;
-        finalName = uploadJson.fileName || selectedFile.name;
-        finalSize = `${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB`;
-      }
-
-      const docToSave: DocumentoIstituzionale = {
-        id: `doc-${Date.now()}`,
-        titolo: newDoc.titolo.trim(),
-        categoria: (newDoc.categoria as any) || "altro",
-        descrizione: newDoc.descrizione?.trim() || "Documento ufficiale dell'archivio",
-        fileName: finalName,
-        fileUrl: finalUrl,
-        formato: finalName.endsWith(".pdf") ? "PDF" : finalName.split(".").pop()?.toUpperCase() || "DOC",
-        dimensione: finalSize,
-        dataAggiornamento: new Date().toISOString().split("T")[0],
-        riservato: Boolean(newDoc.riservato),
-      };
-
-      const res = await fetch("/api/anagrafica", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "add_document", document: docToSave }),
-      });
-
-      const resJson = await res.json();
-      if (!res.ok || !resJson.success) {
-        throw new Error(resJson.error || "Errore durante il salvataggio");
-      }
-
-      showToast("success", "Documento inserito con successo nell'archivio");
-      setData(resJson.data);
-      setUploadModalOpen(false);
-      setNewDoc({ titolo: "", categoria: "runts", descrizione: "", riservato: false, formato: "PDF" });
-      setSelectedFile(null);
-      onReload();
-    } catch (err: any) {
-      showToast("error", err.message || "Errore durante l'operazione");
-    } finally {
-      setUploading(false);
-    }
-  };
 
   // Eliminazione Documento
   const handleDeleteDoc = async (docId: string, docTitolo: string) => {
@@ -242,13 +164,13 @@ export default function AnagraficaManager({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => setUploadModalOpen(true)}
+            <Link
+              href="/admin/anagrafica/documenti/carica"
               className="px-4 py-2 bg-[#0a1c2a] hover:bg-[#142838] text-white text-xs font-mono font-bold flex items-center gap-2 cursor-pointer shadow-sm transition-colors"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Carica Documento</span>
-            </button>
+            </Link>
             <a
               href="/api/anagrafica/download?doc=runts-iscrizione"
               target="_blank"
@@ -496,13 +418,13 @@ export default function AnagraficaManager({
               </button>
             </div>
 
-            <button
-              onClick={() => setUploadModalOpen(true)}
+            <Link
+              href="/admin/anagrafica/documenti/carica"
               className="px-4 py-2 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer shrink-0 shadow-sm"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Nuovo Documento</span>
-            </button>
+            </Link>
           </div>
 
           {/* Griglia Documenti */}
@@ -1703,138 +1625,7 @@ export default function AnagraficaManager({
         </div>
       )}
 
-      {/* ==============================================================
-          MODALE CARICAMENTO NUOVO DOCUMENTO
-      ============================================================== */}
-      {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white border-t sm:border border-slate-300 max-w-lg w-full h-[96vh] sm:h-auto sm:max-h-[90vh] rounded-t-2xl sm:rounded-none shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-200">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2 sm:hidden shrink-0" />
 
-            {/* Sticky Header */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
-              <div className="flex items-center gap-2">
-                <Upload className="w-4 h-4 text-[#c99a45]" />
-                <h3 className="font-['Cinzel'] font-bold text-sm text-[#0a1c2a] uppercase">
-                  Aggiungi Documento all&apos;Archivio
-                </h3>
-              </div>
-              <button
-                onClick={() => setUploadModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                title="Chiudi"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleUploadSubmit} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-              <div>
-                <label className="text-[10px] font-mono uppercase font-bold text-slate-600 block mb-1">
-                  Titolo Documento *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Es. Ricevuta Iscrizione RUNTS 2026, Documento Identità..."
-                  value={newDoc.titolo || ""}
-                  onChange={(e) => setNewDoc({ ...newDoc, titolo: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 text-xs font-mono bg-white focus:outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] font-mono uppercase font-bold text-slate-600 block mb-1">
-                    Categoria
-                  </label>
-                  <select
-                    value={newDoc.categoria}
-                    onChange={(e) => setNewDoc({ ...newDoc, categoria: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs font-mono bg-white focus:outline-none focus:border-[#0a1c2a]"
-                  >
-                    <option value="presidente">👤 Personali Presidente</option>
-                    <option value="runts">🏛️ RUNTS & Istituzionali</option>
-                    <option value="fiscale_bancario">💳 Fiscali & Bancari</option>
-                    <option value="dossier">⛵ Dossier & Master</option>
-                    <option value="altro">📁 Altro / Allegato</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-[10px] font-mono uppercase font-bold text-slate-600 block mb-1">
-                    Livello Riservatezza
-                  </label>
-                  <select
-                    value={newDoc.riservato ? "true" : "false"}
-                    onChange={(e) => setNewDoc({ ...newDoc, riservato: e.target.value === "true" })}
-                    className="w-full px-3 py-2 border border-slate-300 text-xs font-mono bg-white focus:outline-none focus:border-[#0a1c2a]"
-                  >
-                    <option value="false">Documento Pubblico / Condivisibile</option>
-                    <option value="true">🔒 Riservato Amministrazione</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-mono uppercase font-bold text-slate-600 block mb-1">
-                  Descrizione o Note di Utilizzo
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="Note, estremi protocollo, validità temporale o istruzioni d'uso..."
-                  value={newDoc.descrizione || ""}
-                  onChange={(e) => setNewDoc({ ...newDoc, descrizione: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 text-xs font-mono bg-white focus:outline-none focus:border-[#0a1c2a]"
-                />
-              </div>
-
-              <div>
-                <label className="text-[10px] font-mono uppercase font-bold text-slate-600 block mb-1">
-                  Carica File (PDF, DOC, DOCX, Scansione max 25MB) *
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (f) setSelectedFile(f);
-                  }}
-                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-3 file:border-0 file:text-xs file:font-mono file:font-semibold file:bg-[#0a1c2a] file:text-white hover:file:bg-[#152e42] cursor-pointer"
-                />
-                {selectedFile && (
-                  <span className="text-[11px] font-mono text-emerald-700 block mt-1">
-                    File selezionato: {selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
-                  </span>
-                )}
-              </div>
-
-              </div>
-
-              {/* Sticky Bottom Footer */}
-              <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-slate-200 bg-white/95 backdrop-blur-xs flex items-center justify-end gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setUploadModalOpen(false)}
-                  className="px-4 py-2.5 border border-slate-300 text-xs font-mono text-slate-700 hover:bg-slate-100 cursor-pointer"
-                >
-                  Annulla
-                </button>
-                <button
-                  type="submit"
-                  disabled={uploading}
-                  className="flex-1 sm:flex-none px-5 py-2.5 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                >
-                  <Upload className="w-3.5 h-3.5 text-[#c99a45]" />
-                  <span>{uploading ? "Caricamento in corso..." : "Salva nell'Archivio"}</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
