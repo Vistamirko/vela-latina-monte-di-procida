@@ -268,103 +268,223 @@ export default function LibroSociManager({
           </p>
         </div>
       ) : (
-        <div className="bg-white border border-slate-200 overflow-x-auto shadow-2xs">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-[#fbfaf6] border-b border-slate-200 text-[10px] font-mono uppercase tracking-wider text-slate-600">
-                <th className="py-3 px-3 w-12 text-center">Nr.</th>
-                <th className="py-3 px-3 w-20 text-center">Tessera</th>
-                <th className="py-3 px-4">Cognome e Nome</th>
-                <th className="py-3 px-4">Data & Luogo di Nascita</th>
-                <th className="py-3 px-3 text-center">Anno</th>
-                <th className="py-3 px-3 text-right">Quota Cont. (€)</th>
-                <th className="py-3 px-3 text-right">Bonifico (Bon)</th>
-                <th className="py-3 px-3 text-center">S.O.</th>
-                <th className="py-3 px-4">Contatti</th>
-                <th className="py-3 px-3 text-center w-20">Azioni</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-mono">
-              {filteredSoci.map((item, idx) => (
-                <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="py-2.5 px-3 text-center text-slate-400 text-[11px]">
-                    {item.progressivo || idx + 1}
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    {item.numeroTessera ? (
-                      <span className="px-2 py-0.5 bg-amber-50 text-amber-900 border border-amber-300 font-bold text-[10px] rounded-xs inline-block">
-                        #{item.numeroTessera}
+        <div className="space-y-4">
+          {/* Vista Mobile Cards (< 768px) */}
+          <div className="block md:hidden space-y-3">
+            {filteredSoci.map((item, idx) => (
+              <div
+                key={item.id}
+                className="bg-white border border-slate-300 p-4 space-y-3 shadow-xs"
+              >
+                <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
+                  <div>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono text-slate-400">
+                        #{item.progressivo || idx + 1}
                       </span>
-                    ) : (
-                      <span className="text-slate-300 text-[10px]">—</span>
-                    )}
-                  </td>
-                  <td className="py-2.5 px-4 font-sans font-medium text-[#0a1c2a]">
-                    <div className="font-semibold">{item.nome}</div>
-                    {item.tipologia && item.tipologia !== "Socio Ordinario" && (
-                      <div className="text-[10px] text-slate-500 font-mono">{item.tipologia}</div>
-                    )}
-                  </td>
-                  <td className="py-2.5 px-4 text-slate-700 text-[11px]">
-                    {item.dataLuogoNascita || <span className="text-slate-300">—</span>}
-                    {item.codiceFiscale && (
-                      <div className="text-[10px] text-slate-500 font-mono">CF: {item.codiceFiscale}</div>
-                    )}
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    <span
-                      className={`px-1.5 py-0.5 text-[10px] rounded-xs font-bold ${
-                        item.anno === 2026
-                          ? "bg-emerald-100 text-emerald-900 border border-emerald-200"
-                          : "bg-slate-100 text-slate-700"
-                      }`}
-                    >
-                      {item.anno}
-                    </span>
-                  </td>
-                  <td className="py-2.5 px-3 text-right text-slate-800 font-semibold">
-                    {item.quotaContanti ? `${item.quotaContanti} €` : <span className="text-slate-300 font-normal">—</span>}
-                  </td>
-                  <td className="py-2.5 px-3 text-right text-slate-800 font-semibold">
-                    {item.quotaBonifico ? `${item.quotaBonifico} €` : <span className="text-slate-300 font-normal">—</span>}
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    {item.socioOnorario ? (
-                      <span className="px-1.5 py-0.5 bg-purple-100 text-purple-900 text-[9px] font-bold rounded-xs">
-                        S.O.
+                      {item.numeroTessera && (
+                        <span className="px-2 py-0.5 bg-amber-50 text-amber-900 border border-amber-300 font-bold text-[10px] font-mono">
+                          Tessera #{item.numeroTessera}
+                        </span>
+                      )}
+                      <span
+                        className={`px-1.5 py-0.5 text-[10px] font-mono font-bold ${
+                          item.anno === 2026
+                            ? "bg-emerald-100 text-emerald-900 border border-emerald-300"
+                            : "bg-slate-100 text-slate-700"
+                        }`}
+                      >
+                        {item.anno}
                       </span>
-                    ) : null}
-                  </td>
-                  <td className="py-2.5 px-4 text-[11px] text-slate-600">
-                    {item.email && <div className="truncate max-w-[150px]">{item.email}</div>}
-                    {item.telefono && <div className="text-slate-500">{item.telefono}</div>}
-                    {!item.email && !item.telefono && <span className="text-slate-300">—</span>}
-                  </td>
-                  <td className="py-2.5 px-3 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <button
-                        onClick={() => {
-                          setCurrentSocio(item);
-                          setModalOpen(true);
-                        }}
-                        className="p-1 text-slate-500 hover:text-[#0a1c2a] transition-colors cursor-pointer"
-                        title="Modifica socio"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteSocio(item.id, item.nome)}
-                        className="p-1 text-slate-400 hover:text-red-700 transition-colors cursor-pointer"
-                        title="Elimina socio"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      {item.socioOnorario && (
+                        <span className="px-1.5 py-0.5 bg-purple-100 text-purple-900 text-[9px] font-bold font-mono">
+                          S.O.
+                        </span>
+                      )}
                     </div>
-                  </td>
+                    <h4 className="font-bold text-sm text-[#0a1c2a] mt-1 font-sans">
+                      {item.nome}
+                    </h4>
+                    {item.tipologia && item.tipologia !== "Socio Ordinario" && (
+                      <span className="text-[11px] text-slate-500 font-mono block">
+                        {item.tipologia}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => {
+                        setCurrentSocio(item);
+                        setModalOpen(true);
+                      }}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition-colors cursor-pointer"
+                      title="Modifica socio"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteSocio(item.id, item.nome)}
+                      className="p-2 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-700 border border-slate-300 transition-colors cursor-pointer"
+                      title="Elimina socio"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Dati Anagrafici & Quote */}
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                  {item.dataLuogoNascita && (
+                    <div className="col-span-2 text-slate-600 text-[11px]">
+                      <span className="text-slate-400 block text-[9px] uppercase">Nascita</span>
+                      {item.dataLuogoNascita}
+                    </div>
+                  )}
+                  {item.codiceFiscale && (
+                    <div className="col-span-2 text-slate-700 text-[11px]">
+                      <span className="text-slate-400 block text-[9px] uppercase">Codice Fiscale</span>
+                      <span className="font-bold">{item.codiceFiscale}</span>
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-slate-400 block text-[9px] uppercase">Quota Contanti</span>
+                    <span className="font-semibold text-slate-800">
+                      {item.quotaContanti ? `${item.quotaContanti} €` : "—"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[9px] uppercase">Quota Bonifico</span>
+                    <span className="font-semibold text-slate-800">
+                      {item.quotaBonifico ? `${item.quotaBonifico} €` : "—"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Contatti Rapidi */}
+                {(item.telefono || item.email) && (
+                  <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2 text-xs font-mono">
+                    {item.telefono && (
+                      <a
+                        href={`tel:${item.telefono}`}
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] flex items-center gap-1 font-semibold border border-slate-200"
+                      >
+                        📞 {item.telefono}
+                      </a>
+                    )}
+                    {item.email && (
+                      <a
+                        href={`mailto:${item.email}`}
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] flex items-center gap-1 border border-slate-200 truncate max-w-[220px]"
+                      >
+                        ✉️ {item.email}
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Vista Tabella Desktop (>= 768px) */}
+          <div className="hidden md:block bg-white border border-slate-200 overflow-x-auto shadow-2xs">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="bg-[#fbfaf6] border-b border-slate-200 text-[10px] font-mono uppercase tracking-wider text-slate-600">
+                  <th className="py-3 px-3 w-12 text-center">Nr.</th>
+                  <th className="py-3 px-3 w-20 text-center">Tessera</th>
+                  <th className="py-3 px-4">Cognome e Nome</th>
+                  <th className="py-3 px-4">Data & Luogo di Nascita</th>
+                  <th className="py-3 px-3 text-center">Anno</th>
+                  <th className="py-3 px-3 text-right">Quota Cont. (€)</th>
+                  <th className="py-3 px-3 text-right">Bonifico (Bon)</th>
+                  <th className="py-3 px-3 text-center">S.O.</th>
+                  <th className="py-3 px-4">Contatti</th>
+                  <th className="py-3 px-3 text-center w-20">Azioni</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-mono">
+                {filteredSoci.map((item, idx) => (
+                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="py-2.5 px-3 text-center text-slate-400 text-[11px]">
+                      {item.progressivo || idx + 1}
+                    </td>
+                    <td className="py-2.5 px-3 text-center">
+                      {item.numeroTessera ? (
+                        <span className="px-2 py-0.5 bg-amber-50 text-amber-900 border border-amber-300 font-bold text-[10px] rounded-xs inline-block">
+                          #{item.numeroTessera}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 text-[10px]">—</span>
+                      )}
+                    </td>
+                    <td className="py-2.5 px-4 font-sans font-medium text-[#0a1c2a]">
+                      <div className="font-semibold">{item.nome}</div>
+                      {item.tipologia && item.tipologia !== "Socio Ordinario" && (
+                        <div className="text-[10px] text-slate-500 font-mono">{item.tipologia}</div>
+                      )}
+                    </td>
+                    <td className="py-2.5 px-4 text-slate-700 text-[11px]">
+                      {item.dataLuogoNascita || <span className="text-slate-300">—</span>}
+                      {item.codiceFiscale && (
+                        <div className="text-[10px] text-slate-500 font-mono">CF: {item.codiceFiscale}</div>
+                      )}
+                    </td>
+                    <td className="py-2.5 px-3 text-center">
+                      <span
+                        className={`px-1.5 py-0.5 text-[10px] rounded-xs font-bold ${
+                          item.anno === 2026
+                            ? "bg-emerald-100 text-emerald-900 border border-emerald-200"
+                            : "bg-slate-100 text-slate-700"
+                        }`}
+                      >
+                        {item.anno}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-right text-slate-800 font-semibold">
+                      {item.quotaContanti ? `${item.quotaContanti} €` : <span className="text-slate-300 font-normal">—</span>}
+                    </td>
+                    <td className="py-2.5 px-3 text-right text-slate-800 font-semibold">
+                      {item.quotaBonifico ? `${item.quotaBonifico} €` : <span className="text-slate-300 font-normal">—</span>}
+                    </td>
+                    <td className="py-2.5 px-3 text-center">
+                      {item.socioOnorario ? (
+                        <span className="px-1.5 py-0.5 bg-purple-100 text-purple-900 text-[9px] font-bold rounded-xs">
+                          S.O.
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="py-2.5 px-4 text-[11px] text-slate-600">
+                      {item.email && <div className="truncate max-w-[150px]">{item.email}</div>}
+                      {item.telefono && <div className="text-slate-500">{item.telefono}</div>}
+                      {!item.email && !item.telefono && <span className="text-slate-300">—</span>}
+                    </td>
+                    <td className="py-2.5 px-3 text-center">
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          onClick={() => {
+                            setCurrentSocio(item);
+                            setModalOpen(true);
+                          }}
+                          className="p-1 text-slate-500 hover:text-[#0a1c2a] transition-colors cursor-pointer"
+                          title="Modifica socio"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteSocio(item.id, item.nome)}
+                          className="p-1 text-slate-400 hover:text-red-700 transition-colors cursor-pointer"
+                          title="Elimina socio"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

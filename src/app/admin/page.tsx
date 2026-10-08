@@ -384,9 +384,9 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen bg-[#fbfaf6] text-[#0a1c2a] selection:bg-[#0a1c2a] selection:text-white">
       {/* Top Header Navbar */}
       <header className="bg-white border-b border-slate-300 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative w-8 h-8 shrink-0">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="relative w-7 h-7 sm:w-8 sm:h-8 shrink-0">
               <Image
                 src="/images/stemma-vela-latina.jpg"
                 alt="Stemma"
@@ -394,63 +394,63 @@ export default function AdminDashboardPage() {
                 className="object-contain"
               />
             </div>
-            <div>
-              <span className="font-['Cinzel'] text-xs uppercase tracking-[0.2em] font-bold text-[#0a1c2a] block leading-tight">
+            <div className="min-w-0">
+              <span className="font-['Cinzel'] text-[11px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] font-bold text-[#0a1c2a] block leading-tight truncate">
                 Vela Latina Monte di Procida
               </span>
-              <span className="text-[9px] font-mono tracking-widest uppercase text-slate-700 font-semibold">
-                Pannello API & Gestione Contenuti
+              <span className="text-[8px] sm:text-[9px] font-mono tracking-wider sm:tracking-widest uppercase text-slate-700 font-semibold block truncate">
+                Pannello API & Gestione
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-700 bg-[#fbfaf6] px-3 py-1.5 border border-slate-300">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+            <div className="hidden md:flex items-center gap-2 text-xs font-mono text-slate-700 bg-[#fbfaf6] px-3 py-1.5 border border-slate-300">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>{currentUser?.name || currentUser?.email}</span>
+              <span className="truncate max-w-[140px]">{currentUser?.name || currentUser?.email}</span>
             </div>
 
             <Link
               href="/"
               target="_blank"
-              className="text-xs font-mono text-slate-700 hover:text-[#0a1c2a] flex items-center gap-1 font-semibold"
+              className="text-[11px] sm:text-xs font-mono text-slate-700 hover:text-[#0a1c2a] flex items-center gap-1 font-semibold px-2 py-1.5 border border-transparent hover:border-slate-300 transition-colors"
             >
-              <span>Vedi Sito</span>
-              <ExternalLink className="w-3 h-3" />
+              <span className="hidden xs:inline">Sito</span>
+              <ExternalLink className="w-3.5 h-3.5" />
             </Link>
 
             <button
               onClick={handleLogout}
-              className="px-3 py-1.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-700 border border-slate-300 text-xs font-mono font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-2.5 sm:px-3 py-1.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-700 border border-slate-300 text-[11px] sm:text-xs font-mono font-semibold flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Esci</span>
+              <span className="hidden xs:inline">Esci</span>
             </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="max-w-7xl mx-auto px-6 flex items-center gap-1 border-t border-slate-200 overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 flex items-center gap-1 border-t border-slate-200 overflow-x-auto scrollbar-none">
           <button
             onClick={() => setActiveTab("richieste")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "richieste"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
             <Inbox className="w-3.5 h-3.5" />
-            <span>Iscrizioni & Richieste ({bookings.length})</span>
+            <span>Iscrizioni ({bookings.length})</span>
             {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
               <span className="px-1.5 py-0.5 text-[9px] bg-amber-600 text-white rounded-full font-bold">
-                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length} attive
+                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length}
               </span>
             )}
           </button>
 
           <button
             onClick={() => setActiveTab("soci")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "soci"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
@@ -460,14 +460,14 @@ export default function AdminDashboardPage() {
             <span>Libro Soci ({soci.length})</span>
             {soci.filter((s) => s.anno === 2026).length > 0 && (
               <span className="px-1.5 py-0.5 text-[9px] bg-emerald-700 text-white rounded-full font-bold">
-                {soci.filter((s) => s.anno === 2026).length} (2026)
+                {soci.filter((s) => s.anno === 2026).length}
               </span>
             )}
           </button>
 
           <button
             onClick={() => setActiveTab("anagrafica")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "anagrafica"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
@@ -484,69 +484,69 @@ export default function AdminDashboardPage() {
 
           <button
             onClick={() => setActiveTab("eventi")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer shrink-0 ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "eventi"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Eventi & Palmarès ({events.length})</span>
+            <span>Eventi ({events.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("blog")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "blog"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Blog & Racconti ({blogPosts.length})</span>
+            <span>Blog ({blogPosts.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("corsi")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "corsi"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>Calendario Corsi ({courses.length})</span>
+            <span>Corsi ({courses.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("progetti")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "progetti"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>Progetti & Cantieri ({projects.length})</span>
+            <span>Progetti ({projects.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("db")}
-            className={`px-4 py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
               activeTab === "db"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
             <Database className="w-3.5 h-3.5" />
-            <span>Database & Cloud</span>
+            <span>Database</span>
           </button>
         </div>
       </header>
 
       {/* Notifications Toast */}
       {notification && (
-        <div className="fixed bottom-6 right-6 z-50">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 max-w-[90vw]">
           <div
             className={`px-4 py-3 shadow-lg border text-xs font-mono font-semibold flex items-center gap-2 ${
               notification.type === "success"
@@ -555,17 +555,17 @@ export default function AdminDashboardPage() {
             }`}
           >
             {notification.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             ) : (
-              <AlertCircle className="w-4 h-4 text-amber-300" />
+              <AlertCircle className="w-4 h-4 text-amber-300 shrink-0" />
             )}
-            <span>{notification.message}</span>
+            <span className="truncate">{notification.message}</span>
           </div>
         </div>
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-5 sm:py-8">
         {/* ==============================================================
            TAB 0: ISCRIZIONI & RICHIESTE
         ============================================================== */}
@@ -688,7 +688,7 @@ export default function AdminDashboardPage() {
                     return (
                       <div
                         key={item.id}
-                        className={`p-6 bg-white border transition-all ${
+                        className={`p-4 sm:p-6 bg-white border transition-all ${
                           item.status === "in_attesa_pagamento"
                             ? "border-amber-400 shadow-xs bg-amber-50/20"
                             : item.status === "nuova"
@@ -944,8 +944,122 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* List Table */}
-            <div className="bg-white border border-slate-300 overflow-hidden shadow-xs">
+            {/* Vista Mobile Cards (schermi piccoli < md) */}
+            <div className="block md:hidden space-y-3">
+              {events.map((evt) => (
+                <div
+                  key={evt.id}
+                  className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="uppercase text-[9px] px-2 py-0.5 bg-slate-100 text-slate-800 border border-slate-300 font-mono font-bold">
+                        {evt.category}
+                      </span>
+                      {evt.badge && (
+                        <span className="text-[10px] text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold font-mono">
+                          ★ {evt.badge}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => handleToggleEventPublish(evt)}
+                      title={evt.published ? "Clicca per nascondere" : "Clicca per pubblicare"}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 text-[9px] uppercase tracking-wider font-bold border cursor-pointer shrink-0 font-mono ${
+                        evt.published
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                          : "bg-amber-50 text-amber-800 border-amber-300"
+                      }`}
+                    >
+                      {evt.published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                      <span>{evt.published ? "Online" : "Bozza"}</span>
+                    </button>
+                  </div>
+
+                  <div>
+                    <h3 className="font-sans font-bold text-sm text-[#0a1c2a] leading-snug">
+                      {evt.title}
+                    </h3>
+                    {evt.description && (
+                      <p className="text-slate-600 text-xs font-light line-clamp-2 mt-1">
+                        {evt.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2 border border-slate-200 space-y-0.5">
+                    <div className="font-bold text-[#0a1c2a]">📅 {evt.date}</div>
+                    <div className="text-slate-600">📍 {evt.location}</div>
+                    {evt.result && (
+                      <div className="text-[#0a1c2a] font-semibold text-[10px] pt-1 border-t border-slate-200 mt-1">
+                        🏆 {evt.result}
+                      </div>
+                    )}
+                  </div>
+
+                  {evt.articleSlug ? (
+                    <Link
+                      href={`/blog/${evt.articleSlug}`}
+                      target="_blank"
+                      className="inline-flex items-center gap-1 text-[10px] font-mono text-[#1b5b80] font-semibold underline"
+                    >
+                      <span>Articolo collegato</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        const slug = `racconto-${evt.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "")}`;
+                        setCurrentBlogPost({
+                          title: `Diario di Bordo & Racconto: ${evt.title}`,
+                          slug,
+                          category: "Reportage Regata",
+                          author: currentUser?.name || "Vela Latina",
+                          excerpt: `Cronaca, emozioni e manovre dell'evento ${evt.title} a ${evt.location} (${evt.date}).`,
+                          content: `L'evento ${evt.title} si è svolto a ${evt.location}.\n\nLe imbarcazioni dell'Associazione Vela Latina Monte di Procida hanno preso parte alla manifestazione affrontando il vento e le correnti con determinazione.\n\n[Inserisci qui il racconto dettagliato delle prove in mare, impressioni dell'equipaggio e fotografie...]`,
+                          coverImage: evt.imageUrl || "/images/hero-sailing.webp",
+                          published: true,
+                        });
+                        setActiveTab("blog");
+                        setBlogModalOpen(true);
+                      }}
+                      className="text-[10px] font-mono text-slate-700 hover:text-[#0a1c2a] font-bold underline cursor-pointer"
+                    >
+                      + Scrivi Articolo Blog
+                    </button>
+                  )}
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
+                    <button
+                      onClick={() => {
+                        setCurrentEvent(evt);
+                        setEventModalOpen(true);
+                      }}
+                      className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Modifica</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteEvent(evt.id, evt.title)}
+                      className="py-2 px-3 border border-slate-300 text-red-600 bg-white hover:bg-red-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Elimina</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {events.length === 0 && (
+                <div className="p-8 text-center text-slate-600 font-light bg-white border border-slate-200">
+                  Nessun evento presente. Creane uno nuovo con il pulsante in alto.
+                </div>
+              )}
+            </div>
+
+            {/* List Table Desktop (>= md) */}
+            <div className="hidden md:block bg-white border border-slate-300 overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
                   <thead className="bg-[#fbfaf6] border-b border-slate-300 text-slate-800 uppercase text-[10px] tracking-wider font-bold">
@@ -1118,8 +1232,97 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* List Table */}
-            <div className="bg-white border border-slate-300 overflow-hidden shadow-xs">
+            {/* Vista Mobile Cards (schermi piccoli < md) */}
+            <div className="block md:hidden space-y-3">
+              {blogPosts.map((post) => (
+                <div
+                  key={post.id}
+                  className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="uppercase text-[9px] px-2 py-0.5 bg-slate-100 text-slate-800 border border-slate-300 font-mono font-bold">
+                      {post.category}
+                    </span>
+                    <button
+                      onClick={() => handleToggleBlogPublish(post)}
+                      title={post.published ? "Clicca per nascondere" : "Clicca per pubblicare"}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 text-[9px] uppercase tracking-wider font-bold border cursor-pointer shrink-0 font-mono ${
+                        post.published
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                          : "bg-amber-50 text-amber-800 border-amber-300"
+                      }`}
+                    >
+                      {post.published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                      <span>{post.published ? "Online" : "Bozza"}</span>
+                    </button>
+                  </div>
+
+                  <div>
+                    <h3 className="font-sans font-bold text-sm text-[#0a1c2a] leading-snug">
+                      {post.title}
+                    </h3>
+                    <p className="text-slate-500 font-mono text-[10px] mt-0.5 truncate">
+                      /blog/{post.slug}
+                    </p>
+                  </div>
+
+                  <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2 border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <span className="text-slate-500 text-[9px] block">Autore</span>
+                      <span className="font-semibold text-[#0a1c2a]">{post.author}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-slate-500 text-[9px] block">Data</span>
+                      <span className="text-slate-700">
+                        {new Date(post.publishedAt || post.createdAt).toLocaleDateString("it-IT", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      target="_blank"
+                      className="py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1"
+                      title="Apri sul sito"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Vedi</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setCurrentBlogPost(post);
+                        setBlogModalOpen(true);
+                      }}
+                      className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Modifica</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteBlogPost(post.id, post.title)}
+                      className="py-2 px-3 border border-slate-300 text-red-600 bg-white hover:bg-red-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Elimina</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {blogPosts.length === 0 && (
+                <div className="p-8 text-center text-slate-600 font-light bg-white border border-slate-200">
+                  Nessun articolo blog presente. Clicca su &quot;Nuovo Articolo&quot;.
+                </div>
+              )}
+            </div>
+
+            {/* List Table Desktop (>= md) */}
+            <div className="hidden md:block bg-white border border-slate-300 overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
                   <thead className="bg-[#fbfaf6] border-b border-slate-300 text-slate-800 uppercase text-[10px] tracking-wider font-bold">
@@ -1261,8 +1464,91 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* List Table */}
-            <div className="bg-white border border-slate-300 overflow-hidden shadow-xs">
+            {/* Vista Mobile Cards (schermi piccoli < md) */}
+            <div className="block md:hidden space-y-3">
+              {courses.map((c) => (
+                <div
+                  key={c.id}
+                  className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span
+                      className={`inline-block px-2 py-0.5 text-[9px] uppercase tracking-wider font-bold border font-mono ${
+                        c.status === "aperte"
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                          : c.status === "in-esaurimento"
+                          ? "bg-amber-50 text-amber-800 border-amber-300"
+                          : "bg-red-50 text-red-800 border-red-300"
+                      }`}
+                    >
+                      ● {c.status}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-700 font-bold">
+                      {c.availableSeats} / {c.totalSeats} posti
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-sans font-bold text-sm text-[#0a1c2a] leading-snug">
+                      {c.courseTitle}
+                    </h3>
+                    {(c.notes || c.price) && (
+                      <p className="text-slate-600 text-xs font-light line-clamp-2 mt-1">
+                        {c.notes || c.price}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2.5 border border-slate-200 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 text-[10px]">Inizio:</span>
+                      <span className="font-bold text-[#0a1c2a]">📅 {c.startDate}</span>
+                    </div>
+                    {c.schedule && (
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-slate-500 text-[10px] shrink-0">Orari:</span>
+                        <span className="text-slate-700 text-right">{c.schedule}</span>
+                      </div>
+                    )}
+                    {c.instructor && (
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-200 mt-1">
+                        <span className="text-slate-500 text-[10px]">Istruttore:</span>
+                        <span className="text-[#0a1c2a] font-semibold">{c.instructor}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
+                    <button
+                      onClick={() => {
+                        setCurrentCourse(c);
+                        setCourseModalOpen(true);
+                      }}
+                      className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Modifica</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCourse(c.id, c.courseTitle)}
+                      className="py-2 px-3 border border-slate-300 text-red-600 bg-white hover:bg-red-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Elimina</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {courses.length === 0 && (
+                <div className="p-8 text-center text-slate-600 font-light bg-white border border-slate-200">
+                  Nessuna sessione di corso configurata.
+                </div>
+              )}
+            </div>
+
+            {/* List Table Desktop (>= md) */}
+            <div className="hidden md:block bg-white border border-slate-300 overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
                   <thead className="bg-[#fbfaf6] border-b border-slate-300 text-slate-800 uppercase text-[10px] tracking-wider font-bold">
@@ -1283,9 +1569,7 @@ export default function AdminDashboardPage() {
                             className={`inline-block px-2.5 py-1 text-[9px] uppercase tracking-wider font-bold border ${
                               c.status === "aperte"
                                 ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-                                : c.status === "in-esaurimento"
-                                ? "bg-amber-50 text-amber-800 border-amber-300"
-                                : "bg-red-50 text-red-800 border-red-300"
+                                : "bg-amber-50 text-amber-800 border-amber-300"
                             }`}
                           >
                             {c.status}
@@ -1411,8 +1695,175 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Tabella Progetti */}
-            <div className="bg-white border border-slate-300 overflow-hidden shadow-xs">
+            {/* Vista Mobile Cards (schermi piccoli < md) */}
+            <div className="block md:hidden space-y-4">
+              {projects.map((proj) => (
+                <div
+                  key={proj.id}
+                  className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="px-2 py-0.5 text-xs font-mono font-bold bg-[#0a1c2a] text-white">
+                        #{proj.number}
+                      </span>
+                      <span className="inline-block px-2 py-0.5 text-[9px] bg-slate-100 border border-slate-300 text-slate-800 font-mono font-bold">
+                        {proj.category}
+                      </span>
+                      {proj.badge && (
+                        <span className="text-[10px] text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold font-mono">
+                          ★ {proj.badge}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleToggleProjectPublish(proj)}
+                      className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold cursor-pointer shrink-0"
+                      title="Clicca per invertire stato"
+                    >
+                      {proj.published ? (
+                        <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 font-bold">
+                          <Eye className="w-3 h-3 text-emerald-600" />
+                          Online
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-slate-500 bg-slate-50 border border-slate-300 px-2 py-0.5 font-bold">
+                          <EyeOff className="w-3 h-3 text-slate-400" />
+                          Bozza
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  <div>
+                    <h3 className="font-sans font-bold text-sm text-[#0a1c2a] leading-snug">
+                      {proj.title}
+                    </h3>
+                    {proj.highlight && (
+                      <p className="text-[11px] text-slate-600 italic font-serif mt-0.5">
+                        {proj.highlight}
+                      </p>
+                    )}
+                    {proj.partner && (
+                      <span className="text-[10px] text-slate-500 font-mono block mt-1">
+                        Partner: {proj.partner}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Referente & Avanzamento */}
+                  <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2.5 border border-slate-200 space-y-2">
+                    {proj.referente ? (
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-500 text-[9px] uppercase font-bold">Referente Progetto</span>
+                          {proj.anagrafica?.codiceProgetto && (
+                            <span className="px-1.5 py-0.5 text-[9px] bg-[#0a1c2a] text-[#c99a45] font-bold">
+                              {proj.anagrafica.codiceProgetto}
+                            </span>
+                          )}
+                        </div>
+                        <div className="font-sans font-bold text-xs text-[#0a1c2a] mt-0.5">
+                          {proj.referente.nome}
+                        </div>
+                        <div className="text-[10px] text-slate-600 truncate">
+                          {proj.referente.ruolo}
+                        </div>
+                        <div className="flex items-center gap-3 mt-1.5 pt-1.5 border-t border-slate-200 text-[10px]">
+                          {proj.referente.telefono && (
+                            <a
+                              href={`tel:${proj.referente.telefono}`}
+                              className="text-[#0a1c2a] hover:underline font-bold flex items-center gap-1"
+                            >
+                              📞 {proj.referente.telefono}
+                            </a>
+                          )}
+                          {proj.referente.email && (
+                            <a
+                              href={`mailto:${proj.referente.email}`}
+                              className="text-slate-600 hover:underline truncate max-w-[150px]"
+                            >
+                              ✉️ {proj.referente.email}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 text-[10px] italic">Referente non assegnato</span>
+                    )}
+
+                    {/* Stato & Progresso */}
+                    <div className="pt-2 border-t border-slate-200">
+                      <div className="flex items-center justify-between mb-1">
+                        <span
+                          className={`inline-block px-1.5 py-0.5 text-[9px] font-bold border ${
+                            proj.status === "In Corso"
+                              ? "bg-sky-50 text-sky-800 border-sky-300"
+                              : proj.status === "Completato"
+                              ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                              : "bg-amber-50 text-amber-800 border-amber-300"
+                          }`}
+                        >
+                          {proj.status}
+                        </span>
+                        {typeof proj.anagrafica?.statoAvanzamento === "number" && (
+                          <span className="text-[10px] text-slate-600 font-bold">
+                            {proj.anagrafica.statoAvanzamento}%
+                          </span>
+                        )}
+                      </div>
+                      {typeof proj.anagrafica?.statoAvanzamento === "number" && (
+                        <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                          <div
+                            className="bg-[#0a1c2a] h-full"
+                            style={{ width: `${proj.anagrafica.statoAvanzamento}%` }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
+                    <Link
+                      href={`/progetti/${proj.slug}`}
+                      target="_blank"
+                      className="py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1"
+                      title="Visualizza pagina dedicata pubblica"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Vedi</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setCurrentProject(proj);
+                        setProjectModalOpen(true);
+                      }}
+                      className="flex-1 py-2 px-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Modifica</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProject(proj.id, proj.title)}
+                      className="py-2 px-3 border border-slate-300 text-rose-600 bg-white hover:bg-rose-50 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Elimina</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {projects.length === 0 && (
+                <div className="p-8 text-center text-slate-600 font-light bg-white border border-slate-200">
+                  Nessun progetto strategico configurato.
+                </div>
+              )}
+            </div>
+
+            {/* Tabella Progetti Desktop (>= md) */}
+            <div className="hidden md:block bg-white border border-slate-300 overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#fbfaf6] border-b border-slate-300 text-[10px] font-mono uppercase tracking-widest text-slate-700 font-bold">
@@ -1563,7 +2014,7 @@ export default function AdminDashboardPage() {
                     ))}
                     {projects.length === 0 && (
                       <tr>
-                        <td colSpan={6} className="p-8 text-center text-slate-600 font-light">
+                        <td colSpan={7} className="p-8 text-center text-slate-600 font-light">
                           Nessun progetto strategico configurato.
                         </td>
                       </tr>
@@ -1631,8 +2082,8 @@ export default function AdminDashboardPage() {
          MODALE EVENTO
       ============================================================== */}
       {eventModalOpen && currentEvent && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-xl space-y-5">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4">
+          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 md:p-8 shadow-xl space-y-5">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light">
                 {currentEvent.id ? "Modifica Evento" : "Nuovo Evento"}
@@ -1828,8 +2279,8 @@ export default function AdminDashboardPage() {
          MODALE BLOG
       ============================================================== */}
       {blogModalOpen && currentBlogPost && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-300 max-w-3xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 shadow-xl space-y-5">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4">
+          <div className="bg-white border border-slate-300 max-w-3xl w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 md:p-8 shadow-xl space-y-5">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light">
                 {currentBlogPost.id ? "Modifica Articolo Blog" : "Nuovo Articolo"}
@@ -1983,8 +2434,8 @@ export default function AdminDashboardPage() {
          MODALE CORSO
       ============================================================== */}
       {courseModalOpen && currentCourse && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-xl space-y-5">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4">
+          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 md:p-8 shadow-xl space-y-5">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light">
                 {currentCourse.id ? "Modifica Sessione Corso" : "Nuova Sessione di Formazione"}
@@ -2154,8 +2605,8 @@ export default function AdminDashboardPage() {
          MODALE PROGETTO
       ============================================================== */}
       {projectModalOpen && currentProject && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-xl space-y-5">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4">
+          <div className="bg-white border border-slate-300 max-w-2xl w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 md:p-8 shadow-xl space-y-5">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light">
                 {currentProject.id ? "Modifica Progetto" : "Nuovo Progetto Strategico"}
