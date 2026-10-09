@@ -47,14 +47,38 @@ function AdminDashboardContent() {
   } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // Active Tab: 'richieste' | 'soci' | 'anagrafica' | 'eventi' | 'blog' | 'corsi' | 'progetti' | 'db'
-  const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db">("richieste");
+  // Active Tab handling
+  const VALID_TABS: Record<string, "richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db"> = {
+    richieste: "richieste",
+    iscrizioni: "richieste",
+    soci: "soci",
+    anagrafica: "anagrafica",
+    eventi: "eventi",
+    blog: "blog",
+    corsi: "corsi",
+    progetti: "progetti",
+    db: "db",
+  };
+
+  const resolveTab = (param: string | null) => {
+    if (!param) return "richieste";
+    return VALID_TABS[param.toLowerCase()] || "richieste";
+  };
+
+  const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db">(() => resolveTab(tabParam));
 
   useEffect(() => {
-    if (tabParam && ["richieste", "soci", "anagrafica", "eventi", "blog", "corsi", "progetti", "db"].includes(tabParam)) {
-      setActiveTab(tabParam as any);
+    if (tabParam && VALID_TABS[tabParam.toLowerCase()]) {
+      setActiveTab(VALID_TABS[tabParam.toLowerCase()]);
     }
   }, [tabParam]);
+
+  // Modal invio email corso
+  const [emailModalBooking, setEmailModalBooking] = useState<BookingRequest | null>(null);
+  const [emailCustomMessage, setEmailCustomMessage] = useState("");
+  const [emailDataLezione, setEmailDataLezione] = useState("");
+  const [emailLuogo, setEmailLuogo] = useState("");
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   // Data states
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -145,6 +169,38 @@ function AdminDashboardContent() {
       showToast("success", "Richiesta eliminata");
     } catch {
       showToast("error", "Impossibile eliminare la richiesta");
+    }
+  };
+
+  const handleSendCourseEmail = async () => {
+    if (!emailModalBooking) return;
+    setSendingEmail(true);
+    try {
+      const res = await fetch("/api/iscrizioni/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId: emailModalBooking.id,
+          customMessage: emailCustomMessage.trim() || undefined,
+          dataLezione: emailDataLezione.trim() || undefined,
+          luogo: emailLuogo.trim() || undefined,
+          updateStatus: emailModalBooking.status === "nuova" ? "contattato" : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Errore durante l'invio dell'email");
+      }
+      showToast("success", `Email inviata con successo a ${emailModalBooking.email}!`);
+      setEmailModalBooking(null);
+      setEmailCustomMessage("");
+      setEmailDataLezione("");
+      setEmailLuogo("");
+      loadAllData();
+    } catch (err: any) {
+      showToast("error", err.message || "Errore invio email");
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -736,6 +792,23 @@ function AdminDashboardContent() {
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
                                 <span>Iscritto nel Libro Soci</span>
                               </span>
+                            )}
+
+                            {item.type === "corso" && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEmailModalBooking(item);
+                                  setEmailCustomMessage("");
+                                  setEmailDataLezione("");
+                                  setEmailLuogo("Porticciolo di Acquamorta, Banchina Pescatori (Monte di Procida)");
+                                }}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-[10px] uppercase font-mono tracking-wider font-bold transition-colors cursor-pointer shadow-2xs"
+                                title="Invia email ufficiale di riscontro per questo corso"
+                              >
+                                <Mail className="w-3.5 h-3.5 text-[#c99a45]" />
+                                <span>Invia Email Corso</span>
+                              </button>
                             )}
 
                             {waLink && (
@@ -1885,6 +1958,106 @@ function AdminDashboardContent() {
           </div>
         )}
       </main>
+
+      {/* Modal Invio Email Riscontro Corso */}
+      {emailModalBooking && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-300 max-w-lg w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in-95">
+            <div className="bg-[#0a1c2a] text-white p-4 sm:p-5 flex items-center justify-between border-b-2 border-[#c99a45]">
+              <div>
+                <span className="text-[10px] font-mono text-[#c99a45] uppercase tracking-widest font-bold block">
+                  Comunicazione Allievo Corso
+                </span>
+                <h3 className="font-['Cormorant_Garamond'] text-2xl font-light">
+                  Invia Email di Riscontro
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEmailModalBooking(null)}
+                className="p-1.5 hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4 text-xs">
+              <div className="bg-slate-50 border border-slate-200 p-3 rounded-xs font-mono text-[11px] space-y-1">
+                <div>
+                  <strong className="text-slate-600">Allievo:</strong>{" "}
+                  <span className="text-[#0a1c2a] font-bold">{emailModalBooking.name}</span> &lt;{emailModalBooking.email}&gt;
+                </div>
+                <div>
+                  <strong className="text-slate-600">Corso:</strong>{" "}
+                  <span className="text-[#1b5b80] font-semibold">{emailModalBooking.itemTitle}</span>
+                </div>
+                {emailModalBooking.phone && (
+                  <div>
+                    <strong className="text-slate-600">Telefono:</strong> {emailModalBooking.phone}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono uppercase tracking-wider font-bold text-slate-700 mb-1">
+                  Data/Orario prima lezione o incontro (opzionale)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Es: Sabato prossimo ore 10:00"
+                  value={emailDataLezione}
+                  onChange={(e) => setEmailDataLezione(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 text-xs focus:border-[#0a1c2a] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono uppercase tracking-wider font-bold text-slate-700 mb-1">
+                  Luogo di ritrovo
+                </label>
+                <input
+                  type="text"
+                  value={emailLuogo}
+                  onChange={(e) => setEmailLuogo(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 text-xs focus:border-[#0a1c2a] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono uppercase tracking-wider font-bold text-slate-700 mb-1">
+                  Messaggio personalizzato per l&apos;allievo (opzionale)
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Lascia vuoto per inviare il testo ufficiale predefinito, oppure scrivi indicazioni specifiche per l'allievo..."
+                  value={emailCustomMessage}
+                  onChange={(e) => setEmailCustomMessage(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 text-xs focus:border-[#0a1c2a] outline-none resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setEmailModalBooking(null)}
+                  className="px-4 py-2 border border-slate-300 text-slate-700 font-mono text-[11px] font-bold hover:bg-slate-50 cursor-pointer"
+                >
+                  Annulla
+                </button>
+                <button
+                  type="button"
+                  disabled={sendingEmail}
+                  onClick={handleSendCourseEmail}
+                  className="px-5 py-2 bg-[#0a1c2a] hover:bg-[#b8860b] text-white font-mono text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>{sendingEmail ? "Invio in corso..." : "Invia Email Ufficiale"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

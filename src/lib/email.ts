@@ -38,8 +38,41 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
       ? "Vela Latina <onboarding@resend.dev>"
       : `"Vela Latina Monte di Procida" <${user || "vistamirko@gmail.com"}>`);
 
-  // 1. Invio prioritario via RESEND REST API
-  if (resendApiKey) {
+  const adminEmail = (process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com").toLowerCase();
+  const isSendToAdmin = to.toLowerCase() === adminEmail;
+  const isResendTesting = !process.env.SMTP_FROM && (!from || from.includes("onboarding@resend.dev"));
+  const hasSmtp = Boolean(host && user && pass);
+
+  // Helper per invio via SMTP (Gmail)
+  const sendViaSmtp = async () => {
+    if (!hasSmtp) return null;
+    try {
+      const transporter = nodemailer.createTransport({
+        host,
+        port,
+        secure,
+        auth: { user, pass },
+      });
+
+      const info = await transporter.sendMail({
+        from: `"Vela Latina Monte di Procida" <${user}>`,
+        to,
+        replyTo,
+        subject,
+        html,
+      });
+
+      console.log(`[SMTP ${tag}] Inviata con successo a ${to}: ${info.messageId}`);
+      return { sent: true, provider: "smtp", messageId: info.messageId };
+    } catch (err: any) {
+      console.error(`[SMTP ${tag} ERROR]`, err.message || err);
+      return { sent: false, error: err.message || "Errore SMTP" };
+    }
+  };
+
+  // Helper per invio via RESEND
+  const sendViaResend = async () => {
+    if (!resendApiKey) return null;
     try {
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -63,43 +96,41 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
       }
 
       console.warn(`[RESEND ${tag} NOTICE] API ha risposto con errore:`, resendData.message || resendData);
-      // Prosegui al fallback SMTP
+      return { sent: false, error: resendData.message || "Errore Resend" };
     } catch (err: any) {
       console.warn(`[RESEND ${tag} ERROR]`, err.message);
-      // Prosegui al fallback SMTP
-    }
-  }
-
-  // 2. Invio fallback via SMTP (es. Gmail)
-  if (host && user && pass) {
-    try {
-      const transporter = nodemailer.createTransport({
-        host,
-        port,
-        secure,
-        auth: { user, pass },
-      });
-
-      const info = await transporter.sendMail({
-        from: `"Vela Latina Monte di Procida" <${user}>`,
-        to,
-        replyTo,
-        subject,
-        html,
-      });
-
-      console.log(`[SMTP ${tag}] Inviata con successo a ${to}: ${info.messageId}`);
-      return { sent: true, provider: "smtp", messageId: info.messageId };
-    } catch (err: any) {
-      console.error(`[SMTP ${tag} ERROR]`, err);
       return { sent: false, error: err.message };
     }
+  };
+
+  // Se Resend è in modalità test (onboarding@resend.dev) e l'email è per un utente esterno,
+  // usiamo prioritariamente SMTP perché Resend blocca destinatari esterni non verificati (403)
+  if (hasSmtp && isResendTesting && !isSendToAdmin) {
+    const smtpResult = await sendViaSmtp();
+    if (smtpResult?.sent) return smtpResult;
+
+    // Se SMTP fallisce, tenta Resend come fallback estremo
+    const resendResult = await sendViaResend();
+    if (resendResult?.sent) return resendResult;
+
+    return smtpResult || { sent: false, error: "Tutti i provider email hanno fallito." };
+  }
+
+  // Altrimenti, tenta prima Resend e poi SMTP come fallback
+  if (resendApiKey) {
+    const resendResult = await sendViaResend();
+    if (resendResult?.sent) return resendResult;
+  }
+
+  if (hasSmtp) {
+    const smtpResult = await sendViaSmtp();
+    if (smtpResult?.sent) return smtpResult;
   }
 
   console.warn(`[EMAIL ${tag}] Nessun provider email attivo o entrambi hanno fallito.`);
   return {
     sent: false,
-    reason: "EMAIL_NOT_CONFIGURED_OR_FAILED",
+    error: "Nessun servizio email configurato (verificare RESEND_API_KEY o credenziali SMTP)",
   };
 }
 
@@ -540,4 +571,99 @@ export async function sendMembershipApprovedNotification(params: {
     tag: "MEMBERSHIP_APPROVED",
   });
 }
+
+/**
+ * Invia email di riscontro/benvenuto al corso a un allievo dal pannello admin
+ */
+export async function sendCourseResponse(params: {
+  nome: string;
+  email: string;
+  corso: string;
+  messaggioPersonalizzato?: string;
+  dataLezione?: string;
+  luogo?: string;
+}) {
+  const subject = `Iscrizione Corso: ${params.corso} | Vela Latina Monte di Procida`;
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #fbfaf6; color: #0a1c2a; margin: 0; padding: 24px; }
+    .card { max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .header { background: #0a1c2a; color: #ffffff; padding: 30px 24px; text-align: center; border-bottom: 3px solid #c99a45; }
+    .header-logo { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #c99a45; font-weight: 700; margin-bottom: 8px; }
+    .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; color: #ffffff; }
+    .body { padding: 32px 28px; }
+    .greeting { font-size: 18px; font-weight: 600; color: #0a1c2a; margin: 0 0 16px 0; }
+    .intro { font-size: 14px; line-height: 1.6; color: #334155; margin-bottom: 24px; }
+    .highlight-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #16a34a; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px; font-size: 13px; color: #166534; line-height: 1.5; }
+    .message-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px; font-size: 13px; line-height: 1.6; color: #334155; }
+    .btn-site { display: inline-block; background: #0a1c2a; color: #ffffff !important; padding: 12px 24px; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+    .footer { padding: 20px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; text-align: center; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="header-logo">Vela Latina Monte di Procida APS</div>
+      <h1>Scuola di Mare & Marineria Tradizionale</h1>
+    </div>
+    <div class="body">
+      <h2 class="greeting">Gentile ${params.nome},</h2>
+      <p class="intro">
+        In merito alla tua richiesta di partecipazione per il <strong>${params.corso}</strong>, la segreteria dell'Associazione Vela Latina Monte di Procida ha il piacere di confermarti la presa in carico della tua domanda.
+      </p>
+
+      ${
+        params.messaggioPersonalizzato
+          ? `<div class="message-box">
+               <strong style="display: block; margin-bottom: 8px; color: #0a1c2a; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Indicazioni della Segreteria / Istruttori:</strong>
+               ${params.messaggioPersonalizzato.replace(/\n/g, "<br>")}
+             </div>`
+          : `<div class="highlight-box">
+               I nostri istruttori stanno coordinando il gruppo e il calendario delle prossime uscite in mare al porto di Acquamorta. Ti contatteremo a breve per concordare giorno e orario della prima sessione.
+             </div>`
+      }
+
+      ${
+        params.dataLezione
+          ? `<div style="background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; font-size: 13px;">
+               <strong>Prima Uscita / Ritrovo:</strong> ${params.dataLezione}<br>
+               <strong>Punto di Ritrovo:</strong> ${params.luogo || "Porticciolo di Acquamorta, Banchina Pescatori (Monte di Procida)"}
+             </div>`
+          : ""
+      }
+
+      <div style="text-align: center; padding: 16px 0;">
+        <a href="${SITE_URL}" class="btn-site" target="_blank">Visita il Portale Ufficiale</a>
+      </div>
+
+      <div style="font-size: 13px; color: #334155; margin-top: 24px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+        Per qualsiasi domanda puoi rispondere direttamente a questa email o contattarci via WhatsApp.<br><br>
+        Buon Vento,<br>
+        <strong>Il Consiglio Direttivo & Staff Tecnico</strong><br>
+        <em>Associazione Vela Latina Monte di Procida APS</em>
+      </div>
+    </div>
+    <div class="footer">
+      Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
+      Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
+      Email: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  return sendEmailMessage({
+    to: params.email,
+    replyTo: "vistamirko@gmail.com",
+    subject,
+    html,
+    tag: "COURSE_RESPONSE",
+  });
+}
+
 
