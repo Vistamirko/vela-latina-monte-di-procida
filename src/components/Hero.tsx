@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowDown, Compass, Waves } from "lucide-react";
 
 export default function Hero() {
@@ -67,22 +68,29 @@ export default function Hero() {
         </div>
 
         {/* Primary CTA Buttons */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-8 sm:mt-10">
-          <a
-            href="#flotta"
-            className="group px-7 py-3.5 sm:px-8 sm:py-4 bg-[#c99f5a] text-[#061118] text-xs uppercase tracking-[0.25em] font-semibold hover:bg-white transition-all duration-300 rounded-sm shadow-xl flex items-center gap-3"
+        <div className="flex flex-wrap items-center gap-3.5 sm:gap-5 mt-8 sm:mt-10">
+          <Link
+            href="/diventa-socio"
+            className="group px-7 py-3.5 sm:px-8 sm:py-4 bg-[#c99f5a] hover:bg-[#e0be82] text-[#061118] text-xs uppercase tracking-[0.25em] font-bold transition-all duration-300 rounded-sm shadow-2xl flex items-center gap-2.5 transform hover:-translate-y-0.5 hover:shadow-[#c99f5a]/30"
           >
-            <span>Esplora la Flotta Storica</span>
+            <span>★ Diventa Socio</span>
             <span className="text-base group-hover:translate-x-1 transition-transform">
               →
             </span>
+          </Link>
+
+          <a
+            href="#flotta"
+            className="px-6 py-3.5 sm:px-7 sm:py-4 border border-[#c99f5a]/60 hover:border-[#c99f5a] text-[#f4efe6] hover:text-[#e0be82] text-xs uppercase tracking-[0.25em] font-medium transition-all duration-300 rounded-sm backdrop-blur-sm"
+          >
+            Esplora la Flotta
           </a>
 
           <a
             href="#manifesto"
-            className="px-6 py-3.5 sm:px-7 sm:py-4 border border-[#f4efe6]/25 hover:border-[#c99f5a] text-[#f4efe6] hover:text-[#e0be82] text-xs uppercase tracking-[0.25em] font-medium transition-all duration-300 rounded-sm backdrop-blur-sm"
+            className="px-4 py-3.5 text-xs uppercase tracking-[0.25em] text-[#f4efe6]/60 hover:text-white transition-colors"
           >
-            Il Nostro Manifesto
+            Il Manifesto
           </a>
         </div>
       </div>

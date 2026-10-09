@@ -710,14 +710,14 @@ export default function EmotionalStory() {
 
           <div className="pt-4 flex flex-wrap justify-center gap-4">
             <Link
-              href="/associazione"
-              className="px-6 py-3 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-colors shadow-xs"
+              href="/diventa-socio"
+              className="px-7 py-3.5 bg-[#b8860b] hover:bg-[#9a7009] text-white text-[11px] uppercase tracking-[0.25em] font-bold transition-all shadow-md flex items-center gap-2"
             >
-              Diventa Socio
+              ★ Diventa Socio Subito
             </Link>
             <Link
               href="/corsi"
-              className="px-6 py-3 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold hover:border-slate-800 transition-colors bg-white shadow-2xs"
+              className="px-6 py-3.5 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold hover:border-slate-800 transition-colors bg-white shadow-2xs"
             >
               Partecipa ai Corsi
             </Link>

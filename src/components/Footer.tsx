@@ -29,6 +29,11 @@ export default function Footer() {
             Navigazione
           </span>
           <div>
+            <Link href="/diventa-socio" className="text-[#b8860b] hover:text-[#0a1c2a] font-bold transition-colors flex items-center gap-1.5">
+              <span>★ Diventa Socio Online</span>
+            </Link>
+          </div>
+          <div>
             <Link href="/progetti" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
               Progetti & Cantieri 2027
             </Link>

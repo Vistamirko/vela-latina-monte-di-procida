@@ -269,7 +269,7 @@ export default function AssociazionePage() {
       </section>
 
       {/* Diventa Socio / Modulo Adesione */}
-      <section className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
+      <section id="diventa-socio" className="scroll-mt-24 py-24 px-6 sm:px-12 lg:px-24 bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto w-full text-center space-y-6">
           <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block">
             Adesione
