@@ -63,7 +63,7 @@ export default function AssociazionePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
+    <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white overflow-x-clip">
       <Header />
 
       <main id="main-content">
@@ -152,9 +152,9 @@ export default function AssociazionePage() {
       </section>
 
       {/* La Flotta Storica Completa */}
-      <section className="py-24 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6]">
+      <section className="py-24 px-6 sm:px-12 lg:px-24 border-b border-slate-200 bg-[#fbfaf6] overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 sm:mb-16">
             <div>
               <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block mb-2">
                 Restauro & Navigazione
@@ -165,12 +165,12 @@ export default function AssociazionePage() {
             </div>
 
             {/* Selettore Barca */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 max-w-full">
               {FLEET_DATA.map((boat, idx) => (
                 <button
                   key={boat.id}
                   onClick={() => setSelectedBoatIndex(idx)}
-                  className={`px-3 py-2 text-[10px] font-mono tracking-widest border transition-all cursor-pointer ${
+                  className={`px-3 py-2 text-[10px] font-mono tracking-widest border transition-all cursor-pointer shrink-0 ${
                     idx === selectedBoatIndex
                       ? "border-[#0a1c2a] bg-[#0a1c2a] text-white font-bold"
                       : "border-slate-300 text-slate-700 font-medium hover:border-slate-800 bg-white"
