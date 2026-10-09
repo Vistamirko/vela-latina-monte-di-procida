@@ -73,55 +73,47 @@ export default function DiventaSocioPage() {
       <Header />
 
       <main>
-        {/* HERO SECTION - GRANDE IMPATTO VISIVO */}
-        <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-8 lg:px-12 bg-[#061118] text-white overflow-hidden">
-          {/* Sfondo evocativo con texture marina */}
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/janara-regatta.jpeg"
-              alt="Vela Latina in navigazione"
-              fill
-              priority
-              className="object-cover object-[center_40%] opacity-30 brightness-90 contrast-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#061118] via-[#061118]/80 to-[#061118]/60" />
-            <div className="absolute inset-0 vintage-grain pointer-events-none opacity-40" />
+        {/* HERO SECTION - ELEGANTE & LUMINOSA STILE EDITORIALE */}
+        <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-8 lg:px-12 bg-[#fbfaf6] border-b border-slate-200 overflow-hidden">
+          {/* Filigrana Nautica Sottile */}
+          <div className="absolute top-10 right-0 sm:right-12 pointer-events-none opacity-20 select-none overflow-hidden">
+            <Compass className="w-64 h-64 sm:w-96 sm:h-96 text-[#c99f5a]" />
           </div>
 
           <div className="relative z-10 max-w-5xl mx-auto text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#c99f5a]/40 bg-[#081926]/80 backdrop-blur-sm text-[10px] sm:text-xs tracking-[0.25em] text-[#e0be82] uppercase font-mono font-medium">
-              <Anchor className="w-3.5 h-3.5 text-[#38b2ac]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#c99f5a]/40 bg-white text-[10px] sm:text-xs tracking-[0.25em] text-[#85580a] uppercase font-mono font-semibold shadow-2xs">
+              <Anchor className="w-3.5 h-3.5 text-[#1b5b80]" />
               <span>Adesione Ufficiale · Anno 2026</span>
             </div>
 
-            <h1 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl md:text-8xl font-light tracking-tight text-white leading-[0.95]">
+            <h1 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl md:text-8xl font-light tracking-tight text-[#0a1c2a] leading-[0.95]">
               Sali a bordo dell&apos;equipaggio. <br />
-              <span className="italic text-[#e0be82]">Diventa Socio oggi.</span>
+              <span className="italic text-[#b8860b]">Diventa Socio oggi.</span>
             </h1>
 
-            <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-[#f4efe6]/85 font-light leading-relaxed">
+            <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-700 font-light leading-relaxed">
               Unisciti all&apos;<strong>Associazione Vela Latina Monte di Procida (APS)</strong>.
               Che tu voglia imparare a vogare in piedi, timonare un gozzo storico o semplicemente supportare
               la salvaguardia della marineria flegrea, qui trovi una comunità viva e accogliente.
             </p>
 
             {/* Quick Metrics Bar */}
-            <div className="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-[#c99f5a]/20 text-left">
-              <div className="p-3 bg-white/5 backdrop-blur-xs border border-white/10">
-                <span className="block text-[10px] uppercase font-mono tracking-wider text-[#e0be82]">Quota Annuale</span>
-                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-white">€ 50</span>
+            <div className="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-slate-200 text-left">
+              <div className="p-3.5 bg-white border border-slate-200 shadow-2xs">
+                <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-700 font-medium">Quota Annuale</span>
+                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-[#0a1c2a]">€ 50</span>
               </div>
-              <div className="p-3 bg-white/5 backdrop-blur-xs border border-white/10">
-                <span className="block text-[10px] uppercase font-mono tracking-wider text-[#e0be82]">Attività</span>
-                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-white">Tutto l&apos;anno</span>
+              <div className="p-3.5 bg-white border border-slate-200 shadow-2xs">
+                <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-700 font-medium">Attività</span>
+                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-[#0a1c2a]">Tutto l&apos;anno</span>
               </div>
-              <div className="p-3 bg-white/5 backdrop-blur-xs border border-white/10">
-                <span className="block text-[10px] uppercase font-mono tracking-wider text-[#e0be82]">Registro</span>
-                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-white">Libro Soci APS</span>
+              <div className="p-3.5 bg-white border border-slate-200 shadow-2xs">
+                <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-700 font-medium">Registro</span>
+                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-[#0a1c2a]">Libro Soci APS</span>
               </div>
-              <div className="p-3 bg-white/5 backdrop-blur-xs border border-white/10">
-                <span className="block text-[10px] uppercase font-mono tracking-wider text-[#e0be82]">Tempo Iscrizione</span>
-                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-white">1 Minuto</span>
+              <div className="p-3.5 bg-white border border-slate-200 shadow-2xs">
+                <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-700 font-medium">Tempo Iscrizione</span>
+                <span className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-semibold text-[#0a1c2a]">1 Minuto</span>
               </div>
             </div>
           </div>
