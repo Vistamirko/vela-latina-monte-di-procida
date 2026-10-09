@@ -186,6 +186,7 @@ const DEFAULT_COURSES: CourseSession[] = [
     id: "course-voga-primavera-2026",
     courseKey: "voga",
     courseTitle: "Scuola di Voga Tradizionale Flegrea (In Piedi)",
+    imageUrl: "/images/museo/museo-3.jpeg",
     startDate: "2026-05-02",
     endDate: "2026-05-30",
     schedule: "Ogni Sabato mattina ore 09:30 – 12:30",
@@ -203,6 +204,7 @@ const DEFAULT_COURSES: CourseSession[] = [
     id: "course-vela-estate-2026",
     courseKey: "vela",
     courseTitle: "Corso di Conduzione & Manovre a Vela Latina",
+    imageUrl: "/images/janara-regatta.jpeg",
     startDate: "2026-06-06",
     endDate: "2026-06-27",
     schedule: "Sabato e Domenica ore 15:00 – 19:00",
@@ -220,6 +222,7 @@ const DEFAULT_COURSES: CourseSession[] = [
     id: "course-rosa-2027",
     courseKey: "rosa",
     courseTitle: "Progetto ROSA · Selezioni Equipaggio Femminile 2027",
+    imageUrl: "/images/janara-crew.jpeg",
     startDate: "2026-05-16",
     schedule: "Weekend quindicinali",
     totalSeats: 16,
@@ -236,6 +239,7 @@ const DEFAULT_COURSES: CourseSession[] = [
     id: "course-inclusione-continuo",
     courseKey: "inclusione",
     courseTitle: "Inclusione Mare · Laboratorio Voga e Sensi (Centro Serapide)",
+    imageUrl: "/images/museo/museo-6.jpeg",
     startDate: "2026-05-10",
     schedule: "Giovedì e Sabato mattina su prenotazione",
     totalSeats: 20,
@@ -613,11 +617,16 @@ export async function initDb(): Promise<void> {
           instructor VARCHAR(255) NOT NULL,
           notes TEXT,
           price VARCHAR(100),
+          image_url TEXT,
           published BOOLEAN NOT NULL DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
         );
       `;
+
+      try {
+        await sql`ALTER TABLE corsi_calendar ADD COLUMN IF NOT EXISTS image_url TEXT;`;
+      } catch {}
 
       // Tabella Progetti Strategici & Cantieri
       await sql`
@@ -1033,6 +1042,7 @@ export const CoursesRepo = {
         instructor: r.instructor,
         notes: r.notes || undefined,
         price: r.price || undefined,
+        imageUrl: r.image_url || undefined,
         published: Boolean(r.published),
         createdAt: r.created_at,
         updatedAt: r.updated_at,
@@ -1062,8 +1072,8 @@ export const CoursesRepo = {
     }
     const sql = neon(DB_URL);
     await sql`
-      INSERT INTO corsi_calendar (id, course_key, course_title, start_date, end_date, schedule, total_seats, available_seats, status, instructor, notes, price, published, updated_at)
-      VALUES (${session.id}, ${session.courseKey}, ${session.courseTitle}, ${session.startDate}, ${session.endDate || null}, ${session.schedule}, ${session.totalSeats}, ${session.availableSeats}, ${session.status}, ${session.instructor}, ${session.notes || null}, ${session.price || null}, ${session.published}, ${now})
+      INSERT INTO corsi_calendar (id, course_key, course_title, start_date, end_date, schedule, total_seats, available_seats, status, instructor, notes, price, image_url, published, updated_at)
+      VALUES (${session.id}, ${session.courseKey}, ${session.courseTitle}, ${session.startDate}, ${session.endDate || null}, ${session.schedule}, ${session.totalSeats}, ${session.availableSeats}, ${session.status}, ${session.instructor}, ${session.notes || null}, ${session.price || null}, ${session.imageUrl || null}, ${session.published}, ${now})
       ON CONFLICT (id) DO UPDATE SET
         course_key = EXCLUDED.course_key,
         course_title = EXCLUDED.course_title,
@@ -1076,6 +1086,7 @@ export const CoursesRepo = {
         instructor = EXCLUDED.instructor,
         notes = EXCLUDED.notes,
         price = EXCLUDED.price,
+        image_url = EXCLUDED.image_url,
         published = EXCLUDED.published,
         updated_at = EXCLUDED.updated_at;
     `;

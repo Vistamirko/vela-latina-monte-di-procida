@@ -33,6 +33,7 @@ export interface CourseSession {
   id: string;
   courseKey: "voga" | "vela" | "rosa" | "inclusione";
   courseTitle: string;
+  imageUrl?: string;
   startDate: string;
   endDate?: string;
   schedule: string;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { GraduationCap, CheckCircle2, Calendar, Clock } from "lucide-react";
@@ -103,103 +104,147 @@ export default function CorsiPage() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {/* 01 · Voga in Piedi */}
-            <div className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between">
+            <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
-                <span className="font-mono text-xs text-[#0a1c2a] font-semibold block mb-2">
-                  01 · SCUOLA DI VOGA
-                </span>
-                <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
-                  Voga Tradizionale Flegrea
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
-                  L’antica tecnica montese della voga in piedi con lo sguardo
-                  rivolto in direzione di marcia. Dedicata a ragazzi delle
-                  scuole, giovani allievi marittimi e aspiranti al libretto di
-                  navigazione.
-                </p>
-                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
-                  <li>• Postura, equilibrio sui paglioli e coordinazione</li>
-                  <li>• Uso dello stroppo di canapa e dello scalmo in legno</li>
-                  <li>• Addestramento su San Michele Arcangelo e Quandel</li>
-                </ul>
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
+                  <Image
+                    src="/images/museo/museo-3.jpeg"
+                    alt="Voga Tradizionale Flegrea"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
+                    01 · SCUOLA DI VOGA
+                  </span>
+                </div>
+                <div className="p-8 sm:p-10">
+                  <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
+                    Voga Tradizionale Flegrea
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
+                    L’antica tecnica montese della voga in piedi con lo sguardo
+                    rivolto in direzione di marcia. Dedicata a ragazzi delle
+                    scuole, giovani allievi marittimi e aspiranti al libretto di
+                    navigazione.
+                  </p>
+                  <ul className="text-xs text-slate-700 font-mono space-y-2 mb-2">
+                    <li>• Postura, equilibrio sui paglioli e coordinazione</li>
+                    <li>• Uso dello stroppo di canapa e dello scalmo in legno</li>
+                    <li>• Addestramento su San Michele Arcangelo e Quandel</li>
+                  </ul>
+                </div>
               </div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 Aperto a tutti · Livello base e avanzato
               </div>
             </div>
 
             {/* 02 · Vela Latina */}
-            <div className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between">
+            <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
-                <span className="font-mono text-xs text-[#0a1c2a] font-semibold block mb-2">
-                  02 · CONDUZIONE TRADIZIONALE
-                </span>
-                <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
-                  Corso di Vela Latina
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
-                  Apprendimento delle manovre classiche della vela triangolare:
-                  armo dell’antenna di pino, tensionamento del carnao e del pizzo,
-                  regolazione della scotta, virata in prua e in poppa.
-                </p>
-                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
-                  <li>• Lettura delle brezze del canale di Procida e Ischia</li>
-                  <li>• Conduzione al timone e bordeggio di sicurezza</li>
-                  <li>• Preparazione per uscite costiere e d&apos;altura</li>
-                </ul>
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
+                  <Image
+                    src="/images/janara-regatta.jpeg"
+                    alt="Corso di Vela Latina"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
+                    02 · CONDUZIONE TRADIZIONALE
+                  </span>
+                </div>
+                <div className="p-8 sm:p-10">
+                  <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
+                    Corso di Vela Latina
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
+                    Apprendimento delle manovre classiche della vela triangolare:
+                    armo dell’antenna di pino, tensionamento del carnao e del pizzo,
+                    regolazione della scotta, virata in prua e in poppa.
+                  </p>
+                  <ul className="text-xs text-slate-700 font-mono space-y-2 mb-2">
+                    <li>• Lettura delle brezze del canale di Procida e Ischia</li>
+                    <li>• Conduzione al timone e bordeggio di sicurezza</li>
+                    <li>• Preparazione per uscite costiere e d&apos;altura</li>
+                  </ul>
+                </div>
               </div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 A bordo di Janara e gozzi della flotta
               </div>
             </div>
 
             {/* 03 · Progetto ROSA */}
-            <div className="p-8 sm:p-10 border border-[#0a1c2a] bg-white flex flex-col justify-between">
+            <div className="group border border-[#0a1c2a] bg-white flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#b8860b] transition-all">
               <div>
-                <span className="font-mono text-xs text-[#0a1c2a] font-bold block mb-2">
-                  03 · PROGETTO ROSA
-                </span>
-                <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
-                  Equipaggio Femminile 2027
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
-                  Un percorso formativo dedicato interamente alle donne: voga,
-                  manovre a vela latina, sicurezza in navigazione e leadership.
-                  Obiettivo: formare l’equipaggio per Les Voiles Latines di
-                  Saint-Tropez nel 2027.
-                </p>
-                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
-                  <li>• Allenamento atletico e tecnico continuativo</li>
-                  <li>• Preparazione alle regate d&apos;altura internazionali</li>
-                  <li>• Modello di parità e leadership nel mare</li>
-                </ul>
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
+                  <Image
+                    src="/images/janara-crew.jpeg"
+                    alt="Progetto ROSA Equipaggio Femminile"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#b8860b] text-white text-[10px] font-mono uppercase tracking-widest font-bold shadow-xs">
+                    03 · PROGETTO ROSA
+                  </span>
+                </div>
+                <div className="p-8 sm:p-10">
+                  <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
+                    Equipaggio Femminile 2027
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
+                    Un percorso formativo dedicato interamente alle donne: voga,
+                    manovre a vela latina, sicurezza in navigazione e leadership.
+                    Obiettivo: formare l’equipaggio per Les Voiles Latines di
+                    Saint-Tropez nel 2027.
+                  </p>
+                  <ul className="text-xs text-slate-700 font-mono space-y-2 mb-2">
+                    <li>• Allenamento atletico e tecnico continuativo</li>
+                    <li>• Preparazione alle regate d&apos;altura internazionali</li>
+                    <li>• Modello di parità e leadership nel mare</li>
+                  </ul>
+                </div>
               </div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 Selezioni e candidature aperte
               </div>
             </div>
 
             {/* 04 · Inclusione Mare */}
-            <div className="p-8 sm:p-10 border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between">
+            <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
-                <span className="font-mono text-xs text-[#0a1c2a] font-semibold block mb-2">
-                  04 · SOLIDARIETÀ & BENESSERE
-                </span>
-                <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
-                  Inclusione Mare
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
-                  In collaborazione con il <strong>Centro Serapide</strong> di
-                  Monte di Procida, avviciniamo alla voga e alla navigazione
-                  bambini e ragazzi con bisogni speciali o disabilità.
-                </p>
-                <ul className="text-xs text-slate-700 font-mono space-y-2 mb-6">
-                  <li>• Esperienze sensoriali e motorie a bordo</li>
-                  <li>• Educatori dedicati e imbarcazione accessibile</li>
-                  <li>• Il mare come terapia, relazione e libertà</li>
-                </ul>
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
+                  <Image
+                    src="/images/museo/museo-6.jpeg"
+                    alt="Inclusione Mare Centro Serapide"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
+                    04 · SOLIDARIETÀ & BENESSERE
+                  </span>
+                </div>
+                <div className="p-8 sm:p-10">
+                  <h3 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light mb-3">
+                    Inclusione Mare
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-700 font-light leading-relaxed mb-6">
+                    In collaborazione con il <strong>Centro Serapide</strong> di
+                    Monte di Procida, avviciniamo alla voga e alla navigazione
+                    bambini e ragazzi con bisogni speciali o disabilità.
+                  </p>
+                  <ul className="text-xs text-slate-700 font-mono space-y-2 mb-2">
+                    <li>• Esperienze sensoriali e motorie a bordo</li>
+                    <li>• Educatori dedicati e imbarcazione accessibile</li>
+                    <li>• Il mare come terapia, relazione e libertà</li>
+                  </ul>
+                </div>
               </div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
                 A bordo di San Michele Arcangelo
               </div>
             </div>
@@ -225,73 +270,97 @@ export default function CorsiPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {calendarSessions.map((session) => (
-              <div
-                key={session.id}
-                className="p-6 bg-[#fbfaf6] border border-slate-200 flex flex-col justify-between hover:border-[#0a1c2a] transition-all"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span
-                      className={`px-2 py-0.5 text-[9px] uppercase tracking-wider font-mono font-bold border ${
-                        session.status === "aperte"
-                          ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-                          : session.status === "in-esaurimento"
-                          ? "bg-amber-50 text-amber-800 border-amber-300"
-                          : "bg-red-50 text-red-800 border-red-300"
-                      }`}
+            {calendarSessions.map((session) => {
+              const defaultPhotos: Record<string, string> = {
+                voga: "/images/museo/museo-3.jpeg",
+                vela: "/images/janara-regatta.jpeg",
+                rosa: "/images/janara-crew.jpeg",
+                inclusione: "/images/museo/museo-6.jpeg",
+              };
+              const photo = session.imageUrl || defaultPhotos[session.courseKey] || "/images/janara-regatta.jpeg";
+
+              return (
+                <div
+                  key={session.id}
+                  className="bg-[#fbfaf6] border border-slate-200 flex flex-col justify-between hover:border-[#0a1c2a] transition-all overflow-hidden group shadow-2xs hover:shadow-md"
+                >
+                  <div>
+                    {/* Header Image della sessione */}
+                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
+                      <Image
+                        src={photo}
+                        alt={session.courseTitle}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-2.5 left-2.5">
+                        <span
+                          className={`px-2 py-0.5 text-[9px] uppercase tracking-wider font-mono font-bold border backdrop-blur-xs ${
+                            session.status === "aperte"
+                              ? "bg-emerald-900/85 text-emerald-100 border-emerald-500"
+                              : session.status === "in-esaurimento"
+                              ? "bg-amber-900/85 text-amber-100 border-amber-500"
+                              : "bg-red-900/85 text-red-100 border-red-500"
+                          }`}
+                        >
+                          {session.status}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-2.5 right-2.5">
+                        <span className="px-2 py-0.5 bg-[#0a1c2a]/85 text-white text-[9px] font-mono font-semibold backdrop-blur-xs">
+                          {session.availableSeats} posti liberi
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-6">
+                      <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light mb-2">
+                        {session.courseTitle}
+                      </h3>
+
+                      <div className="space-y-1.5 text-xs text-slate-700 font-mono mb-4">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-[#1b5b80]" />
+                          <span className="font-bold text-[#0a1c2a]">Dal {session.startDate}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#1b5b80]" />
+                          <span>{session.schedule}</span>
+                        </div>
+                      </div>
+
+                      {session.notes && (
+                        <p className="text-xs text-slate-600 font-light mb-4">
+                          {session.notes}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="px-6 pb-6 pt-4 border-t border-slate-200 flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-slate-700 line-clamp-1 max-w-[120px]">
+                      {session.instructor}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          corso: session.courseKey,
+                          note: `Candidatura per sessione: ${session.courseTitle} (inizio ${session.startDate})`,
+                        }));
+                        const formElement = document.getElementById("iscrizione-form");
+                        if (formElement) {
+                          formElement.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                      className="px-3 py-1.5 bg-[#0a1c2a] text-white text-[10px] uppercase font-mono tracking-wider font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
                     >
-                      {session.status}
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-700 font-bold">
-                      {session.availableSeats} posti liberi
-                    </span>
+                      Iscriviti
+                    </button>
                   </div>
-
-                  <h3 className="font-['Cormorant_Garamond'] text-2xl text-[#0a1c2a] font-light mb-2">
-                    {session.courseTitle}
-                  </h3>
-
-                  <div className="space-y-1.5 text-xs text-slate-700 font-mono mb-4">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-[#1b5b80]" />
-                      <span className="font-bold text-[#0a1c2a]">Dal {session.startDate}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#1b5b80]" />
-                      <span>{session.schedule}</span>
-                    </div>
-                  </div>
-
-                  {session.notes && (
-                    <p className="text-xs text-slate-600 font-light mb-4">
-                      {session.notes}
-                    </p>
-                  )}
                 </div>
-
-                <div className="pt-4 border-t border-slate-300 flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-700">
-                    {session.instructor}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        corso: session.courseKey,
-                        note: `Richiesta per sessione: ${session.courseTitle} (${session.startDate})`,
-                      }));
-                      const formEl = document.getElementById("form-iscrizione");
-                      if (formEl) formEl.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold hover:text-[#b8860b] transition-colors cursor-pointer flex items-center gap-1"
-                  >
-                    <span>Seleziona</span>
-                    <span>→</span>
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

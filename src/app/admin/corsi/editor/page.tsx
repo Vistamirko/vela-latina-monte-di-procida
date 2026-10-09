@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import ImageUploader from "@/components/ImageUploader";
 import { CourseSession } from "@/lib/db/types";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 
@@ -18,6 +19,7 @@ function CourseEditorContent() {
   const [courseData, setCourseData] = useState<Partial<CourseSession>>({
     courseKey: "voga",
     courseTitle: "Scuola di Voga Tradizionale Flegrea",
+    imageUrl: "/images/museo/museo-3.jpeg",
     startDate: new Date().toISOString().split("T")[0],
     schedule: "Sabato mattina ore 09:30 – 12:30",
     totalSeats: 12,
@@ -266,6 +268,13 @@ function CourseEditorContent() {
               />
             </div>
           </div>
+
+          <ImageUploader
+            label="Fotografia Ufficiale del Corso / Percorso Formativo"
+            value={courseData.imageUrl || ""}
+            onChange={(url) => setCourseData({ ...courseData, imageUrl: url })}
+            placeholder="/images/museo/museo-3.jpeg"
+          />
 
           <div>
             <label className="block text-xs uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1.5">

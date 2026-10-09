@@ -1293,8 +1293,18 @@ function AdminDashboardContent() {
               {courses.map((c) => (
                 <div
                   key={c.id}
-                  className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3"
+                  className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3 overflow-hidden"
                 >
+                  {c.imageUrl && (
+                    <div className="relative w-full h-36 border-b border-slate-200 overflow-hidden bg-slate-100 -mt-4 -mx-4 mb-2">
+                      <Image
+                        src={c.imageUrl}
+                        alt={c.courseTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
                   <div className="flex items-start justify-between gap-2">
                     <span
                       className={`inline-block px-2 py-0.5 text-[9px] uppercase tracking-wider font-bold border font-mono ${
@@ -1397,11 +1407,25 @@ function AdminDashboardContent() {
                           </span>
                         </td>
                         <td className="p-4">
-                          <div className="font-sans font-semibold text-sm text-[#0a1c2a]">
-                            {c.courseTitle}
-                          </div>
-                          <div className="text-slate-600 font-sans text-xs line-clamp-1 mt-0.5">
-                            {c.notes || c.price}
+                          <div className="flex items-center gap-3">
+                            {c.imageUrl && (
+                              <div className="relative w-12 h-9 shrink-0 border border-slate-300 bg-slate-100 overflow-hidden shadow-2xs">
+                                <Image
+                                  src={c.imageUrl}
+                                  alt={c.courseTitle}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            )}
+                            <div>
+                              <div className="font-sans font-semibold text-sm text-[#0a1c2a]">
+                                {c.courseTitle}
+                              </div>
+                              <div className="text-slate-600 font-sans text-xs line-clamp-1 mt-0.5">
+                                {c.notes || c.price}
+                              </div>
+                            </div>
                           </div>
                         </td>
                         <td className="p-4 whitespace-nowrap text-slate-700">
