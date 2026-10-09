@@ -61,6 +61,26 @@ export default function CorsiPage() {
     }
   };
 
+  const scrollToForm = (courseKey?: string, note?: string) => {
+    if (courseKey) {
+      setFormData((prev) => ({
+        ...prev,
+        corso: courseKey,
+        note: note !== undefined ? note : prev.note,
+      }));
+    }
+    const formElement =
+      document.getElementById("form-iscrizione") ||
+      document.getElementById("iscrizione-form");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      const input = document.getElementById("corso-nome") as HTMLInputElement | null;
+      if (input) {
+        setTimeout(() => input.focus(), 400);
+      }
+    }
+  };
+
   useEffect(() => {
     fetch("/api/corsi-calendar")
       .then((res) => res.json())
@@ -135,8 +155,15 @@ export default function CorsiPage() {
                   </ul>
                 </div>
               </div>
-              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
-                Aperto a tutti · Livello base e avanzato
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300 flex items-center justify-between gap-3">
+                <span>Aperto a tutti · Base e avanzato</span>
+                <button
+                  type="button"
+                  onClick={() => scrollToForm("voga", "Iscrizione: Scuola di Voga Tradizionale Flegrea")}
+                  className="px-3.5 py-1.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-[10px] font-mono uppercase tracking-wider font-semibold transition-colors cursor-pointer shrink-0"
+                >
+                  Iscriviti →
+                </button>
               </div>
             </div>
 
@@ -171,8 +198,15 @@ export default function CorsiPage() {
                   </ul>
                 </div>
               </div>
-              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
-                A bordo di Janara e gozzi della flotta
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300 flex items-center justify-between gap-3">
+                <span className="line-clamp-1">A bordo di Janara e flotta</span>
+                <button
+                  type="button"
+                  onClick={() => scrollToForm("vela", "Iscrizione: Corso di Conduzione a Vela Latina")}
+                  className="px-3.5 py-1.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-[10px] font-mono uppercase tracking-wider font-semibold transition-colors cursor-pointer shrink-0"
+                >
+                  Iscriviti →
+                </button>
               </div>
             </div>
 
@@ -208,8 +242,15 @@ export default function CorsiPage() {
                   </ul>
                 </div>
               </div>
-              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
-                Selezioni e candidature aperte
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300 flex items-center justify-between gap-3">
+                <span className="line-clamp-1">Selezioni e candidature aperte</span>
+                <button
+                  type="button"
+                  onClick={() => scrollToForm("rosa", "Candidatura: Progetto ROSA - Equipaggio Femminile 2027")}
+                  className="px-3.5 py-1.5 bg-[#b8860b] hover:bg-[#0a1c2a] text-white text-[10px] font-mono uppercase tracking-wider font-bold transition-colors cursor-pointer shrink-0 shadow-xs"
+                >
+                  Candidati →
+                </button>
               </div>
             </div>
 
@@ -244,8 +285,15 @@ export default function CorsiPage() {
                   </ul>
                 </div>
               </div>
-              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300">
-                A bordo di San Michele Arcangelo
+              <div className="mx-8 sm:mx-10 pb-8 text-[11px] font-mono uppercase tracking-wider text-[#0a1c2a] font-bold pt-4 border-t border-slate-300 flex items-center justify-between gap-3">
+                <span className="line-clamp-1">A bordo di San Michele Arcangelo</span>
+                <button
+                  type="button"
+                  onClick={() => scrollToForm("inclusione", "Richiesta informazioni Inclusione Mare Centro Serapide")}
+                  className="px-3.5 py-1.5 bg-[#0a1c2a] hover:bg-[#b8860b] text-white text-[10px] font-mono uppercase tracking-wider font-semibold transition-colors cursor-pointer shrink-0"
+                >
+                  Richiedi Info →
+                </button>
               </div>
             </div>
           </div>
@@ -342,18 +390,14 @@ export default function CorsiPage() {
                       {session.instructor}
                     </span>
                     <button
-                      onClick={() => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          corso: session.courseKey,
-                          note: `Candidatura per sessione: ${session.courseTitle} (inizio ${session.startDate})`,
-                        }));
-                        const formElement = document.getElementById("iscrizione-form");
-                        if (formElement) {
-                          formElement.scrollIntoView({ behavior: "smooth" });
-                        }
-                      }}
-                      className="px-3 py-1.5 bg-[#0a1c2a] text-white text-[10px] uppercase font-mono tracking-wider font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
+                      type="button"
+                      onClick={() =>
+                        scrollToForm(
+                          session.courseKey,
+                          `Candidatura per sessione: ${session.courseTitle} (inizio ${session.startDate})`
+                        )
+                      }
+                      className="px-3.5 py-1.5 bg-[#0a1c2a] text-white text-[10px] uppercase font-mono tracking-wider font-semibold hover:bg-[#b8860b] transition-colors cursor-pointer"
                     >
                       Iscriviti
                     </button>
@@ -366,8 +410,11 @@ export default function CorsiPage() {
       </section>
 
       {/* Form di Iscrizione / Richiesta Info */}
-      <section id="form-iscrizione" className="py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200">
-        <div className="max-w-3xl mx-auto w-full">
+      <section
+        id="form-iscrizione"
+        className="scroll-mt-24 py-24 px-6 sm:px-12 lg:px-24 bg-[#fbfaf6] border-b border-slate-200"
+      >
+        <div id="iscrizione-form" className="max-w-3xl mx-auto w-full">
           <div className="text-center space-y-4 mb-10">
             <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-slate-700 font-semibold block">
               Prenota una Uscita di Prova
