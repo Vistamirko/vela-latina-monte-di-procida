@@ -240,7 +240,7 @@ export default function DiventaSocioPage() {
                       <span className="uppercase tracking-wider">Tessera Ufficiale & Libro Soci</span>
                     </div>
                     <p className="text-xs text-slate-600 leading-relaxed pl-6 font-light">
-                      Iscrizione a Libro Soci APS, diritto di voto nelle assemblee, convenzioni e copertura assicurativa durante le manifestazioni associative.
+                      Iscrizione ufficiale al Libro Soci APS, convenzioni dedicate e copertura assicurativa durante le attività associative.
                     </p>
                   </div>
                 </div>

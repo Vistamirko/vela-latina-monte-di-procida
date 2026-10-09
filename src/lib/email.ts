@@ -510,7 +510,7 @@ export async function sendMembershipApprovedNotification(params: {
       <div style="background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 18px; margin-top: 24px; font-size: 13px; line-height: 1.6; color: #451a03;">
         <strong>⚓ Cosa puoi fare adesso come socio:</strong>
         <ul style="margin: 8px 0 0; padding-left: 20px;">
-          <li>Partecipare alle assemblee sociali e alle iniziative culturali e di voga.</li>
+          <li>Partecipare a tutti gli eventi, iniziative culturali, uscite in mare e attività di voga.</li>
           <li>Frequentare le attività di cantiere e navigazione a bordo dei gozzi della flotta (Janara, San Michele Arcangelo, Quandel).</li>
           <li>Contribuire alla salvaguardia dell'arte marinaresca tradizionale flegrea.</li>
         </ul>
