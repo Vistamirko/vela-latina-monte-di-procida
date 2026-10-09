@@ -28,7 +28,7 @@ describe("Pagina Diventa Socio", () => {
     cy.get('input[name="dataLuogoNascita"]').type("01/01/1990 - Napoli");
     cy.get('input[name="codiceFiscale"]').type("RSSMRA90A01F839U");
 
-    cy.get('button[type="submit"]').contains("Invia Domanda di Ammissione").click();
+    cy.get('button[type="submit"]').contains("Invia Domanda di Tesseramento").click();
 
     cy.wait("@iscrizioneRequest");
 
