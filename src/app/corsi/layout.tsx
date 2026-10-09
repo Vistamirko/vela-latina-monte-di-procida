@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Scuola di Mare & Corsi di Voga e Vela Tradizionale",
   description:
     "Impara l'arte della vela latina e la voga tradizionale flegrea (in piedi). Corsi aperti ad Acquamorta per principianti, equipaggi d'altura e progetti speciali.",
   alternates: {
-    canonical: "https://velalatinamontediprocida.it/corsi",
+    canonical: `${SITE_URL}/corsi`,
   },
   openGraph: {
     title: "Scuola di Mare & Corsi | Vela Latina Monte di Procida",
     description:
       "Corsi di vela latina, scuola di voga tradizionale in piedi e masterclass di marineria storica flegrea ad Acquamorta.",
-    url: "https://velalatinamontediprocida.it/corsi",
+    url: `${SITE_URL}/corsi`,
     images: [
       {
         url: "/images/hero-sailing.webp",
@@ -28,12 +29,12 @@ const CORSI_SCHEMA = {
   "@graph": [
     {
       "@type": "Course",
-      "@id": "https://velalatinamontediprocida.it/corsi#scuola-vela",
+      "@id": `${SITE_URL}/corsi#scuola-vela`,
       name: "Corso di Conduzione e Manovre a Vela Latina",
       description:
         "Corso pratico di conduzione del gozzo a vela latina: armo antenna a calcese, regolazione carnao e scotta, bordeggio nel Canale di Procida e ormeggio tradizionale.",
       provider: {
-        "@id": "https://velalatinamontediprocida.it/#organization",
+        "@id": `${SITE_URL}/#organization`,
       },
       educationalCredentialAwarded: "Attestato di Marinaio Tradizionale Vela Latina",
       hasCourseInstance: {
@@ -53,12 +54,12 @@ const CORSI_SCHEMA = {
     },
     {
       "@type": "Course",
-      "@id": "https://velalatinamontediprocida.it/corsi#scuola-voga",
+      "@id": `${SITE_URL}/corsi#scuola-voga`,
       name: "Scuola di Voga Tradizionale Flegrea (In Piedi)",
       description:
         "Apprendimento della voga flegrea in piedi con remi lunghi di faggio a bordo delle lance storiche San Michele Arcangelo e Quandel ad Acquamorta.",
       provider: {
-        "@id": "https://velalatinamontediprocida.it/#organization",
+        "@id": `${SITE_URL}/#organization`,
       },
     },
     {
@@ -68,13 +69,13 @@ const CORSI_SCHEMA = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://velalatinamontediprocida.it",
+          item: `${SITE_URL}`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Corsi",
-          item: "https://velalatinamontediprocida.it/corsi",
+          item: `${SITE_URL}/corsi`,
         },
       ],
     },

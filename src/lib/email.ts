@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { SITE_URL } from "@/lib/config";
 
 export interface BookingNotificationData {
   type: "corso" | "tesseramento";
@@ -213,7 +214,7 @@ export async function sendBookingNotification(data: BookingNotificationData) {
       </div>
     </div>
     <div class="footer">
-      Questa notifica è stata generata automaticamente dal portale velalatinamontediprocida.it
+      Questa notifica è stata generata automaticamente dal portale <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
     </div>
   </div>
 </body>
@@ -399,7 +400,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
       </div>
 
       <div class="cta-area">
-        <a href="https://velalatinamontediprocida.it" class="btn-site" target="_blank">Esplora il nostro portale</a>
+        <a href="${SITE_URL}" class="btn-site" target="_blank">Esplora il nostro portale</a>
       </div>
 
       <div class="signoff">
@@ -412,7 +413,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
     <div class="footer">
       Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
-      Email di contatto: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="https://velalatinamontediprocida.it" style="color: #64748b;">velalatinamontediprocida.it</a>
+      Email di contatto: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
     </div>
   </div>
 </body>

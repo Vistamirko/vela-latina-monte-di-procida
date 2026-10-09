@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "L'Associazione & la Memoria Flegrea",
   description:
     "Fondata nel 2008 ad Acquamorta, l'Associazione Vela Latina Monte di Procida custodisce i saperi della marineria storica, il restauro dei gozzi e lance, e la scuola di voga.",
   alternates: {
-    canonical: "https://velalatinamontediprocida.it/associazione",
+    canonical: `${SITE_URL}/associazione`,
   },
   openGraph: {
     title: "L'Associazione & la Memoria Flegrea | Vela Latina Monte di Procida",
     description:
       "Fondata nel 2008 ad Acquamorta, l'Associazione Vela Latina Monte di Procida custodisce i saperi della marineria storica e il restauro dei gozzi tradizionali.",
-    url: "https://velalatinamontediprocida.it/associazione",
+    url: `${SITE_URL}/associazione`,
     images: [
       {
         url: "/images/janara-crew.jpeg",
@@ -28,14 +29,14 @@ const ASSOCIAZIONE_SCHEMA = {
   "@graph": [
     {
       "@type": "AboutPage",
-      "@id": "https://velalatinamontediprocida.it/associazione#webpage",
-      url: "https://velalatinamontediprocida.it/associazione",
+      "@id": `${SITE_URL}/associazione#webpage`,
+      url: `${SITE_URL}/associazione`,
       name: "L'Associazione & la Memoria Flegrea",
       isPartOf: {
-        "@id": "https://velalatinamontediprocida.it/#website",
+        "@id": `${SITE_URL}/#website`,
       },
       about: {
-        "@id": "https://velalatinamontediprocida.it/#organization",
+        "@id": `${SITE_URL}/#organization`,
       },
       breadcrumb: {
         "@type": "BreadcrumbList",
@@ -44,13 +45,13 @@ const ASSOCIAZIONE_SCHEMA = {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://velalatinamontediprocida.it",
+            item: `${SITE_URL}`,
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Associazione",
-            item: "https://velalatinamontediprocida.it/associazione",
+            item: `${SITE_URL}/associazione`,
           },
         ],
       },

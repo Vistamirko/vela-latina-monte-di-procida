@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { initDb, ProjectsRepo, BlogRepo } from "@/lib/db";
+import { SITE_URL } from "@/lib/config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://velalatinamontediprocida.it";
+  const baseUrl = SITE_URL;
 
   await initDb();
   const [projects, posts] = await Promise.all([

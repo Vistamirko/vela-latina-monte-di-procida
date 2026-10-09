@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { initDb, ProjectsRepo } from "@/lib/db";
 import { Compass, ArrowUpRight, ArrowRight } from "lucide-react";
+import { SITE_URL } from "@/lib/config";
 
 export const revalidate = 60;
 
@@ -12,13 +13,13 @@ export const metadata: Metadata = {
   description:
     "Otto cantieri attivi dell'Associazione Vela Latina Monte di Procida: Progetto ROSA (equipaggio femminile verso Saint-Tropez), America's Cup Napoli, Barcolana, Quandel Lab e Breccia Museo.",
   alternates: {
-    canonical: "https://velalatinamontediprocida.it/progetti",
+    canonical: `${SITE_URL}/progetti`,
   },
   openGraph: {
     title: "I Grandi Progetti & Cantieri 2027 | Vela Latina Monte di Procida",
     description:
       "Dalla formazione per Saint-Tropez alla presenza all'America's Cup, Barcolana e ricerca scientifica. Scopri i cantieri della marineria flegrea.",
-    url: "https://velalatinamontediprocida.it/progetti",
+    url: `${SITE_URL}/progetti`,
     images: [
       {
         url: "/images/janara-crew.jpeg",
@@ -39,8 +40,8 @@ export default async function ProgettiPage() {
     "@graph": [
       {
         "@type": "CollectionPage",
-        "@id": "https://velalatinamontediprocida.it/progetti#webpage",
-        url: "https://velalatinamontediprocida.it/progetti",
+        "@id": `${SITE_URL}/progetti#webpage`,
+        url: `${SITE_URL}/progetti`,
         name: "I Grandi Progetti & Cantieri 2027",
         description:
           "Cantieri strategici e rotte della marineria flegrea: regate internazionali, inclusione sociale e ricerca scientifica.",
@@ -51,13 +52,13 @@ export default async function ProgettiPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://velalatinamontediprocida.it",
+              item: `${SITE_URL}`,
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Progetti",
-              item: "https://velalatinamontediprocida.it/progetti",
+              item: `${SITE_URL}/progetti`,
             },
           ],
         },
@@ -67,7 +68,7 @@ export default async function ProgettiPage() {
           itemListElement: projects.map((p, index) => ({
             "@type": "ListItem",
             position: index + 1,
-            url: `https://velalatinamontediprocida.it/progetti/${p.slug}`,
+            url: `${SITE_URL}/progetti/${p.slug}`,
             name: `${p.number} · ${p.title} (${p.highlight})`,
           })),
         },

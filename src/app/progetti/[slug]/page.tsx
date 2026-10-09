@@ -20,6 +20,7 @@ import {
   NauticalCrosshair,
 } from "@/components/NauticalChartElements";
 import { initDb, ProjectsRepo } from "@/lib/db";
+import { SITE_URL } from "@/lib/config";
 
 export const revalidate = 60;
 
@@ -38,7 +39,7 @@ export async function generateMetadata({
     };
   }
 
-  const canonicalUrl = `https://velalatinamontediprocida.it/progetti/${project.slug}`;
+  const canonicalUrl = `${SITE_URL}/progetti/${project.slug}`;
 
   return {
     title: `${project.title} · ${project.highlight}`,
@@ -87,7 +88,7 @@ export default async function ProjectDetailPage({
       ? allProjects[0]
       : null;
 
-  const projectUrl = `https://velalatinamontediprocida.it/progetti/${project.slug}`;
+  const projectUrl = `${SITE_URL}/progetti/${project.slug}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -99,9 +100,9 @@ export default async function ProjectDetailPage({
         headline: `${project.title} · ${project.highlight}`,
         description: project.description,
         url: projectUrl,
-        image: project.imageUrl ? `https://velalatinamontediprocida.it${project.imageUrl}` : undefined,
+        image: project.imageUrl ? `${SITE_URL}${project.imageUrl}` : undefined,
         creator: {
-          "@id": "https://velalatinamontediprocida.it/#organization",
+          "@id": `${SITE_URL}/#organization`,
         },
         temporalCoverage: project.timeline || "2026/2027",
         spatialCoverage: project.location || "Monte di Procida, Italia",
@@ -114,13 +115,13 @@ export default async function ProjectDetailPage({
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://velalatinamontediprocida.it",
+            item: `${SITE_URL}`,
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Progetti",
-            item: "https://velalatinamontediprocida.it/progetti",
+            item: `${SITE_URL}/progetti`,
           },
           {
             "@type": "ListItem",

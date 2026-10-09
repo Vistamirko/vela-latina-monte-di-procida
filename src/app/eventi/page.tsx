@@ -6,6 +6,7 @@ import { Calendar, Award, Film, Tv, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { initDb, EventsRepo } from "@/lib/db";
+import { SITE_URL } from "@/lib/config";
 
 export const revalidate = 60;
 
@@ -14,13 +15,13 @@ export const metadata: Metadata = {
   description:
     "Vittorie storiche e appuntamenti della flotta: 1° posto assoluto a Saint-Tropez 2024, Procida Cup, Barcolana 2026, presenza al cinema d'autore e all'America's Cup.",
   alternates: {
-    canonical: "https://velalatinamontediprocida.it/eventi",
+    canonical: `${SITE_URL}/eventi`,
   },
   openGraph: {
     title: "Palmarès & Regate Storiche | Vela Latina Monte di Procida",
     description:
       "Scopri i trionfi velici dell'ammiraglia Janara, le regate storiche nel Mediterraneo e la presenza nel cinema.",
-    url: "https://velalatinamontediprocida.it/eventi",
+    url: `${SITE_URL}/eventi`,
     images: [
       {
         url: "/images/janara-regatta.jpeg",
@@ -41,8 +42,8 @@ export default async function EventiPage() {
     "@graph": [
       {
         "@type": "CollectionPage",
-        "@id": "https://velalatinamontediprocida.it/eventi#webpage",
-        url: "https://velalatinamontediprocida.it/eventi",
+        "@id": `${SITE_URL}/eventi#webpage`,
+        url: `${SITE_URL}/eventi`,
         name: "Palmarès, Regate Storiche & Cinema",
         breadcrumb: {
           "@type": "BreadcrumbList",
@@ -51,13 +52,13 @@ export default async function EventiPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://velalatinamontediprocida.it",
+              item: `${SITE_URL}`,
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Eventi",
-              item: "https://velalatinamontediprocida.it/eventi",
+              item: `${SITE_URL}/eventi`,
             },
           ],
         },
@@ -73,7 +74,7 @@ export default async function EventiPage() {
               name: e.location,
             },
             organizer: {
-              "@id": "https://velalatinamontediprocida.it/#organization",
+              "@id": `${SITE_URL}/#organization`,
             },
           })),
         },

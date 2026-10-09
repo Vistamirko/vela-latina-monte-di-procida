@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BookOpen, Calendar, ArrowRight, User } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
+import { SITE_URL } from "@/lib/config";
 
 export const revalidate = 60; // rigenera ogni minuto
 
@@ -13,13 +14,13 @@ export const metadata: Metadata = {
   description:
     "Articoli, memorie orali e saggi di marineria: i segreti costruttivi dei maestri d'ascia montesi, la conduzione all'antenna e la lettura del vento nel Canale di Procida.",
   alternates: {
-    canonical: "https://velalatinamontediprocida.it/blog",
+    canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
     title: "Il Giornale di Bordo & la Memoria Flegrea | Vela Latina Monte di Procida",
     description:
       "Racconti di mare, calafateria navale e storie di regata dall'Associazione Vela Latina Monte di Procida.",
-    url: "https://velalatinamontediprocida.it/blog",
+    url: `${SITE_URL}/blog`,
     images: [
       {
         url: "/images/janara-crew.jpeg",
@@ -40,12 +41,12 @@ export default async function BlogPage() {
     "@graph": [
       {
         "@type": "Blog",
-        "@id": "https://velalatinamontediprocida.it/blog#blog",
-        url: "https://velalatinamontediprocida.it/blog",
+        "@id": `${SITE_URL}/blog#blog`,
+        url: `${SITE_URL}/blog`,
         name: "Il Giornale di Bordo & la Memoria Flegrea",
         description: "Articoli, memorie e approfondimenti sulla marineria tradizionale flegrea.",
         publisher: {
-          "@id": "https://velalatinamontediprocida.it/#organization",
+          "@id": `${SITE_URL}/#organization`,
         },
         breadcrumb: {
           "@type": "BreadcrumbList",
@@ -54,20 +55,20 @@ export default async function BlogPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://velalatinamontediprocida.it",
+              item: `${SITE_URL}`,
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Blog",
-              item: "https://velalatinamontediprocida.it/blog",
+              item: `${SITE_URL}/blog`,
             },
           ],
         },
         blogPost: posts.map((p) => ({
           "@type": "BlogPosting",
           headline: p.title,
-          url: `https://velalatinamontediprocida.it/blog/${p.slug}`,
+          url: `${SITE_URL}/blog/${p.slug}`,
           datePublished: p.publishedAt || p.createdAt,
           author: {
             "@type": "Person",

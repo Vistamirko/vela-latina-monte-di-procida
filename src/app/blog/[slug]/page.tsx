@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ArrowLeft, Calendar, User, Compass } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
+import { SITE_URL } from "@/lib/config";
 
 export const revalidate = 60;
 
@@ -24,7 +25,7 @@ export async function generateMetadata({
     };
   }
 
-  const canonicalUrl = `https://velalatinamontediprocida.it/blog/${post.slug}`;
+  const canonicalUrl = `${SITE_URL}/blog/${post.slug}`;
 
   return {
     title: `${post.title} | Il Giornale di Bordo`,
@@ -66,7 +67,7 @@ export default async function BlogPostPage({
     notFound();
   }
 
-  const postUrl = `https://velalatinamontediprocida.it/blog/${post.slug}`;
+  const postUrl = `${SITE_URL}/blog/${post.slug}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -84,12 +85,12 @@ export default async function BlogPostPage({
           name: post.author,
         },
         publisher: {
-          "@id": "https://velalatinamontediprocida.it/#organization",
+          "@id": `${SITE_URL}/#organization`,
         },
-        image: post.coverImage ? `https://velalatinamontediprocida.it${post.coverImage}` : undefined,
+        image: post.coverImage ? `${SITE_URL}${post.coverImage}` : undefined,
         inLanguage: "it-IT",
         isPartOf: {
-          "@id": "https://velalatinamontediprocida.it/blog#blog",
+          "@id": `${SITE_URL}/blog#blog`,
         },
       },
       {
@@ -99,13 +100,13 @@ export default async function BlogPostPage({
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://velalatinamontediprocida.it",
+            item: `${SITE_URL}`,
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Blog",
-            item: "https://velalatinamontediprocida.it/blog",
+            item: `${SITE_URL}/blog`,
           },
           {
             "@type": "ListItem",

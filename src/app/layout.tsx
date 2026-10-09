@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Cinzel, Plus_Jakarta_Sans } from "next/font/google";
+import { SITE_URL, getAbsoluteUrl } from "@/lib/config";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -25,7 +26,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://velalatinamontediprocida.it"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Associazione Vela Latina Monte di Procida — Un punto cospicuo sul Mediterraneo",
     template: "%s | Vela Latina Monte di Procida",
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Associazione Vela Latina Monte di Procida APS" }],
   alternates: {
-    canonical: "https://velalatinamontediprocida.it",
+    canonical: SITE_URL,
   },
   robots: {
     index: true,
@@ -67,7 +68,7 @@ export const metadata: Metadata = {
     title: "Associazione Vela Latina Monte di Procida — Un punto cospicuo sul Mediterraneo",
     description:
       "Custodire il passato, progettare il futuro del mare flegreo. Scopri la flotta storica, la scuola di voga e le nostre rotte.",
-    url: "https://velalatinamontediprocida.it",
+    url: SITE_URL,
     siteName: "Vela Latina Monte di Procida",
     locale: "it_IT",
     type: "website",
@@ -110,18 +111,18 @@ const GLOBAL_SCHEMA_JSON = {
   "@graph": [
     {
       "@type": ["SportsClub", "NGO"],
-      "@id": "https://velalatinamontediprocida.it/#organization",
+      "@id": `${SITE_URL}/#organization`,
       name: "Associazione Vela Latina Monte di Procida",
       alternateName: "Vela Latina Monte di Procida",
       legalName: "Associazione di Promozione Sociale Vela Latina Monte di Procida",
-      url: "https://velalatinamontediprocida.it",
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        "@id": "https://velalatinamontediprocida.it/#logo",
-        url: "https://velalatinamontediprocida.it/images/stemma-vela-latina.jpg",
+        "@id": `${SITE_URL}/#logo`,
+        url: getAbsoluteUrl("/images/stemma-vela-latina.jpg"),
         caption: "Stemma Ufficiale Vela Latina Monte di Procida",
       },
-      image: "https://velalatinamontediprocida.it/images/janara-regatta.jpeg",
+      image: getAbsoluteUrl("/images/janara-regatta.jpeg"),
       description:
         "Presidio culturale permanente per la marineria flegrea. Custodia del gozzo napoletano a vela latina e a remi, scuola di voga tradizionale, restauro navale e partecipazione a regate storiche internazionali.",
       foundingDate: "2008",
@@ -154,11 +155,11 @@ const GLOBAL_SCHEMA_JSON = {
     },
     {
       "@type": "WebSite",
-      "@id": "https://velalatinamontediprocida.it/#website",
-      url: "https://velalatinamontediprocida.it",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
       name: "Vela Latina Monte di Procida",
       publisher: {
-        "@id": "https://velalatinamontediprocida.it/#organization",
+        "@id": `${SITE_URL}/#organization`,
       },
       inLanguage: "it-IT",
     },
