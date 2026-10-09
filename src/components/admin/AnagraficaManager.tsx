@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { AnagraficaAssociazione, DocumentoIstituzionale } from "@/lib/db/types";
+import { AnagraficaAssociazione } from "@/lib/db/types";
 import {
-  FileText,
   Download,
   Upload,
   ShieldCheck,
@@ -18,19 +17,8 @@ import {
   Trash2,
   Edit2,
   Save,
-  X,
-  Phone,
-  Mail,
-  MapPin,
-  Calendar,
   Lock,
-  FileCheck,
-  Award,
-  Sparkles,
-  Info,
-  Clock,
   Printer,
-  ChevronRight,
 } from "lucide-react";
 
 interface AnagraficaManagerProps {
@@ -105,8 +93,8 @@ export default function AnagraficaManager({
       showToast("success", "Documento rimosso");
       setData(resJson.data);
       onReload();
-    } catch (err: any) {
-      showToast("error", err.message || "Errore");
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore");
     }
   };
 
@@ -130,8 +118,8 @@ export default function AnagraficaManager({
       if (sectionKey === "presidente") setIsEditingPres(false);
       if (sectionKey === "banca") setIsEditingBanca(false);
       onReload();
-    } catch (err: any) {
-      showToast("error", err.message || "Errore salvataggio");
+    } catch (err: unknown) {
+      showToast("error", err instanceof Error ? err.message : "Errore salvataggio");
     } finally {
       setSavingSection(false);
     }
