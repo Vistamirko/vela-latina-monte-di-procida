@@ -431,190 +431,203 @@ function AdminDashboardContent() {
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 flex items-center gap-1 border-t border-slate-200 overflow-x-auto scrollbar-none">
-          <button
-            onClick={() => setActiveTab("cruscotto")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "cruscotto"
-                ? "border-[#c99a45] text-[#0a1c2a] bg-amber-50/50"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <LayoutDashboard className="w-3.5 h-3.5 text-[#c99a45]" />
-            <span>Cruscotto</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("barche")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "barche"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Ship className="w-3.5 h-3.5" />
-            <span>Flotta & Lavori</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("attivita")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "attivita"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <CheckSquare className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Attività & Task</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("inventario")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "inventario"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Boxes className="w-3.5 h-3.5 text-purple-600" />
-            <span>Inventario & Acquisti</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("account")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "account"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Account & WhatsApp</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("fundraising")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "fundraising"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <DollarSign className="w-3.5 h-3.5 text-[#c99a45]" />
-            <span>Fundraising & 5×1000</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("soci")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "soci"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Users className="w-3.5 h-3.5" />
-            <span>Libro Soci ({soci.length})</span>
-            {soci.filter((s) => s.anno === 2026).length > 0 && (
-              <span className="px-1.5 py-0.5 text-[9px] bg-emerald-700 text-white rounded-full font-bold">
-                {soci.filter((s) => s.anno === 2026).length}
+        {/* Tab Navigation Organizzata in Due Livelli Visibili */}
+        <div className="border-t border-slate-200 bg-slate-50/70">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-col gap-2">
+            {/* GRUPPO 1: CONTENUTI PUBBLICI DEL SITO */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-slate-500 mr-1.5 flex items-center gap-1 shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1b5b80]"></span>
+                <span>Contenuti Sito:</span>
               </span>
-            )}
-          </button>
 
-          <button
-            onClick={() => setActiveTab("anagrafica")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "anagrafica"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Building2 className="w-3.5 h-3.5 text-[#c99a45]" />
-            <span>Anagrafica & RUNTS</span>
-            {anagrafica?.documenti && (
-              <span className="px-1.5 py-0.5 text-[9px] bg-amber-50 text-amber-900 border border-amber-300 rounded-full font-bold">
-                {anagrafica.documenti.length} doc
+              <button
+                onClick={() => setActiveTab("corsi")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "corsi"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <GraduationCap className={`w-3.5 h-3.5 ${activeTab === "corsi" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+                <span>Corsi ({courses.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("blog")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "blog"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <BookOpen className={`w-3.5 h-3.5 ${activeTab === "blog" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+                <span>Blog ({blogPosts.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("eventi")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "eventi"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Calendar className={`w-3.5 h-3.5 ${activeTab === "eventi" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+                <span>Eventi ({events.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("progetti")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "progetti"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Compass className={`w-3.5 h-3.5 ${activeTab === "progetti" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+                <span>Progetti ({projects.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("richieste")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "richieste"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Inbox className={`w-3.5 h-3.5 ${activeTab === "richieste" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+                <span>Iscrizioni ({bookings.length})</span>
+                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
+                  <span className="px-1.5 py-0.2 text-[9px] bg-amber-600 text-white rounded-full font-bold">
+                    {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* GRUPPO 2: GESTIONALE INTERNO ASSOCIAZIONE (EXCEL) */}
+            <div className="flex items-center gap-1.5 flex-wrap pt-1.5 border-t border-slate-200/60">
+              <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#c99a45] mr-1.5 flex items-center gap-1 shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#c99a45]"></span>
+                <span>Gestionale & Excel:</span>
               </span>
-            )}
-          </button>
 
-          <button
-            onClick={() => setActiveTab("eventi")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "eventi"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Eventi ({events.length})</span>
-          </button>
+              <button
+                onClick={() => setActiveTab("cruscotto")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "cruscotto"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <LayoutDashboard className="w-3.5 h-3.5 text-[#c99a45]" />
+                <span>Cruscotto</span>
+              </button>
 
-          <button
-            onClick={() => setActiveTab("richieste")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "richieste"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Inbox className="w-3.5 h-3.5" />
-            <span>Iscrizioni ({bookings.length})</span>
-            {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
-              <span className="px-1.5 py-0.5 text-[9px] bg-amber-600 text-white rounded-full font-bold">
-                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length}
-              </span>
-            )}
-          </button>
+              <button
+                onClick={() => setActiveTab("barche")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "barche"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Ship className="w-3.5 h-3.5 text-blue-600" />
+                <span>Flotta & Lavori</span>
+              </button>
 
-          <button
-            onClick={() => setActiveTab("corsi")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "corsi"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <GraduationCap className="w-3.5 h-3.5" />
-            <span>Corsi ({courses.length})</span>
-          </button>
+              <button
+                onClick={() => setActiveTab("attivita")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "attivita"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <CheckSquare className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Attività & Task</span>
+              </button>
 
-          <button
-            onClick={() => setActiveTab("blog")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "blog"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Blog ({blogPosts.length})</span>
-          </button>
+              <button
+                onClick={() => setActiveTab("inventario")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "inventario"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Boxes className="w-3.5 h-3.5 text-purple-600" />
+                <span>Inventario & Acquisti</span>
+              </button>
 
-          <button
-            onClick={() => setActiveTab("progetti")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "progetti"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5" />
-            <span>Progetti ({projects.length})</span>
-          </button>
+              <button
+                onClick={() => setActiveTab("account")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "account"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Account & WhatsApp</span>
+              </button>
 
-          <button
-            onClick={() => setActiveTab("db")}
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "db"
-                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
-                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
-            }`}
-          >
-            <Database className="w-3.5 h-3.5" />
-            <span>Database</span>
-          </button>
+              <button
+                onClick={() => setActiveTab("fundraising")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "fundraising"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <DollarSign className="w-3.5 h-3.5 text-[#c99a45]" />
+                <span>Fundraising</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("soci")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "soci"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Users className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Libro Soci ({soci.length})</span>
+                {soci.filter((s) => s.anno === 2026).length > 0 && (
+                  <span className="px-1.5 py-0.2 text-[9px] bg-emerald-700 text-white rounded-full font-bold">
+                    {soci.filter((s) => s.anno === 2026).length}
+                  </span>
+                )}
+              </button>
+
+              <button
+                onClick={() => setActiveTab("anagrafica")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "anagrafica"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5 text-[#c99a45]" />
+                <span>Anagrafica & RUNTS</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("db")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "db"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Database className="w-3.5 h-3.5 text-slate-500" />
+                <span>Database</span>
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 

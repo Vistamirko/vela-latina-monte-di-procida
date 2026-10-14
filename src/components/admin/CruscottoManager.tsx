@@ -17,6 +17,11 @@ import {
   Camera,
   ImageOff,
   CheckCircle2,
+  GraduationCap,
+  BookOpen,
+  Compass,
+  Inbox,
+  Users,
 } from "lucide-react";
 import { CruscottoKPI, PropostaSoftwareItem } from "@/lib/db/types";
 
@@ -85,20 +90,41 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => onNavigateTab("barche")}
-              className="px-3.5 py-2 bg-[#c99a45] hover:bg-[#d8a852] text-[#0a1c2a] text-xs font-mono font-bold rounded-lg transition-all flex items-center gap-2 shadow-md cursor-pointer"
+              onClick={() => onNavigateTab("corsi")}
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
             >
-              <Ship className="w-4 h-4" />
-              <span>Flotta & Lavori</span>
+              <GraduationCap className="w-3.5 h-3.5 text-[#c99a45]" />
+              <span>Corsi</span>
             </button>
             <button
-              onClick={() => onNavigateTab("attivita")}
-              className="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-700 text-xs font-mono font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer"
+              onClick={() => onNavigateTab("blog")}
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
             >
-              <CheckSquare className="w-4 h-4 text-emerald-400" />
-              <span>Task Operativi</span>
+              <BookOpen className="w-3.5 h-3.5 text-[#c99a45]" />
+              <span>Blog</span>
+            </button>
+            <button
+              onClick={() => onNavigateTab("eventi")}
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
+            >
+              <Calendar className="w-3.5 h-3.5 text-[#c99a45]" />
+              <span>Eventi</span>
+            </button>
+            <button
+              onClick={() => onNavigateTab("progetti")}
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
+            >
+              <Compass className="w-3.5 h-3.5 text-[#c99a45]" />
+              <span>Progetti</span>
+            </button>
+            <button
+              onClick={() => onNavigateTab("barche")}
+              className="px-3.5 py-1.5 bg-[#c99a45] hover:bg-[#d8a852] text-[#0a1c2a] text-xs font-mono font-bold rounded-lg transition-all flex items-center gap-1.5 shadow-md cursor-pointer"
+            >
+              <Ship className="w-3.5 h-3.5" />
+              <span>Flotta</span>
             </button>
           </div>
         </div>
