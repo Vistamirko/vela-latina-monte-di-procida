@@ -48,12 +48,14 @@ export interface CourseSession {
   updatedAt: string;
 }
 
+export type AdminRole = "superadmin" | "admin" | "segreteria" | "editor" | "istruttore";
+
 export interface AdminUser {
   id: string;
   email: string;
   passwordHash: string;
   name: string;
-  role: "superadmin" | "admin" | "editor";
+  role: AdminRole;
   createdAt: string;
 }
 

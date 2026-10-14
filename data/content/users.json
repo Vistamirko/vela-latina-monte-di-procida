@@ -1,10 +1,34 @@
 [
   {
-    "id": "admin-root",
+    "id": "user-superadmin",
     "email": "admin@velalatinamontediprocida.it",
-    "passwordHash": "bb6c42c06519bf7ef109ec7ebee20b88:092742d1731b4001e19ecff8d3af0fdd67693c766c6fe821c2984155a4cb81e088ce140da75cb408b4d24389b4571e7f3ff7dd1a6b8d91d814e134ca890a0305",
-    "name": "Amministratore Vela Latina",
+    "passwordHash": "583769397ad37efa4d18e6b876f45b13:2fce22972a7e115a3c67b539a0852ebc12a499f03f13ad1fa9ad2087ed37716b1b8e1a9e13c90abd0c8dd7d8692a2f03643e70f32a345d39eee255944dc4d667",
+    "name": "Antonio Pugliese (Presidente)",
     "role": "superadmin",
     "createdAt": "2026-10-07T10:32:32.491Z"
+  },
+  {
+    "id": "user-segreteria",
+    "email": "segreteria@velalatinamontediprocida.it",
+    "passwordHash": "e6db716998c1efa8557abe40bad7f8d1:4ee3c9ab00790d65ee2faa681a62a50c1822d30d866f4eaaa4d6803a19144a009c7ffeb71fbc78375dc27f7f31df1ec264326957fed3d225f3de123058ea381d",
+    "name": "Segreteria Operativa & Soci",
+    "role": "segreteria",
+    "createdAt": "2026-10-14T10:00:00.000Z"
+  },
+  {
+    "id": "user-editor",
+    "email": "comunicazione@velalatinamontediprocida.it",
+    "passwordHash": "1aac4369ebda5aac16286128b95ab5d8:ed40f9559069d06a2679804a9bf1195aeb70695431c5d163e6e25c7978423e56953584e74372c8688ad1c72919785a81f7958641c468278e25afeb332241072e",
+    "name": "Ufficio Stampa & Media",
+    "role": "editor",
+    "createdAt": "2026-10-14T10:00:00.000Z"
+  },
+  {
+    "id": "user-istruttori",
+    "email": "istruttori@velalatinamontediprocida.it",
+    "passwordHash": "e9741ec21c78985e7dfd2927ff91666c:ba7fd8a5fb6b864400a156bcdeaf0c04d0d466bf7da41579d2e4eaaea98d90b404cdf41a582c8c336861e476e49bcf9dc6c388c8fc4d34f7d0a80fd1db058789",
+    "name": "Staff Istruttori & Capibarca",
+    "role": "istruttore",
+    "createdAt": "2026-10-14T10:00:00.000Z"
   }
 ]

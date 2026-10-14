@@ -10,6 +10,12 @@ export async function GET() {
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato. Accesso riservato agli amministratori." }, { status: 401 });
     }
+    if (user.role !== "superadmin") {
+      return NextResponse.json(
+        { error: "Accesso riservato esclusivamente al Presidente / Direttivo (Superadmin)" },
+        { status: 403 }
+      );
+    }
 
     const anagrafica = await AnagraficaRepo.get();
     return NextResponse.json({ success: true, data: anagrafica });
@@ -28,6 +34,12 @@ export async function POST(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin") {
+      return NextResponse.json(
+        { error: "Modifiche anagrafica riservate al Presidente / Direttivo (Superadmin)" },
+        { status: 403 }
+      );
     }
 
     const body = await req.json();

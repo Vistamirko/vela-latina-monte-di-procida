@@ -9,6 +9,12 @@ export async function GET(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json(
+        { error: "Download del Libro Soci riservato a Segreteria e Superadmin" },
+        { status: 403 }
+      );
+    }
 
     await initDb();
     const url = new URL(req.url);

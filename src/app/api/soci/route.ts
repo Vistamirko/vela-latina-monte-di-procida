@@ -9,6 +9,12 @@ export async function GET(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json(
+        { error: "Accesso riservato a Segreteria e Superadmin" },
+        { status: 403 }
+      );
+    }
 
     await initDb();
     const url = new URL(req.url);
@@ -36,6 +42,12 @@ export async function POST(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json(
+        { error: "Operazione consentita solo a Segreteria e Superadmin" },
+        { status: 403 }
+      );
     }
 
     await initDb();
@@ -91,6 +103,12 @@ export async function DELETE(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json(
+        { error: "Operazione consentita solo a Segreteria e Superadmin" },
+        { status: 403 }
+      );
     }
 
     await initDb();

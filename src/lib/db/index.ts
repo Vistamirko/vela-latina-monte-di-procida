@@ -514,6 +514,41 @@ I raduni nazionali non sono sfilate statiche, ma vere competizioni ad armi pari 
   },
 ];
 
+export const DEFAULT_ADMIN_USERS: AdminUser[] = [
+  {
+    id: "user-superadmin",
+    email: "admin@velalatinamontediprocida.it",
+    passwordHash: "583769397ad37efa4d18e6b876f45b13:2fce22972a7e115a3c67b539a0852ebc12a499f03f13ad1fa9ad2087ed37716b1b8e1a9e13c90abd0c8dd7d8692a2f03643e70f32a345d39eee255944dc4d667",
+    name: "Antonio Pugliese (Presidente)",
+    role: "superadmin",
+    createdAt: "2026-10-07T10:32:32.491Z",
+  },
+  {
+    id: "user-segreteria",
+    email: "segreteria@velalatinamontediprocida.it",
+    passwordHash: "e6db716998c1efa8557abe40bad7f8d1:4ee3c9ab00790d65ee2faa681a62a50c1822d30d866f4eaaa4d6803a19144a009c7ffeb71fbc78375dc27f7f31df1ec264326957fed3d225f3de123058ea381d",
+    name: "Segreteria Operativa & Soci",
+    role: "segreteria",
+    createdAt: "2026-10-14T10:00:00.000Z",
+  },
+  {
+    id: "user-editor",
+    email: "comunicazione@velalatinamontediprocida.it",
+    passwordHash: "1aac4369ebda5aac16286128b95ab5d8:ed40f9559069d06a2679804a9bf1195aeb70695431c5d163e6e25c7978423e56953584e74372c8688ad1c72919785a81f7958641c468278e25afeb332241072e",
+    name: "Ufficio Stampa & Media",
+    role: "editor",
+    createdAt: "2026-10-14T10:00:00.000Z",
+  },
+  {
+    id: "user-istruttori",
+    email: "istruttori@velalatinamontediprocida.it",
+    passwordHash: "e9741ec21c78985e7dfd2927ff91666c:ba7fd8a5fb6b864400a156bcdeaf0c04d0d466bf7da41579d2e4eaaea98d90b404cdf41a582c8c336861e476e49bcf9dc6c388c8fc4d34f7d0a80fd1db058789",
+    name: "Staff Istruttori & Capibarca",
+    role: "istruttore",
+    createdAt: "2026-10-14T10:00:00.000Z",
+  },
+];
+
 /* ==============================================================
    INIZIALIZZAZIONE SCHEMA TABELLE POSTGRESQL (NEON / VERCEL)
 ============================================================== */
@@ -550,16 +585,16 @@ export async function initDb(): Promise<void> {
       writeLocalJson<ProjectItem[]>("progetti.json", mergedProjects);
 
       const users = readLocalJson<AdminUser[]>("users.json", []);
-      if (users.length === 0) {
-        const defaultAdmin: AdminUser = {
-          id: "admin-root",
-          email: "admin@velalatinamontediprocida.it",
-          passwordHash: hashPassword(process.env.ADMIN_INIT_PASSWORD || "velalatina2026!"),
-          name: "Amministratore Vela Latina",
-          role: "superadmin",
-          createdAt: new Date().toISOString(),
-        };
-        writeLocalJson<AdminUser[]>("users.json", [defaultAdmin]);
+      const updatedUsers = [...users];
+      let changed = false;
+      for (const defUser of DEFAULT_ADMIN_USERS) {
+        if (!updatedUsers.some((u) => u.email.toLowerCase() === defUser.email.toLowerCase())) {
+          updatedUsers.push(defUser);
+          changed = true;
+        }
+      }
+      if (changed || users.length === 0) {
+        writeLocalJson<AdminUser[]>("users.json", updatedUsers.length > 0 ? updatedUsers : DEFAULT_ADMIN_USERS);
       }
       return;
     }
@@ -751,16 +786,15 @@ export async function initDb(): Promise<void> {
         console.warn("[initDb] Avviso seed soci:", errSoci);
       }
 
-      // Controlla se esiste admin iniziale
-      const existingUsers = await sql`SELECT count(*) FROM admin_users;`;
-      if (parseInt(existingUsers[0].count) === 0) {
-        const adminId = "admin-root";
-        const email = "admin@velalatinamontediprocida.it";
-        const pwdHash = hashPassword(process.env.ADMIN_INIT_PASSWORD || "velalatina2026!");
-        await sql`
-          INSERT INTO admin_users (id, email, password_hash, name, role)
-          VALUES (${adminId}, ${email}, ${pwdHash}, 'Amministratore Vela Latina', 'superadmin');
-        `;
+      // Assicura la presenza degli utenti per ciascun ruolo
+      for (const u of DEFAULT_ADMIN_USERS) {
+        const found = await sql`SELECT id FROM admin_users WHERE LOWER(email) = LOWER(${u.email}) LIMIT 1;`;
+        if (found.length === 0) {
+          await sql`
+            INSERT INTO admin_users (id, email, password_hash, name, role)
+            VALUES (${u.id}, ${u.email}, ${u.passwordHash}, ${u.name}, ${u.role});
+          `;
+        }
       }
 
       // Seed Eventi se vuota

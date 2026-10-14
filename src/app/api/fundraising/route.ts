@@ -9,6 +9,9 @@ export async function GET() {
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Accesso riservato alla gestione operativa" }, { status: 403 });
+    }
 
     const items = await FundraisingRepo.getAll();
     return NextResponse.json({ success: true, data: items });
@@ -24,6 +27,9 @@ export async function POST(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Operazione riservata alla gestione operativa" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -45,6 +51,9 @@ export async function DELETE(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Operazione riservata alla gestione operativa" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);
