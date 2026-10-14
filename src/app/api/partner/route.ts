@@ -7,10 +7,11 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const all = searchParams.get("all") === "true"; // se true include non pubblicati (richiesto da admin)
+    const user = await getCurrentUser();
 
     let partners = await PartnerRepo.getAll();
 
-    if (!all) {
+    if (!all || !user) {
       partners = partners.filter((p) => p.published);
     }
 
@@ -33,6 +34,9 @@ export async function POST(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "editor") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -64,6 +68,9 @@ export async function DELETE(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "editor") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);

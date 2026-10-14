@@ -2,13 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { initDb, BookingsRepo } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { sendCourseResponse, sendUserConfirmation } from "@/lib/email";
+import { sanitizePlainText } from "@/lib/sanitize";
 
-// POST /api/iscrizioni/email — Invia o reinvia email a un utente registrato (Riservato ad Admin)
+// POST /api/iscrizioni/email — Invia o reinvia email a un utente registrato (Riservato a Segreteria e Superadmin)
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Operazione consentita solo a Segreteria e Amministratore" }, { status: 403 });
     }
 
     await initDb();

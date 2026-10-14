@@ -26,6 +26,9 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "editor") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
+    }
 
     await initDb();
     const body = await req.json();
@@ -65,6 +68,9 @@ export async function PUT(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "editor") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
+    }
 
     await initDb();
     const body = await req.json();
@@ -102,6 +108,9 @@ export async function DELETE(req: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "editor") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
     }
 
     await initDb();

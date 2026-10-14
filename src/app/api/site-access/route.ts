@@ -1,8 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSiteAccessToken, DEFAULT_SITE_PASSWORD, SITE_ACCESS_COOKIE } from "@/lib/auth";
+import { rateLimiter, getClientIp } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const rateCheck = rateLimiter.check(`site-access:${clientIp}`, 10, 15 * 60); // 10 tentativi ogni 15 minuti
+
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `Troppi tentativi errati. Riprova tra ${Math.ceil(rateCheck.resetInSeconds / 60)} minuti.`,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateCheck.resetInSeconds),
+          },
+        }
+      );
+    }
+
     const body = await req.json();
     const { password } = body;
 
@@ -11,6 +29,9 @@ export async function POST(req: NextRequest) {
     if (!password || String(password).trim() !== validPassword) {
       return NextResponse.json({ error: "Password di accesso non corretta" }, { status: 401 });
     }
+
+    // Accesso riuscito: resetta il rate limiter
+    rateLimiter.reset(`site-access:${clientIp}`);
 
     const token = await createSiteAccessToken();
 

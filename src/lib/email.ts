@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { SITE_URL } from "@/lib/config";
+import { escapeHtml } from "@/lib/sanitize";
 
 export interface BookingNotificationData {
   type: "corso" | "tesseramento";
@@ -140,8 +141,15 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
 export async function sendBookingNotification(data: BookingNotificationData) {
   const notificationRecipient = process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com";
   const isCorso = data.type === "corso";
+  const safeName = escapeHtml(data.name);
+  const safeItemTitle = escapeHtml(data.itemTitle);
+  const safeEmail = escapeHtml(data.email);
+  const safePhone = data.phone ? escapeHtml(data.phone) : "";
+  const safeExperience = data.experience ? escapeHtml(data.experience) : "";
+  const safeMessage = data.message ? escapeHtml(data.message) : "";
+
   const subjectPrefix = isCorso ? "Nuova Iscrizione Corso" : "Nuova Richiesta Tesseramento Socio";
-  const subject = `${subjectPrefix}: ${data.name} — ${data.itemTitle}`;
+  const subject = `${subjectPrefix}: ${safeName} — ${safeItemTitle}`;
 
   const cleanPhone = data.phone ? data.phone.replace(/[^0-9+]/g, "") : "";
   const waLink = cleanPhone
@@ -181,7 +189,7 @@ export async function sendBookingNotification(data: BookingNotificationData) {
     </div>
     <div class="body">
       <h2 style="font-size: 16px; margin: 0 0 16px; color: #0a1c2a;">
-        Ricevuta nuova richiesta da <strong>${data.name}</strong>
+        Ricevuta nuova richiesta da <strong>${safeName}</strong>
       </h2>
 
       <div class="row">
@@ -190,31 +198,31 @@ export async function sendBookingNotification(data: BookingNotificationData) {
       </div>
       <div class="row">
         <div class="label">${isCorso ? "Corso Scelto" : "Categoria Socio"}</div>
-        <div class="value" style="color: #1b5b80; font-weight: bold;">${data.itemTitle}</div>
+        <div class="value" style="color: #1b5b80; font-weight: bold;">${safeItemTitle}</div>
       </div>
       <div class="row">
         <div class="label">Nominativo</div>
-        <div class="value">${data.name}</div>
+        <div class="value">${safeName}</div>
       </div>
       <div class="row">
         <div class="label">Email</div>
-        <div class="value"><a href="mailto:${data.email}">${data.email}</a></div>
+        <div class="value"><a href="mailto:${safeEmail}">${safeEmail}</a></div>
       </div>
       ${
-        data.phone
+        safePhone
           ? `
       <div class="row">
         <div class="label">Telefono</div>
-        <div class="value"><a href="tel:${data.phone}">${data.phone}</a></div>
+        <div class="value"><a href="tel:${safePhone}">${safePhone}</a></div>
       </div>`
           : ""
       }
       ${
-        data.experience
+        safeExperience
           ? `
       <div class="row">
         <div class="label">Esperienza</div>
-        <div class="value">${data.experience}</div>
+        <div class="value">${safeExperience}</div>
       </div>`
           : ""
       }
@@ -224,11 +232,11 @@ export async function sendBookingNotification(data: BookingNotificationData) {
       </div>
 
       ${
-        data.message
+        safeMessage
           ? `
       <div style="margin-top: 16px;">
         <span style="font-size: 11px; text-transform: uppercase; font-weight: bold; color: #64748b;">Messaggio / Note:</span>
-        <div class="note-box">${data.message}</div>
+        <div class="note-box">${safeMessage}</div>
       </div>`
           : ""
       }
@@ -266,8 +274,15 @@ export async function sendBookingNotification(data: BookingNotificationData) {
  */
 export async function sendUserConfirmation(data: BookingNotificationData & { dataLuogoNascita?: string; codiceFiscale?: string }) {
   const isCorso = data.type === "corso";
+  const safeName = escapeHtml(data.name);
+  const safeItemTitle = escapeHtml(data.itemTitle);
+  const safeEmail = escapeHtml(data.email);
+  const safePhone = data.phone ? escapeHtml(data.phone) : "";
+  const safeDataLuogoNascita = data.dataLuogoNascita ? escapeHtml(data.dataLuogoNascita) : "";
+  const safeMessage = data.message ? escapeHtml(data.message) : "";
+
   const subject = isCorso
-    ? `Conferma ricezione richiesta: ${data.itemTitle} | Vela Latina Monte di Procida`
+    ? `Conferma ricezione richiesta: ${safeItemTitle} | Vela Latina Monte di Procida`
     : `Domanda di Tesseramento Ricevuta (In attesa di pagamento) | Vela Latina Monte di Procida`;
 
   const formattedDate = new Date(data.createdAt).toLocaleString("it-IT", {
@@ -335,12 +350,12 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
       <span class="badge ${isCorso ? "badge-ok" : "badge-pending"}">
         ${isCorso ? "Richiesta Ricevuta" : "In Attesa di Pagamento Quota"}
       </span>
-      <h2 class="greeting">Gentile ${data.name},</h2>
+      <h2 class="greeting">Gentile ${safeName},</h2>
       <p class="intro">
         ${
           isCorso
-            ? `Abbiamo registrato con successo la tua richiesta di partecipazione per <strong>"${data.itemTitle}"</strong>. Grazie per l'interesse dimostrato verso la nostra associazione!`
-            : `Abbiamo ricevuto la tua domanda di tesseramento come <strong>"${data.itemTitle}"</strong> per l'Associazione Vela Latina Monte di Procida APS. Come previsto dallo statuto, l'iscrizione formale al <strong>Libro Soci Ufficiale</strong> e l'assegnazione del <strong>Numero di Tessera</strong> si perfezionano a seguito del versamento della quota associativa.`
+            ? `Abbiamo registrato con successo la tua richiesta di partecipazione per <strong>"${safeItemTitle}"</strong>. Grazie per l'interesse dimostrato verso la nostra associazione!`
+            : `Abbiamo ricevuto la tua domanda di tesseramento come <strong>"${safeItemTitle}"</strong> per l'Associazione Vela Latina Monte di Procida APS. Come previsto dallo statuto, l'iscrizione formale al <strong>Libro Soci Ufficiale</strong> e l'assegnazione del <strong>Numero di Tessera</strong> si perfezionano a seguito del versamento della quota associativa.`
         }
       </p>
 
@@ -351,7 +366,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
         <div class="payment-title">Istruzioni per il Versamento della Quota Sociale</div>
         <div class="payment-item"><strong>Beneficiario:</strong> Associazione Vela Latina Monte di Procida APS</div>
         <div class="payment-item"><strong>Quota associativa annuale:</strong> € 50,00</div>
-        <div class="payment-item"><strong>Causale:</strong> Quota Sociale 2026 - ${data.name}</div>
+        <div class="payment-item"><strong>Causale:</strong> Quota Sociale 2026 - ${safeName}</div>
         <div class="payment-item"><strong>Coordinate IBAN:</strong><br>
           <span class="iban-code">${ibanCode}</span>
         </div>
@@ -366,7 +381,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
         <div class="summary-title">Riepilogo dei dettagli inseriti</div>
         <div class="summary-row">
           <div class="summary-label">Attività / Voce</div>
-          <div class="summary-value" style="color: #1b5b80;">${data.itemTitle}</div>
+          <div class="summary-value" style="color: #1b5b80;">${safeItemTitle}</div>
         </div>
         <div class="summary-row">
           <div class="summary-label">Tipologia</div>
@@ -374,27 +389,27 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
         </div>
         <div class="summary-row">
           <div class="summary-label">Nome e Cognome</div>
-          <div class="summary-value">${data.name}</div>
+          <div class="summary-value">${safeName}</div>
         </div>
         ${
-          data.dataLuogoNascita
+          safeDataLuogoNascita
             ? `
         <div class="summary-row">
           <div class="summary-label">Nascita</div>
-          <div class="summary-value">${data.dataLuogoNascita}</div>
+          <div class="summary-value">${safeDataLuogoNascita}</div>
         </div>`
             : ""
         }
         <div class="summary-row">
           <div class="summary-label">Email</div>
-          <div class="summary-value">${data.email}</div>
+          <div class="summary-value">${safeEmail}</div>
         </div>
         ${
-          data.phone
+          safePhone
             ? `
         <div class="summary-row">
           <div class="summary-label">Telefono</div>
-          <div class="summary-value">${data.phone}</div>
+          <div class="summary-value">${safePhone}</div>
         </div>`
             : ""
         }
@@ -403,12 +418,12 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
           <div class="summary-value">${formattedDate}</div>
         </div>
         ${
-          data.message
+          safeMessage
             ? `
         <div class="summary-row" style="flex-direction: column; gap: 4px; padding-top: 10px;">
           <div class="summary-label">Messaggio / Note:</div>
           <div style="font-size: 12px; color: #475569; font-style: italic; background: #ffffff; padding: 8px 12px; border-radius: 4px; border: 1px solid #e2e8f0; margin-top: 4px;">
-            ${data.message}
+            ${safeMessage}
           </div>
         </div>`
             : ""
@@ -472,7 +487,11 @@ export async function sendMembershipApprovedNotification(params: {
   metodoPagamento?: string;
   importo?: number | string;
 }) {
-  const subject = `Benvenuto/a nel Libro Soci! Tessera #${params.numeroTessera || ""} (${params.anno}) | Vela Latina Monte di Procida`;
+  const safeNome = escapeHtml(params.nome);
+  const safeNumeroTessera = params.numeroTessera ? escapeHtml(String(params.numeroTessera)) : "";
+  const safeTipologia = params.tipologia ? escapeHtml(params.tipologia) : "Socio Ordinario";
+
+  const subject = `Benvenuto/a nel Libro Soci! Tessera #${safeNumeroTessera || ""} (${params.anno}) | Vela Latina Monte di Procida`;
 
   const html = `
 <!DOCTYPE html>
@@ -508,22 +527,22 @@ export async function sendMembershipApprovedNotification(params: {
     </div>
     <div class="body">
       <span class="badge-success">Pagamento Confermato & Iscritto</span>
-      <h2 style="font-size: 20px; margin: 0 0 12px 0;">Benvenuto/a a bordo, ${params.nome}!</h2>
+      <h2 style="font-size: 20px; margin: 0 0 12px 0;">Benvenuto/a a bordo, ${safeNome}!</h2>
       <p style="font-size: 14px; line-height: 1.6; color: #334155;">
         Con grande piacere ti comunichiamo che il pagamento della tua quota associativa è stato registrato con successo. Sei ufficialmente iscritto/a al <strong>Libro Soci dell'Associazione Vela Latina Monte di Procida</strong> per l'anno sociale <strong>${params.anno}</strong>.
       </p>
 
       <div class="tessera-card">
         <div class="tessera-sub">Tessera Socio Ordinario · Anno ${params.anno}</div>
-        <div class="tessera-num">#${params.numeroTessera || "---"}</div>
-        <div class="tessera-name">${params.nome}</div>
+        <div class="tessera-num">#${safeNumeroTessera || "---"}</div>
+        <div class="tessera-name">${safeNome}</div>
         <div style="font-size: 11px; color: #94a3b8; margin-top: 8px;">Porticciolo di Acquamorta · Campi Flegrei</div>
       </div>
 
       <table class="info-table">
         <tr>
           <td class="info-label">Numero Tessera</td>
-          <td class="info-val">#${params.numeroTessera || "Assegnata"}</td>
+          <td class="info-val">#${safeNumeroTessera || "Assegnata"}</td>
         </tr>
         <tr>
           <td class="info-label">Anno Sociale</td>
@@ -531,7 +550,7 @@ export async function sendMembershipApprovedNotification(params: {
         </tr>
         <tr>
           <td class="info-label">Qualifica Socio</td>
-          <td class="info-val">${params.tipologia || "Socio Ordinario"}</td>
+          <td class="info-val">${safeTipologia}</td>
         </tr>
         <tr>
           <td class="info-label">Metodo Pagamento Registrato</td>
@@ -583,7 +602,13 @@ export async function sendCourseResponse(params: {
   dataLezione?: string;
   luogo?: string;
 }) {
-  const subject = `Iscrizione Corso: ${params.corso} | Vela Latina Monte di Procida`;
+  const safeNome = escapeHtml(params.nome);
+  const safeCorso = escapeHtml(params.corso);
+  const safeMessaggio = params.messaggioPersonalizzato ? escapeHtml(params.messaggioPersonalizzato).replace(/\n/g, "<br>") : "";
+  const safeDataLezione = params.dataLezione ? escapeHtml(params.dataLezione) : "";
+  const safeLuogo = params.luogo ? escapeHtml(params.luogo) : "";
+
+  const subject = `Iscrizione Corso: ${safeCorso} | Vela Latina Monte di Procida`;
   const html = `
 <!DOCTYPE html>
 <html>
@@ -611,16 +636,16 @@ export async function sendCourseResponse(params: {
       <h1>Scuola di Mare & Marineria Tradizionale</h1>
     </div>
     <div class="body">
-      <h2 class="greeting">Gentile ${params.nome},</h2>
+      <h2 class="greeting">Gentile ${safeNome},</h2>
       <p class="intro">
-        In merito alla tua richiesta di partecipazione per il <strong>${params.corso}</strong>, la segreteria dell'Associazione Vela Latina Monte di Procida ha il piacere di confermarti la presa in carico della tua domanda.
+        In merito alla tua richiesta di partecipazione per il <strong>${safeCorso}</strong>, la segreteria dell'Associazione Vela Latina Monte di Procida ha il piacere di confermarti la presa in carico della tua domanda.
       </p>
 
       ${
-        params.messaggioPersonalizzato
+        safeMessaggio
           ? `<div class="message-box">
                <strong style="display: block; margin-bottom: 8px; color: #0a1c2a; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Indicazioni della Segreteria / Istruttori:</strong>
-               ${params.messaggioPersonalizzato.replace(/\n/g, "<br>")}
+               ${safeMessaggio}
              </div>`
           : `<div class="highlight-box">
                I nostri istruttori stanno coordinando il gruppo e il calendario delle prossime uscite in mare al porto di Acquamorta. Ti contatteremo a breve per concordare giorno e orario della prima sessione.
@@ -628,10 +653,10 @@ export async function sendCourseResponse(params: {
       }
 
       ${
-        params.dataLezione
+        safeDataLezione
           ? `<div style="background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; font-size: 13px;">
-               <strong>Prima Uscita / Ritrovo:</strong> ${params.dataLezione}<br>
-               <strong>Punto di Ritrovo:</strong> ${params.luogo || "Porticciolo di Acquamorta, Banchina Pescatori (Monte di Procida)"}
+               <strong>Prima Uscita / Ritrovo:</strong> ${safeDataLezione}<br>
+               <strong>Punto di Ritrovo:</strong> ${safeLuogo || "Porticciolo di Acquamorta, Banchina Pescatori (Monte di Procida)"}
              </div>`
           : ""
       }

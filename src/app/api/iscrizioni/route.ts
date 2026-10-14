@@ -2,13 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { initDb, BookingsRepo } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { sendBookingNotification, sendUserConfirmation } from "@/lib/email";
+import { rateLimiter, getClientIp } from "@/lib/rateLimit";
+import { sanitizePlainText, sanitizeEmail, isValidEmail } from "@/lib/sanitize";
 
-// GET /api/iscrizioni — Elenco richieste (riservato ad Admin)
+// GET /api/iscrizioni — Elenco richieste (riservato ad Admin, Segreteria e Istruttori)
 export async function GET() {
   try {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "istruttore") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
     }
 
     await initDb();
@@ -20,22 +25,50 @@ export async function GET() {
   }
 }
 
-// POST /api/iscrizioni — Nuova iscrizione corso o domanda tesseramento (Pubblico)
+// POST /api/iscrizioni — Nuova iscrizione corso o domanda tesseramento (Pubblico con rate limiting)
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const rateCheck = rateLimiter.check(`iscrizione:${clientIp}`, 10, 10 * 60); // 10 invii ogni 10 minuti
+
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Troppe richieste inviate in breve tempo. Per favore riprova più tardi." },
+        { status: 429 }
+      );
+    }
+
     await initDb();
     const body = await req.json();
 
-    const { type, name, email, phone, itemTitle, experience, message, dataLuogoNascita, codiceFiscale } = body;
+    const rawName = body.name;
+    const rawEmail = body.email;
+    const rawItemTitle = body.itemTitle;
 
-    if (!name || !email || !itemTitle) {
+    if (!rawName || !rawEmail || !rawItemTitle) {
       return NextResponse.json(
         { error: "Campi obbligatori mancanti: Nome, Email e Corso/Tipologia sono richiesti." },
         { status: 400 }
       );
     }
 
-    const isTesseramento = type === "tesseramento";
+    const cleanEmail = sanitizeEmail(rawEmail);
+    if (!isValidEmail(cleanEmail)) {
+      return NextResponse.json(
+        { error: "Indirizzo email non valido. Verifica il formato inserito." },
+        { status: 400 }
+      );
+    }
+
+    const cleanName = sanitizePlainText(rawName, 100);
+    const cleanItemTitle = sanitizePlainText(rawItemTitle, 150);
+    const cleanPhone = body.phone ? sanitizePlainText(body.phone, 30) : undefined;
+    const cleanExperience = body.experience ? sanitizePlainText(body.experience, 100) : undefined;
+    const cleanMessage = body.message ? sanitizePlainText(body.message, 1000) : undefined;
+    const cleanDataNascita = body.dataLuogoNascita ? sanitizePlainText(body.dataLuogoNascita, 150) : undefined;
+    const cleanCodiceFiscale = body.codiceFiscale ? sanitizePlainText(body.codiceFiscale, 16).toUpperCase() : undefined;
+
+    const isTesseramento = body.type === "tesseramento";
     const initialStatus = isTesseramento ? "in_attesa_pagamento" : "nuova";
 
     // Salva nel database (con fallback resiliente se il db temporaneamente non risponde)
@@ -43,14 +76,14 @@ export async function POST(req: NextRequest) {
     try {
       booking = await BookingsRepo.create({
         type: isTesseramento ? "tesseramento" : "corso",
-        name: String(name).trim(),
-        email: String(email).trim().toLowerCase(),
-        phone: phone ? String(phone).trim() : undefined,
-        itemTitle: String(itemTitle).trim(),
-        experience: experience ? String(experience).trim() : undefined,
-        message: message ? String(message).trim() : undefined,
-        dataLuogoNascita: dataLuogoNascita ? String(dataLuogoNascita).trim() : undefined,
-        codiceFiscale: codiceFiscale ? String(codiceFiscale).trim().toUpperCase() : undefined,
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        itemTitle: cleanItemTitle,
+        experience: cleanExperience,
+        message: cleanMessage,
+        dataLuogoNascita: cleanDataNascita,
+        codiceFiscale: cleanCodiceFiscale,
         status: initialStatus,
       });
     } catch (dbErr) {
@@ -59,14 +92,14 @@ export async function POST(req: NextRequest) {
       booking = {
         id: `req-${Date.now()}`,
         type: isTesseramento ? "tesseramento" : "corso",
-        name: String(name).trim(),
-        email: String(email).trim().toLowerCase(),
-        phone: phone ? String(phone).trim() : undefined,
-        itemTitle: String(itemTitle).trim(),
-        experience: experience ? String(experience).trim() : undefined,
-        message: message ? String(message).trim() : undefined,
-        dataLuogoNascita: dataLuogoNascita ? String(dataLuogoNascita).trim() : undefined,
-        codiceFiscale: codiceFiscale ? String(codiceFiscale).trim().toUpperCase() : undefined,
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        itemTitle: cleanItemTitle,
+        experience: cleanExperience,
+        message: cleanMessage,
+        dataLuogoNascita: cleanDataNascita,
+        codiceFiscale: cleanCodiceFiscale,
         status: initialStatus,
         createdAt: now,
         updatedAt: now,
@@ -124,12 +157,15 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PATCH /api/iscrizioni — Aggiorna stato (riservato ad Admin)
+// PATCH /api/iscrizioni — Aggiorna stato (riservato ad Admin, Segreteria e Istruttori)
 export async function PATCH(req: NextRequest) {
   try {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "istruttore") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
     }
 
     await initDb();
@@ -152,12 +188,15 @@ export async function PATCH(req: NextRequest) {
   }
 }
 
-// DELETE /api/iscrizioni — Cancella richiesta (riservato ad Admin)
+// DELETE /api/iscrizioni — Cancella richiesta (riservato ad Admin e Segreteria)
 export async function DELETE(req: NextRequest) {
   try {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Eliminazione riservata a Segreteria e Amministratore" }, { status: 403 });
     }
 
     await initDb();

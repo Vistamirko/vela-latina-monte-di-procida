@@ -10,6 +10,9 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "Accesso non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Operazione consentita solo a Segreteria e Amministratore" }, { status: 403 });
+    }
 
     await initDb();
     const body = await req.json();

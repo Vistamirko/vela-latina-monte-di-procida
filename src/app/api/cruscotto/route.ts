@@ -9,6 +9,9 @@ export async function GET() {
     if (!user) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
     }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria") {
+      return NextResponse.json({ error: "Accesso riservato alla Segreteria e Superadmin" }, { status: 403 });
+    }
 
     const kpi = await CruscottoRepo.getKPI();
 
