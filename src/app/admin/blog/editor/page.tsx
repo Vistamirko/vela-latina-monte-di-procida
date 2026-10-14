@@ -28,6 +28,18 @@ function BlogEditorContent() {
   });
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((d) => {
+        const role = d.user?.role;
+        if (!d.authenticated || (role !== "superadmin" && role !== "admin" && role !== "segreteria" && role !== "editor")) {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => router.replace("/admin"));
+  }, [router]);
+
+  useEffect(() => {
     if (postId) {
       fetch("/api/blog?all=true")
         .then((res) => res.json())

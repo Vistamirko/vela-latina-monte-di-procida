@@ -32,6 +32,18 @@ function CourseEditorContent() {
   });
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((d) => {
+        const role = d.user?.role;
+        if (!d.authenticated || (role !== "superadmin" && role !== "admin" && role !== "segreteria" && role !== "istruttore")) {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => router.replace("/admin"));
+  }, [router]);
+
+  useEffect(() => {
     if (courseId) {
       fetch("/api/corsi-calendar?all=true")
         .then((res) => res.json())

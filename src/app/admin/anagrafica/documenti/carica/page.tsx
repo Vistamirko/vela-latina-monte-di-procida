@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import { DocumentoIstituzionale } from "@/lib/db/types";
@@ -17,6 +17,17 @@ import {
 
 function CaricaDocumentoContent() {
   const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((d) => {
+        if (!d.authenticated || d.user?.role !== "superadmin") {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => router.replace("/admin"));
+  }, [router]);
 
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);

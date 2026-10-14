@@ -32,6 +32,18 @@ function SocioEditorContent() {
   });
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((d) => {
+        const role = d.user?.role;
+        if (!d.authenticated || (role !== "superadmin" && role !== "admin" && role !== "segreteria")) {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => router.replace("/admin"));
+  }, [router]);
+
+  useEffect(() => {
     if (socioId) {
       fetch("/api/soci")
         .then((res) => res.json())

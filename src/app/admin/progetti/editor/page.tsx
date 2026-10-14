@@ -53,6 +53,18 @@ function ProjectEditorContent() {
   });
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((d) => {
+        const role = d.user?.role;
+        if (!d.authenticated || (role !== "superadmin" && role !== "admin" && role !== "segreteria" && role !== "editor")) {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => router.replace("/admin"));
+  }, [router]);
+
+  useEffect(() => {
     if (projectId) {
       fetch("/api/progetti?all=true")
         .then((res) => res.json())

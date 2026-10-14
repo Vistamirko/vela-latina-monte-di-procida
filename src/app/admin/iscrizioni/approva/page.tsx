@@ -35,6 +35,18 @@ function ApprovaIscrizioneContent() {
   const [note, setNote] = useState<string>("");
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((d) => {
+        const role = d.user?.role;
+        if (!d.authenticated || (role !== "superadmin" && role !== "admin" && role !== "segreteria")) {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => router.replace("/admin"));
+  }, [router]);
+
+  useEffect(() => {
     if (!bookingId) {
       setLoading(false);
       setNotification({ type: "error", message: "ID richiesta non specificato" });
