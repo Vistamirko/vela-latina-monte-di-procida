@@ -65,25 +65,25 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
   };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-4 sm:space-y-8 animate-fadeIn">
       {/* Hero Banner Cruscotto */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[#0a1c2a] via-[#102a3e] to-[#0a1c2a] text-white p-6 sm:p-8 rounded-xl shadow-xl border border-slate-800">
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#0a1c2a] via-[#102a3e] to-[#0a1c2a] text-white p-4 sm:p-8 rounded-xl shadow-md border border-slate-800">
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-[#c99a45]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c99a45]/20 text-[#e6b763] text-xs font-mono font-semibold uppercase tracking-wider mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
-              Associazione Vela Latina Monte di Procida
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#c99a45]/20 text-[#e6b763] text-[10px] sm:text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+              <Sparkles className="w-3 h-3" />
+              <span>Associazione Vela Latina MdP</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+            <h1 className="text-xl sm:text-3xl font-serif font-bold text-white tracking-tight">
               Cruscotto Operativo & Piano Strategico 2026
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm mt-2 max-w-2xl leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-sm mt-1 sm:mt-2 max-w-2xl leading-relaxed line-clamp-2 sm:line-clamp-none">
               Quadro sinottico integrato per la gestione della flotta storica, coordinamento delle manutenzioni, portafoglio progetti, inventario, canali digitali e fundraising.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="hidden md:flex flex-wrap items-center gap-2">
             <button
               onClick={() => onNavigateTab("corsi")}
               className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer border border-white/20"
@@ -124,18 +124,18 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4">
         {/* Progetti */}
         <div
           onClick={() => onNavigateTab("attivita")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-[#c99a45] transition-all hover:shadow-md cursor-pointer group"
+          className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-[#c99a45] transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Progetti</span>
-            <Layers className="w-4 h-4 text-[#0a1c2a] group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Progetti</span>
+            <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0a1c2a] group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-[#0a1c2a]">{kpi.totaleProgetti}</div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1 font-mono">
+          <div className="text-xl sm:text-2xl font-bold font-serif text-[#0a1c2a]">{kpi.totaleProgetti}</div>
+          <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono">
             <span>Portfolio 2026</span>
           </div>
         </div>
@@ -143,14 +143,14 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
         {/* Attività Aperte */}
         <div
           onClick={() => onNavigateTab("attivita")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-amber-400 transition-all hover:shadow-md cursor-pointer group"
+          className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-amber-400 transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Attività</span>
-            <CheckSquare className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Attività</span>
+            <CheckSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-amber-700">{kpi.attivitaAperte}</div>
-          <div className="text-[11px] text-amber-600 mt-1 flex items-center gap-1 font-mono font-semibold">
+          <div className="text-xl sm:text-2xl font-bold font-serif text-amber-700">{kpi.attivitaAperte}</div>
+          <div className="text-[10px] sm:text-[11px] text-amber-600 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono font-semibold">
             <span>In lavorazione</span>
           </div>
         </div>
@@ -158,14 +158,14 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
         {/* Manutenzioni */}
         <div
           onClick={() => onNavigateTab("barche")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-red-400 transition-all hover:shadow-md cursor-pointer group"
+          className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-red-400 transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Manutenzioni</span>
-            <Wrench className="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Manutenzioni</span>
+            <Wrench className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-red-700">{kpi.manutenzioniTotali}</div>
-          <div className="text-[11px] text-red-600 mt-1 flex items-center gap-1 font-mono font-semibold">
+          <div className="text-xl sm:text-2xl font-bold font-serif text-red-700">{kpi.manutenzioniTotali}</div>
+          <div className="text-[10px] sm:text-[11px] text-red-600 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono font-semibold">
             <span>{kpi.manutenzioniDaFare} da eseguire</span>
           </div>
         </div>
@@ -173,14 +173,14 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
         {/* Eventi */}
         <div
           onClick={() => onNavigateTab("eventi")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-blue-400 transition-all hover:shadow-md cursor-pointer group"
+          className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-blue-400 transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Eventi</span>
-            <Calendar className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Eventi</span>
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-blue-900">{kpi.eventiProgrammati}</div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1 font-mono">
+          <div className="text-xl sm:text-2xl font-bold font-serif text-blue-900">{kpi.eventiProgrammati}</div>
+          <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono">
             <span>Regate e raduni</span>
           </div>
         </div>
@@ -188,14 +188,14 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
         {/* Acquisti */}
         <div
           onClick={() => onNavigateTab("inventario")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-purple-400 transition-all hover:shadow-md cursor-pointer group"
+          className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-purple-400 transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Acquisti</span>
-            <ShoppingCart className="w-4 h-4 text-purple-600 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Acquisti</span>
+            <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-purple-900">{kpi.acquistiDaFare}</div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1 font-mono">
+          <div className="text-xl sm:text-2xl font-bold font-serif text-purple-900">{kpi.acquistiDaFare}</div>
+          <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono">
             <span>Da ordinare</span>
           </div>
         </div>
@@ -203,14 +203,14 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
         {/* Inventario */}
         <div
           onClick={() => onNavigateTab("inventario")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-emerald-400 transition-all hover:shadow-md cursor-pointer group"
+          className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-emerald-400 transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Inventario</span>
-            <Boxes className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Inventario</span>
+            <Boxes className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-emerald-900">{kpi.inventarioTotale}</div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1 font-mono">
+          <div className="text-xl sm:text-2xl font-bold font-serif text-emerald-900">{kpi.inventarioTotale}</div>
+          <div className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono">
             <span>Beni censiti</span>
           </div>
         </div>
@@ -218,15 +218,15 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
         {/* Account da rivedere */}
         <div
           onClick={() => onNavigateTab("account")}
-          className="bg-white p-4 rounded-xl border border-slate-200 hover:border-amber-400 transition-all hover:shadow-md cursor-pointer group col-span-2 sm:col-span-1"
+          className="col-span-2 sm:col-span-1 bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-200 hover:border-rose-400 transition-all hover:shadow-md cursor-pointer group"
         >
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">Account</span>
-            <Users2 className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold">Account</span>
+            <Users2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold font-serif text-amber-700">{kpi.accountDaVerificare}</div>
-          <div className="text-[11px] text-amber-600 mt-1 flex items-center gap-1 font-mono font-semibold">
-            <span>Da verificare</span>
+          <div className="text-xl sm:text-2xl font-bold font-serif text-rose-700">{kpi.accountDaVerificare}</div>
+          <div className="text-[10px] sm:text-[11px] text-rose-600 mt-0.5 sm:mt-1 flex items-center gap-1 font-mono font-semibold">
+            <span>Da revisionare</span>
           </div>
         </div>
       </div>

@@ -39,6 +39,7 @@ import {
   MapPin,
   Award,
   CreditCard,
+  ChevronDown,
 } from "lucide-react";
 import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione } from "@/lib/db/types";
 import LibroSociManager from "@/components/admin/LibroSociManager";
@@ -389,10 +390,10 @@ function AdminDashboardContent() {
   return (
     <div className="min-h-screen bg-[#fbfaf6] text-[#0a1c2a] selection:bg-[#0a1c2a] selection:text-white">
       {/* Top Header Navbar */}
-      <header className="bg-white border-b border-slate-300 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="relative w-7 h-7 sm:w-8 sm:h-8 shrink-0">
+      <header className="bg-white border-b border-slate-300 sticky top-0 z-30 shadow-2xs">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="relative w-6 h-6 sm:w-8 sm:h-8 shrink-0">
               <Image
                 src="/images/stemma-vela-latina.jpg"
                 alt="Stemma"
@@ -401,17 +402,17 @@ function AdminDashboardContent() {
               />
             </div>
             <div className="min-w-0">
-              <span className="font-['Cinzel'] text-[11px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] font-bold text-[#0a1c2a] block leading-tight truncate">
-                Vela Latina Monte di Procida
+              <span className="font-['Cinzel'] text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.2em] font-bold text-[#0a1c2a] block leading-tight truncate">
+                Vela Latina MdP
               </span>
-              <span className="text-[8px] sm:text-[9px] font-mono tracking-wider sm:tracking-widest uppercase text-slate-700 font-semibold block truncate">
-                Pannello API & Gestione
+              <span className="text-[8px] sm:text-[9px] font-mono tracking-wider uppercase text-slate-500 font-semibold block truncate">
+                Pannello Amministrazione
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-            <div className="hidden md:flex items-center gap-2 text-xs font-mono text-slate-700 bg-[#fbfaf6] px-3 py-1.5 border border-slate-300">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-slate-700 bg-[#fbfaf6] px-3 py-1.5 border border-slate-300">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="truncate max-w-[140px]">{currentUser?.name || currentUser?.email}</span>
             </div>
@@ -419,25 +420,246 @@ function AdminDashboardContent() {
             <Link
               href="/"
               target="_blank"
-              className="text-[11px] sm:text-xs font-mono text-slate-700 hover:text-[#0a1c2a] flex items-center gap-1 font-semibold px-2 py-1.5 border border-transparent hover:border-slate-300 transition-colors"
+              className="text-[11px] sm:text-xs font-mono text-slate-700 hover:text-[#0a1c2a] flex items-center gap-1 font-semibold px-2 py-1 sm:py-1.5 border border-slate-200 hover:border-slate-400 bg-slate-50 rounded-xs transition-colors"
+              title="Vedi Sito Pubblico"
             >
-              <span className="hidden xs:inline">Sito</span>
               <ExternalLink className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Sito</span>
             </Link>
 
             <button
               onClick={handleLogout}
-              className="px-2.5 sm:px-3 py-1.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-700 border border-slate-300 text-[11px] sm:text-xs font-mono font-semibold flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer"
+              className="px-2 sm:px-3 py-1 sm:py-1.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-700 border border-slate-300 text-[11px] sm:text-xs font-mono font-semibold flex items-center gap-1 transition-colors cursor-pointer rounded-xs"
+              title="Esci dall'Amministrazione"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">Esci</span>
+              <span className="hidden sm:inline">Esci</span>
             </button>
           </div>
         </div>
 
-        {/* Tab Navigation Organizzata in Due Livelli Visibili */}
-        <div className="border-t border-slate-200 bg-slate-50/70">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-col gap-2">
+        {/* VISTA MOBILE (< md): Selettore Compatto + Scorrimento Orizzontale a 1 Riga (~70px totali) */}
+        <div className="md:hidden border-t border-slate-200 bg-slate-50/95">
+          {/* Selettore rapido a tendina */}
+          <div className="px-3 py-1.5 flex items-center gap-2 border-b border-slate-200/60">
+            <span className="text-[10px] font-mono uppercase font-bold text-slate-500 shrink-0">Sezione:</span>
+            <div className="relative flex-1">
+              <select
+                value={activeTab}
+                onChange={(e) => setActiveTab(e.target.value as any)}
+                className="w-full bg-white border border-slate-300 text-slate-900 text-xs font-mono font-bold py-1 pl-2.5 pr-7 rounded-sm appearance-none focus:outline-none focus:border-[#0a1c2a]"
+              >
+                <optgroup label="Gestionale & Operativo">
+                  <option value="cruscotto">Cruscotto Operativo</option>
+                  <option value="soci">Libro Soci ({soci.filter((s) => s.anno === 2026).length})</option>
+                  <option value="barche">Flotta & Manutenzioni</option>
+                  <option value="attivita">Attività & Task</option>
+                  <option value="inventario">Inventario & Acquisti</option>
+                  <option value="account">Account & WhatsApp</option>
+                  <option value="fundraising">Fundraising & Bandi</option>
+                  <option value="anagrafica">Anagrafica & RUNTS</option>
+                  <option value="db">Database & File JSON</option>
+                </optgroup>
+                <optgroup label="Contenuti Sito Web">
+                  <option value="richieste">Iscrizioni & Tesseramento ({bookings.length})</option>
+                  <option value="corsi">Corsi di Mare ({courses.length})</option>
+                  <option value="eventi">Eventi & Regate ({events.length})</option>
+                  <option value="progetti">Progetti 2027 ({projects.length})</option>
+                  <option value="blog">Articoli Blog ({blogPosts.length})</option>
+                </optgroup>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                <ChevronDown className="w-3.5 h-3.5" />
+              </div>
+            </div>
+          </div>
+
+          {/* Barra orizzontale scorrevole fluida (swipe touch) ad 1 sola riga */}
+          <div className="px-2.5 py-1.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
+            {/* Gestionale prioritari */}
+            <button
+              onClick={() => setActiveTab("cruscotto")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "cruscotto"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <LayoutDashboard className={`w-3 h-3 ${activeTab === "cruscotto" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Cruscotto</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("richieste")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "richieste"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Inbox className={`w-3 h-3 ${activeTab === "richieste" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Iscrizioni</span>
+              {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
+                <span className="px-1 py-0.2 text-[8px] bg-amber-600 text-white rounded-full font-bold">
+                  {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab("soci")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "soci"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Users className={`w-3 h-3 ${activeTab === "soci" ? "text-[#c99a45]" : "text-indigo-600"}`} />
+              <span>Libro Soci</span>
+              {soci.filter((s) => s.anno === 2026).length > 0 && (
+                <span className="px-1 py-0.2 text-[8px] bg-emerald-700 text-white rounded-full font-bold">
+                  {soci.filter((s) => s.anno === 2026).length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab("barche")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "barche"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Ship className={`w-3 h-3 ${activeTab === "barche" ? "text-[#c99a45]" : "text-blue-600"}`} />
+              <span>Flotta</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attivita")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "attivita"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <CheckSquare className={`w-3 h-3 ${activeTab === "attivita" ? "text-[#c99a45]" : "text-emerald-600"}`} />
+              <span>Attività</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("corsi")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "corsi"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <GraduationCap className={`w-3 h-3 ${activeTab === "corsi" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Corsi</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("eventi")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "eventi"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Calendar className={`w-3 h-3 ${activeTab === "eventi" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Eventi</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("progetti")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "progetti"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Compass className={`w-3 h-3 ${activeTab === "progetti" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Progetti</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("blog")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "blog"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <BookOpen className={`w-3 h-3 ${activeTab === "blog" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Blog</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("inventario")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "inventario"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Boxes className={`w-3 h-3 ${activeTab === "inventario" ? "text-[#c99a45]" : "text-purple-600"}`} />
+              <span>Inventario</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("account")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "account"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <MessageSquare className={`w-3 h-3 ${activeTab === "account" ? "text-[#c99a45]" : "text-emerald-500"}`} />
+              <span>Account</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("fundraising")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "fundraising"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <DollarSign className={`w-3 h-3 ${activeTab === "fundraising" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Fundraising</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("anagrafica")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "anagrafica"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Building2 className={`w-3 h-3 ${activeTab === "anagrafica" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Anagrafica</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("db")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "db"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Database className={`w-3 h-3 ${activeTab === "db" ? "text-[#c99a45]" : "text-slate-500"}`} />
+              <span>Database</span>
+            </button>
+          </div>
+        </div>
+
+        {/* VISTA DESKTOP (>= md): Tab Navigation Organizzata in Due Livelli Visibili */}
+        <div className="hidden md:block border-t border-slate-200 bg-slate-50/70">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col gap-2">
             {/* GRUPPO 1: CONTENUTI PUBBLICI DEL SITO */}
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-slate-500 mr-1.5 flex items-center gap-1 shrink-0">
@@ -656,7 +878,7 @@ function AdminDashboardContent() {
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-5 sm:py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-6">
         {/* ==============================================================
            TAB CRUSCOTTO OPERATIVO
         ============================================================== */}
@@ -693,13 +915,13 @@ function AdminDashboardContent() {
            TAB 0: ISCRIZIONI & RICHIESTE
         ============================================================== */}
         {activeTab === "richieste" && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <h2 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light">
+                <h2 className="font-['Cormorant_Garamond'] text-2xl sm:text-4xl text-[#0a1c2a] font-light leading-tight">
                   Iscrizioni Corsi & Richieste Tesseramento
                 </h2>
-                <p className="text-xs text-slate-700 font-light mt-1">
+                <p className="text-xs text-slate-700 font-light mt-1 line-clamp-2 sm:line-clamp-none">
                   Gestione candidature arrivate dal sito: contatta gli aspiranti marinai e soci su WhatsApp o via email e aggiorna lo stato.
                 </p>
               </div>
@@ -1536,13 +1758,13 @@ function AdminDashboardContent() {
            TAB 3: CALENDARIO CORSI
         ============================================================== */}
         {activeTab === "corsi" && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
-                <h2 className="font-['Cormorant_Garamond'] text-3xl sm:text-4xl text-[#0a1c2a] font-light">
+                <h2 className="font-['Cormorant_Garamond'] text-2xl sm:text-4xl text-[#0a1c2a] font-light leading-tight">
                   Calendario Corsi & Sessioni Formative
                 </h2>
-                <p className="text-xs text-slate-700 font-light mt-1">
+                <p className="text-xs text-slate-700 font-light mt-1 line-clamp-2 sm:line-clamp-none">
                   Date di avvio, orari, istruttori e disponibilità posti per Voga in Piedi, Vela Latina e Progetto ROSA.
                 </p>
               </div>
