@@ -56,7 +56,7 @@ const MUSEO_PHOTOS: MuseoPhoto[] = [
     subtitle: "Strumentazione di precisione d'epoca con custodia originale in legno massello, conservata nella collezione del museo.",
     tag: "Strumenti d'Epoca",
     aspect: "aspect-[4/3]",
-    colSpan: "lg:col-span-4",
+    colSpan: "lg:col-span-6",
   },
   {
     src: "/images/museo/apparato-radio-sailor.jpg",
@@ -64,15 +64,7 @@ const MUSEO_PHOTOS: MuseoPhoto[] = [
     subtitle: "Ricetrasmettitore marittimo vintage Sailor SP Radio Denmark con cornetta e manopole in ottone, simbolo delle comunicazioni nautiche d'epoca.",
     tag: "Apparato Radio",
     aspect: "aspect-[4/3]",
-    colSpan: "lg:col-span-4",
-  },
-  {
-    src: "/images/museo/museo-2.jpeg",
-    title: "L'Ormeggio della Flotta davanti alla Grotta di Tufo",
-    subtitle: "Janara ormeggiata lungo la banchina di Acquamorta, ai piedi della falesia di tufo dove ha sede l'Associazione.",
-    tag: "Banchina Acquamorta",
-    aspect: "aspect-[4/3]",
-    colSpan: "lg:col-span-4",
+    colSpan: "lg:col-span-6",
   },
 ];
 
