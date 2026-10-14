@@ -4,8 +4,8 @@
  * (configurabile in .env.local e nelle impostazioni Environment Variables di Vercel).
  */
 export const SITE_URL: string = (
-  process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
   "https://vela-latina-monte-di-procida.vercel.app"
 ).replace(/\/$/, "");
 
