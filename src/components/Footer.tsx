@@ -30,7 +30,7 @@ export default function Footer() {
           </span>
           <div>
             <Link href="/diventa-socio" className="text-[#b8860b] hover:text-[#0a1c2a] font-bold transition-colors flex items-center gap-1.5">
-              <span>★ Diventa Socio Online</span>
+              <span>Diventa Socio Online</span>
             </Link>
           </div>
           <div>

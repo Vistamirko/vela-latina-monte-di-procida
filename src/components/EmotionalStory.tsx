@@ -711,7 +711,7 @@ export default function EmotionalStory() {
               href="/diventa-socio"
               className="px-7 py-3.5 bg-[#b8860b] hover:bg-[#9a7009] text-white text-[11px] uppercase tracking-[0.25em] font-bold transition-all shadow-md flex items-center gap-2"
             >
-              ★ Diventa Socio Subito
+              Diventa Socio Subito
             </Link>
             <Link
               href="/corsi"

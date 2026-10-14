@@ -73,7 +73,7 @@ export default function Hero() {
             href="/diventa-socio"
             className="group px-7 py-3.5 sm:px-8 sm:py-4 bg-[#c99f5a] hover:bg-[#e0be82] text-[#061118] text-xs uppercase tracking-[0.25em] font-bold transition-all duration-300 rounded-sm shadow-2xl flex items-center gap-2.5 transform hover:-translate-y-0.5 hover:shadow-[#c99f5a]/30"
           >
-            <span>★ Diventa Socio</span>
+            <span>Diventa Socio</span>
             <span className="text-base group-hover:translate-x-1 transition-transform">
               →
             </span>

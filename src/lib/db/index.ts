@@ -1981,7 +1981,7 @@ export const AccountRepo = {
     } else {
       saved = {
         id,
-        icona: data.icona || "💬",
+        icona: data.icona || "whatsapp",
         nome: data.nome,
         funzione: data.funzione || "",
         link: data.link || "",

@@ -36,6 +36,9 @@ import {
   ShoppingCart,
   DollarSign,
   LayoutDashboard,
+  MapPin,
+  Award,
+  CreditCard,
 } from "lucide-react";
 import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione } from "@/lib/db/types";
 import LibroSociManager from "@/components/admin/LibroSociManager";
@@ -819,13 +822,23 @@ function AdminDashboardContent() {
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                           <div className="flex flex-wrap items-center gap-2.5">
                             <span
-                              className={`px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-bold ${
+                              className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-bold ${
                                 item.type === "corso"
                                   ? "bg-[#0a1c2a] text-white"
                                   : "bg-[#b8860b] text-white"
                               }`}
                             >
-                              {item.type === "corso" ? "⛵ Corso di Mare" : "🏛️ Tesseramento Socio"}
+                              {item.type === "corso" ? (
+                                <>
+                                  <GraduationCap className="w-3 h-3 text-[#c99a45]" />
+                                  Corso di Mare
+                                </>
+                              ) : (
+                                <>
+                                  <Building2 className="w-3 h-3 text-white" />
+                                  Tesseramento Socio
+                                </>
+                              )}
                             </span>
 
                             <span
@@ -892,13 +905,17 @@ function AdminDashboardContent() {
                               {item.itemTitle}
                             </div>
                             {item.dataLuogoNascita && (
-                              <div className="text-[11px] font-mono text-slate-700">
-                                🎂 Nascita: <span className="font-semibold text-slate-900">{item.dataLuogoNascita}</span>
+                              <div className="text-[11px] font-mono text-slate-700 flex items-center gap-1.5">
+                                <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
+                                <span>Nascita:</span>
+                                <span className="font-semibold text-slate-900">{item.dataLuogoNascita}</span>
                               </div>
                             )}
                             {item.codiceFiscale && (
-                              <div className="text-[11px] font-mono text-slate-700">
-                                🪪 C.F.: <span className="font-semibold text-slate-900 font-mono">{item.codiceFiscale}</span>
+                              <div className="text-[11px] font-mono text-slate-700 flex items-center gap-1.5">
+                                <CreditCard className="w-3 h-3 text-slate-400 shrink-0" />
+                                <span>C.F.:</span>
+                                <span className="font-semibold text-slate-900 font-mono">{item.codiceFiscale}</span>
                               </div>
                             )}
                             {item.experience && (
@@ -1078,8 +1095,9 @@ function AdminDashboardContent() {
                         {evt.category}
                       </span>
                       {evt.badge && (
-                        <span className="text-[10px] text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold font-mono">
-                          ★ {evt.badge}
+                        <span className="inline-flex items-center gap-1 text-[10px] text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold font-mono">
+                          <Award className="w-3 h-3 text-amber-700" />
+                          {evt.badge}
                         </span>
                       )}
                     </div>
@@ -1119,12 +1137,19 @@ function AdminDashboardContent() {
                     )}
                   </div>
 
-                  <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2 border border-slate-200 space-y-0.5">
-                    <div className="font-bold text-[#0a1c2a]">📅 {evt.date}</div>
-                    <div className="text-slate-600">📍 {evt.location}</div>
+                  <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2 border border-slate-200 space-y-1">
+                    <div className="font-bold text-[#0a1c2a] flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3 text-slate-500" />
+                      <span>{evt.date}</span>
+                    </div>
+                    <div className="text-slate-600 flex items-center gap-1.5">
+                      <MapPin className="w-3 h-3 text-slate-400" />
+                      <span>{evt.location}</span>
+                    </div>
                     {evt.result && (
-                      <div className="text-[#0a1c2a] font-semibold text-[10px] pt-1 border-t border-slate-200 mt-1">
-                        🏆 {evt.result}
+                      <div className="text-[#0a1c2a] font-semibold text-[10px] pt-1 border-t border-slate-200 mt-1 flex items-center gap-1.5">
+                        <Award className="w-3 h-3 text-[#c99a45]" />
+                        <span>{evt.result}</span>
                       </div>
                     )}
                   </div>
@@ -1234,8 +1259,9 @@ function AdminDashboardContent() {
                         </td>
                         <td className="p-4 whitespace-nowrap">
                           {evt.badge && (
-                            <span className="text-[10px] text-[#0a1c2a] font-bold block">
-                              ★ {evt.badge}
+                            <span className="inline-flex items-center gap-1 text-[10px] text-[#0a1c2a] font-bold">
+                              <Award className="w-3 h-3 text-amber-700 shrink-0" />
+                              <span>{evt.badge}</span>
                             </span>
                           )}
                           {evt.result && (
@@ -1592,7 +1618,10 @@ function AdminDashboardContent() {
                   <div className="text-[11px] font-mono text-slate-700 bg-[#fbfaf6] p-2.5 border border-slate-200 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500 text-[10px]">Inizio:</span>
-                      <span className="font-bold text-[#0a1c2a]">📅 {c.startDate}</span>
+                      <span className="font-bold text-[#0a1c2a] inline-flex items-center gap-1.5">
+                        <Calendar className="w-3 h-3 text-slate-500" />
+                        <span>{c.startDate}</span>
+                      </span>
                     </div>
                     {c.schedule && (
                       <div className="flex items-start justify-between gap-2">
@@ -1783,8 +1812,9 @@ function AdminDashboardContent() {
                         {proj.category}
                       </span>
                       {proj.badge && (
-                        <span className="text-[10px] text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold font-mono">
-                          ★ {proj.badge}
+                        <span className="inline-flex items-center gap-1 text-[10px] text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold font-mono">
+                          <Award className="w-3 h-3 text-amber-700" />
+                          {proj.badge}
                         </span>
                       )}
                     </div>
@@ -1857,17 +1887,19 @@ function AdminDashboardContent() {
                           {proj.referente.telefono && (
                             <a
                               href={`tel:${proj.referente.telefono}`}
-                              className="text-[#0a1c2a] hover:underline font-bold flex items-center gap-1"
+                              className="text-[#0a1c2a] hover:underline font-bold inline-flex items-center gap-1.5"
                             >
-                              📞 {proj.referente.telefono}
+                              <Phone className="w-3 h-3 text-slate-500" />
+                              <span>{proj.referente.telefono}</span>
                             </a>
                           )}
                           {proj.referente.email && (
                             <a
                               href={`mailto:${proj.referente.email}`}
-                              className="text-slate-600 hover:underline truncate max-w-[150px]"
+                              className="text-slate-600 hover:underline truncate max-w-[150px] inline-flex items-center gap-1.5"
                             >
-                              ✉️ {proj.referente.email}
+                              <Mail className="w-3 h-3 text-slate-500" />
+                              <span className="truncate">{proj.referente.email}</span>
                             </a>
                           )}
                         </div>
@@ -1990,8 +2022,9 @@ function AdminDashboardContent() {
                             {proj.category}
                           </span>
                           {proj.badge && (
-                            <span className="block text-[10px] text-amber-900 font-semibold">
-                              ★ {proj.badge}
+                            <span className="inline-flex items-center gap-1 text-[10px] text-amber-900 font-semibold">
+                              <Award className="w-3 h-3 text-amber-700 shrink-0" />
+                              <span>{proj.badge}</span>
                             </span>
                           )}
                         </td>

@@ -140,7 +140,7 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
 export async function sendBookingNotification(data: BookingNotificationData) {
   const notificationRecipient = process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com";
   const isCorso = data.type === "corso";
-  const subjectPrefix = isCorso ? "⛵ Nuova Iscrizione Corso" : "🏛️ Nuova Richiesta Tesseramento Socio";
+  const subjectPrefix = isCorso ? "Nuova Iscrizione Corso" : "Nuova Richiesta Tesseramento Socio";
   const subject = `${subjectPrefix}: ${data.name} — ${data.itemTitle}`;
 
   const cleanPhone = data.phone ? data.phone.replace(/[^0-9+]/g, "") : "";
@@ -333,7 +333,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
     </div>
     <div class="body">
       <span class="badge ${isCorso ? "badge-ok" : "badge-pending"}">
-        ${isCorso ? "✓ Richiesta Ricevuta" : "⏳ In Attesa di Pagamento Quota"}
+        ${isCorso ? "Richiesta Ricevuta" : "In Attesa di Pagamento Quota"}
       </span>
       <h2 class="greeting">Gentile ${data.name},</h2>
       <p class="intro">
@@ -348,7 +348,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
         !isCorso
           ? `
       <div class="payment-box">
-        <div class="payment-title">💳 Istruzioni per il Versamento della Quota Sociale</div>
+        <div class="payment-title">Istruzioni per il Versamento della Quota Sociale</div>
         <div class="payment-item"><strong>Beneficiario:</strong> Associazione Vela Latina Monte di Procida APS</div>
         <div class="payment-item"><strong>Quota associativa annuale:</strong> € 50,00</div>
         <div class="payment-item"><strong>Causale:</strong> Quota Sociale 2026 - ${data.name}</div>
@@ -416,7 +416,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
       </div>
 
       <div class="steps-box">
-        <div class="steps-title">🧭 Cosa succede adesso?</div>
+        <div class="steps-title">Cosa succede adesso?</div>
         ${
           isCorso
             ? `
@@ -472,7 +472,7 @@ export async function sendMembershipApprovedNotification(params: {
   metodoPagamento?: string;
   importo?: number | string;
 }) {
-  const subject = `🎉 Benvenuto/a nel Libro Soci! Tessera #${params.numeroTessera || ""} (${params.anno}) | Vela Latina Monte di Procida`;
+  const subject = `Benvenuto/a nel Libro Soci! Tessera #${params.numeroTessera || ""} (${params.anno}) | Vela Latina Monte di Procida`;
 
   const html = `
 <!DOCTYPE html>
@@ -507,7 +507,7 @@ export async function sendMembershipApprovedNotification(params: {
       <p>Anno Sociale ${params.anno}</p>
     </div>
     <div class="body">
-      <span class="badge-success">✓ Pagamento Confermato & Iscritto</span>
+      <span class="badge-success">Pagamento Confermato & Iscritto</span>
       <h2 style="font-size: 20px; margin: 0 0 12px 0;">Benvenuto/a a bordo, ${params.nome}!</h2>
       <p style="font-size: 14px; line-height: 1.6; color: #334155;">
         Con grande piacere ti comunichiamo che il pagamento della tua quota associativa è stato registrato con successo. Sei ufficialmente iscritto/a al <strong>Libro Soci dell'Associazione Vela Latina Monte di Procida</strong> per l'anno sociale <strong>${params.anno}</strong>.
@@ -540,7 +540,7 @@ export async function sendMembershipApprovedNotification(params: {
       </table>
 
       <div style="background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 18px; margin-top: 24px; font-size: 13px; line-height: 1.6; color: #451a03;">
-        <strong>⚓ Cosa puoi fare adesso come socio:</strong>
+        <strong>Cosa puoi fare adesso come socio:</strong>
         <ul style="margin: 8px 0 0; padding-left: 20px;">
           <li>Partecipare a tutti gli eventi, iniziative culturali, uscite in mare e attività di voga.</li>
           <li>Frequentare le attività di cantiere e navigazione a bordo dei gozzi della flotta (Janara, San Michele Arcangelo, Quandel).</li>

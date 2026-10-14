@@ -405,8 +405,9 @@ export default function DiventaSocioPage() {
                   </div>
 
                   <div className="p-3.5 bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed space-y-1">
-                    <p className="font-semibold text-[#0a1c2a]">
-                      ✓ Conferma immediata via email
+                    <p className="font-semibold text-[#0a1c2a] inline-flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Conferma immediata via email</span>
                     </p>
                     <p>
                       Inviando la domanda riceverai all&apos;istante le coordinate bancarie per il versamento della quota (€50).

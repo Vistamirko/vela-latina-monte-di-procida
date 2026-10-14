@@ -19,6 +19,8 @@ import {
   Save,
   Lock,
   Printer,
+  User,
+  Ship,
 } from "lucide-react";
 
 interface AnagraficaManagerProps {
@@ -365,7 +367,8 @@ export default function AnagraficaManager({
                     : "bg-[#fbfaf6] text-slate-600 hover:text-[#0a1c2a] border-slate-300"
                 }`}
               >
-                <span>👤 Personali Presidente</span>
+                <User className="w-3.5 h-3.5" />
+                <span>Personali Presidente</span>
                 <span className="text-[10px] opacity-75">({docCounts.presidente})</span>
               </button>
 
@@ -377,7 +380,8 @@ export default function AnagraficaManager({
                     : "bg-[#fbfaf6] text-slate-600 hover:text-[#0a1c2a] border-slate-300"
                 }`}
               >
-                <span>🏛️ RUNTS & Statuto</span>
+                <Building2 className="w-3.5 h-3.5" />
+                <span>RUNTS & Statuto</span>
                 <span className="text-[10px] opacity-75">({docCounts.runts})</span>
               </button>
 
@@ -389,7 +393,8 @@ export default function AnagraficaManager({
                     : "bg-[#fbfaf6] text-slate-600 hover:text-[#0a1c2a] border-slate-300"
                 }`}
               >
-                <span>💳 Fiscali & Bancari</span>
+                <CreditCard className="w-3.5 h-3.5" />
+                <span>Fiscali & Bancari</span>
                 <span className="text-[10px] opacity-75">({docCounts.fiscale_bancario})</span>
               </button>
 
@@ -401,7 +406,8 @@ export default function AnagraficaManager({
                     : "bg-[#fbfaf6] text-slate-600 hover:text-[#0a1c2a] border-slate-300"
                 }`}
               >
-                <span>⛵ Dossier & Master</span>
+                <Ship className="w-3.5 h-3.5" />
+                <span>Dossier & Master</span>
                 <span className="text-[10px] opacity-75">({docCounts.dossier})</span>
               </button>
             </div>

@@ -170,11 +170,11 @@ function CaricaDocumentoContent() {
                   onChange={(e) => setDocData({ ...docData, categoria: e.target.value as any })}
                   className="w-full px-3.5 py-2.5 border border-slate-300 text-sm font-mono focus:outline-none focus:border-[#0a1c2a] bg-white"
                 >
-                  <option value="runts">🏛️ RUNTS & Istituzionali</option>
-                  <option value="presidente">👤 Personali Presidente & Direttivo</option>
-                  <option value="fiscale_bancario">💳 Fiscali & Coordinate Bancarie</option>
-                  <option value="dossier">⛵ Dossier & Master Progetti</option>
-                  <option value="altro">📁 Altro / Allegato Generico</option>
+                  <option value="runts">RUNTS & Istituzionali</option>
+                  <option value="presidente">Personali Presidente & Direttivo</option>
+                  <option value="fiscale_bancario">Fiscali & Coordinate Bancarie</option>
+                  <option value="dossier">Dossier & Master Progetti</option>
+                  <option value="altro">Altro / Allegato Generico</option>
                 </select>
               </div>
 
@@ -188,7 +188,7 @@ function CaricaDocumentoContent() {
                   className="w-full px-3.5 py-2.5 border border-slate-300 text-sm font-mono focus:outline-none focus:border-[#0a1c2a] bg-white"
                 >
                   <option value="false">Documento Pubblico / Scaricabile</option>
-                  <option value="true">🔒 Riservato Amministrazione</option>
+                  <option value="true">Riservato Amministrazione</option>
                 </select>
               </div>
             </div>

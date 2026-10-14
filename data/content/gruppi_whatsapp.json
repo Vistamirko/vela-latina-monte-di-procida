@@ -1,7 +1,7 @@
 [
   {
     "id": "WA-001",
-    "icona": "📢",
+    "icona": "megaphone",
     "nome": "Bacheca Ufficiale Community",
     "funzione": "Spazio per le comunicazioni ufficiali e di interesse generale dell’Associazione. Punto di riferimento per le informazioni rivolte a tutta la Community, evitando di duplicare le stesse comunicazioni nei diversi gruppi.",
     "link": "https://chat.whatsapp.com/EPnmWysg0wsB0qy1x4fTcD",
@@ -16,7 +16,7 @@
   },
   {
     "id": "WA-002",
-    "icona": "⛵",
+    "icona": "ship",
     "nome": "Vela Latina MdP (Attività e Barche)",
     "funzione": "Gruppo dedicato alle attività di vela latina, alle imbarcazioni, alle uscite e alle iniziative direttamente collegate.",
     "link": "https://chat.whatsapp.com/CRHsTJAv5Ur60khN0iD4a7?s=sw&p=a&mlu=4&ilr=4",
@@ -33,7 +33,7 @@
   },
   {
     "id": "WA-003",
-    "icona": "👥",
+    "icona": "users",
     "nome": "Iscritti 2026 Vela Latina",
     "funzione": "Gruppo degli iscritti dell’anno in corso, dedicato alla vita associativa, alle comunicazioni tra soci e al confronto sulle attività dell’Associazione.",
     "link": "https://chat.whatsapp.com/BGX9vmWwrHCG8oKXHRpvsk?s=sw&p=a&mlu=4&ilr=4",
@@ -46,7 +46,7 @@
   },
   {
     "id": "WA-004",
-    "icona": "⚙️",
+    "icona": "settings",
     "nome": "Gruppo Operativo / Direttivo",
     "funzione": "Spazio dedicato al coordinamento e all’organizzazione interna delle attività operative e direttive.",
     "link": "https://chat.whatsapp.com/F5HKA7PBogQAPuRUUwVeo6?s=sw&p=a&mlu=4&ilr=4",
@@ -58,7 +58,7 @@
   },
   {
     "id": "WA-005",
-    "icona": "📅",
+    "icona": "calendar",
     "nome": "Eventi sul Territorio & Cultura",
     "funzione": "Gruppo dedicato alla condivisione di eventi culturali, sociali, ambientali e di promozione del territorio che non rientrano direttamente nelle attività dell’Associazione Vela Latina, ma che possono essere di interesse per i membri della Community.",
     "link": "https://chat.whatsapp.com/DLukQ31QLlBDg3FbIlKku3?s=sw&p=a&mlu=4&ilr=4",

@@ -14,6 +14,8 @@ import {
   FileSpreadsheet,
   CheckCircle2,
   Award,
+  Phone,
+  Mail,
 } from "lucide-react";
 
 interface LibroSociManagerProps {
@@ -315,17 +317,19 @@ export default function LibroSociManager({
                     {item.telefono && (
                       <a
                         href={`tel:${item.telefono}`}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] flex items-center gap-1 font-semibold border border-slate-200"
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] inline-flex items-center gap-1.5 font-semibold border border-slate-200"
                       >
-                        📞 {item.telefono}
+                        <Phone className="w-3 h-3 text-slate-500" />
+                        <span>{item.telefono}</span>
                       </a>
                     )}
                     {item.email && (
                       <a
                         href={`mailto:${item.email}`}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] flex items-center gap-1 border border-slate-200 truncate max-w-[220px]"
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] inline-flex items-center gap-1.5 border border-slate-200 truncate max-w-[220px]"
                       >
-                        ✉️ {item.email}
+                        <Mail className="w-3 h-3 text-slate-500" />
+                        <span className="truncate">{item.email}</span>
                       </a>
                     )}
                   </div>

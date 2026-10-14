@@ -12,6 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  Clock,
+  Info,
 } from "lucide-react";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
@@ -301,8 +303,9 @@ export default function AssociazionePage() {
                   Non appena la segreteria convaliderà il pagamento (bonifico o contanti in sede), riceverai la conferma formale con il tuo <strong>Numero di Tessera Socio</strong>.
                 </p>
                 <div className="pt-2">
-                  <span className="inline-block px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-mono uppercase tracking-wider font-semibold rounded-xs">
-                    ⏳ In attesa di pagamento
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-mono uppercase tracking-wider font-semibold rounded-xs">
+                    <Clock className="w-3 h-3 text-amber-700" />
+                    <span>In attesa di pagamento</span>
                   </span>
                 </div>
               </div>
@@ -444,7 +447,10 @@ export default function AssociazionePage() {
                 </div>
 
                 <div className="p-3 bg-amber-50/70 border border-amber-200 text-slate-700 text-xs leading-relaxed">
-                  <p className="font-semibold text-amber-900 mb-0.5">ℹ️ Modalità di convalida iscrizione:</p>
+                  <p className="font-semibold text-amber-900 mb-0.5 inline-flex items-center gap-1.5">
+                    <Info className="w-3.5 h-3.5 shrink-0 text-amber-800" />
+                    <span>Modalità di convalida iscrizione:</span>
+                  </p>
                   A seguito dell&apos;invio riceverai via email le coordinate per il versamento della quota (€50). L&apos;iscrizione formale al Libro Soci e l&apos;assegnazione del numero di tessera avverranno a seguito della verifica del pagamento da parte della segreteria.
                 </div>
 

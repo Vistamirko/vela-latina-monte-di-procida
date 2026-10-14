@@ -12,6 +12,7 @@ import {
   Search,
   X,
   ListTodo,
+  Check,
 } from "lucide-react";
 import { AttivitaPortfolioItem, TaskOperativoItem } from "@/lib/db/types";
 
@@ -382,9 +383,10 @@ export default function AttivitaManager() {
                         {t.checklist.map((item, idx) => (
                           <span
                             key={idx}
-                            className="text-[10px] font-mono bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-full"
+                            className="text-[10px] font-mono bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1"
                           >
-                            ✓ {item}
+                            <Check className="w-2.5 h-2.5 text-emerald-600 shrink-0" />
+                            <span>{item}</span>
                           </span>
                         ))}
                       </div>

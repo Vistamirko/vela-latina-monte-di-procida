@@ -13,8 +13,30 @@ import {
   Copy,
   ExternalLink,
   X,
+  Megaphone,
+  Ship,
+  Users,
+  Settings,
+  Calendar,
 } from "lucide-react";
 import { AccountDigitaleItem, GruppoWhatsAppItem } from "@/lib/db/types";
+
+function renderGruppoIcon(icona?: string) {
+  switch (icona) {
+    case "megaphone":
+      return <Megaphone className="w-5 h-5 text-amber-600" />;
+    case "ship":
+      return <Ship className="w-5 h-5 text-[#1b5b80]" />;
+    case "users":
+      return <Users className="w-5 h-5 text-indigo-600" />;
+    case "settings":
+      return <Settings className="w-5 h-5 text-slate-700" />;
+    case "calendar":
+      return <Calendar className="w-5 h-5 text-emerald-600" />;
+    default:
+      return <MessageSquare className="w-5 h-5 text-emerald-600" />;
+  }
+}
 
 export default function AccountManager() {
   const [activeTab, setActiveTab] = useState<"whatsapp" | "account">("whatsapp");
@@ -191,7 +213,7 @@ export default function AccountManager() {
             <button
               onClick={() =>
                 setModalGruppo({
-                  icona: "💬",
+                  icona: "whatsapp",
                   nome: "",
                   funzione: "",
                   link: "",
@@ -239,7 +261,9 @@ export default function AccountManager() {
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2.5">
-                      <span className="text-2xl">{g.icona}</span>
+                      <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
+                        {renderGruppoIcon(g.icona)}
+                      </div>
                       <div>
                         <h3 className="font-serif font-bold text-base text-slate-900">{g.nome}</h3>
                         <span className="text-[10px] font-mono text-slate-400">{g.id}</span>
@@ -498,25 +522,19 @@ export default function AccountManager() {
             </div>
 
             <form onSubmit={handleSaveGruppo} className="p-5 space-y-3.5 text-xs">
-              <div className="grid grid-cols-4 gap-3">
-                <div>
-                  <label className="block font-mono text-slate-700 mb-1 font-semibold">Icona</label>
-                  <input
-                    type="text"
-                    value={modalGruppo.icona || "💬"}
-                    onChange={(e) => setModalGruppo({ ...modalGruppo, icona: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded text-center text-lg focus:outline-none"
-                  />
-                </div>
-                <div className="col-span-3">
-                  <label className="block font-mono text-slate-700 mb-1 font-semibold">Nome Gruppo *</label>
+              <div>
+                <label className="block font-mono text-slate-700 mb-1 font-semibold">Nome Gruppo *</label>
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+                    <MessageSquare className="w-4 h-4" />
+                  </div>
                   <input
                     type="text"
                     required
                     value={modalGruppo.nome || ""}
                     onChange={(e) => setModalGruppo({ ...modalGruppo, nome: e.target.value })}
                     placeholder="Es. Bacheca Ufficiale"
-                    className="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none"
+                    className="flex-1 px-3 py-2 border border-slate-300 rounded focus:outline-none"
                   />
                 </div>
               </div>

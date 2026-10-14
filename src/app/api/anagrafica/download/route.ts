@@ -431,7 +431,7 @@ export async function GET(req: NextRequest) {
     ${contentHtml}
 
     <div class="actions">
-      <button class="print-btn" onclick="window.print()">🖨️ Stampa / Salva in PDF</button>
+      <button class="print-btn" onclick="window.print()">Stampa / Salva in PDF</button>
       <span style="font-size: 11px; margin-left: 12px; opacity: 0.8;">(Documento Ufficiale Area Riservata)</span>
     </div>
   </div>
