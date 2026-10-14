@@ -228,11 +228,10 @@ export default async function EventiPage() {
           </div>
 
           <div className="lg:col-span-6 relative h-80 sm:h-96 w-full rounded-xs overflow-hidden border border-slate-200">
-            <Image
-              src="/images/janara-crew.jpeg"
-              alt="Janara vela latina"
-              fill
-              className="object-cover"
+            <PhotoPlaceholder
+              title="Cinema & Televisione · Riprese Storiche"
+              subtitle="The Happy Prince · Rai 1 Linea Blu · Camper"
+              className="h-full border-0"
             />
           </div>
         </div>

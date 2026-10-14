@@ -22,6 +22,7 @@ import {
   NauticalCrosshair,
 } from "@/components/NauticalChartElements";
 import SponsorsSection from "@/components/SponsorsSection";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
 interface MuseoPhoto {
   src: string;
@@ -34,58 +35,42 @@ interface MuseoPhoto {
 
 const MUSEO_PHOTOS: MuseoPhoto[] = [
   {
+    src: "/images/sede/lezione-nodi-bitta.jpg",
+    title: "La Sede Storica · Arte Marinaresca e Nodi sulla Bitta",
+    subtitle: "All'interno della sede ad Acquamorta: trasmissione delle impiombature e dei nodi marinareschi tradizionali montesi sulla storica bitta d'ormeggio.",
+    tag: "Sede Storica",
+    aspect: "aspect-[4/3]",
+    colSpan: "lg:col-span-6",
+  },
+  {
+    src: "/images/museo/reperto-archeologico-navale.jpg",
+    title: "Reperto Storico Sommerso dei Fondali Flegrei",
+    subtitle: "Pezzo navale antico in bronzo recuperato dai fondali con incrostazioni e conchiglie fossili, custodito nel Piccolo Museo del Mare.",
+    tag: "Reperto Archeologico",
+    aspect: "aspect-[4/3]",
+    colSpan: "lg:col-span-6",
+  },
+  {
+    src: "/images/museo/indicatori-maihak-epoca.jpg",
+    title: "Indicatori Navali Meccanici H. Maihak Hamburg",
+    subtitle: "Strumentazione di precisione d'epoca con custodia originale in legno massello, conservata nella collezione del museo.",
+    tag: "Strumenti d'Epoca",
+    aspect: "aspect-[4/3]",
+    colSpan: "lg:col-span-4",
+  },
+  {
+    src: "/images/museo/apparato-radio-sailor.jpg",
+    title: "Stazione Radio VHF d'Epoca Sailor RT144",
+    subtitle: "Ricetrasmettitore marittimo vintage Sailor SP Radio Denmark con cornetta e manopole in ottone, simbolo delle comunicazioni nautiche d'epoca.",
+    tag: "Apparato Radio",
+    aspect: "aspect-[4/3]",
+    colSpan: "lg:col-span-4",
+  },
+  {
     src: "/images/museo/museo-2.jpeg",
-    title: "L'Ormeggio della Sede ad Acquamorta",
-    subtitle: "Janara ormeggiata lungo la banchina al tramonto, davanti alla storica grotta di tufo della sede.",
-    tag: "Porto di Acquamorta",
-    aspect: "aspect-[3/4]",
-    colSpan: "lg:col-span-5",
-  },
-  {
-    src: "/images/museo/museo-1.jpeg",
-    title: "Equipaggio e Soci alla Banchina",
-    subtitle: "Vita associativa e preparazione delle uscite in mare lungo il molo del Piccolo Museo.",
-    tag: "Comunità Nautica",
-    aspect: "aspect-[4/3]",
-    colSpan: "lg:col-span-7",
-  },
-  {
-    src: "/images/museo/museo-4.jpeg",
-    title: "Il Presidente Antonio Pugliese alla Barra",
-    subtitle: "Decenni di maestria marinaresca e guida appassionata della marineria tradizionale flegrea.",
-    tag: "Maestri di Mare",
-    aspect: "aspect-[4/3]",
-    colSpan: "lg:col-span-7",
-  },
-  {
-    src: "/images/museo/museo-3.jpeg",
-    title: "La Trasmissione ai Giovani Marinai",
-    subtitle: "Allievi alla conduzione del timone in legno durante la rotta nel Canale di Procida.",
-    tag: "Nuove Generazioni",
-    aspect: "aspect-[3/4]",
-    colSpan: "lg:col-span-5",
-  },
-  {
-    src: "/images/museo/museo-5.jpeg",
-    title: "L'Armo Storico e il Maestro d'Ascia",
-    subtitle: "Il profilo dell'antenna latina contro il calar del sole sui Campi Flegrei.",
-    tag: "Arte Marinaresca",
-    aspect: "aspect-[3/4]",
-    colSpan: "lg:col-span-4",
-  },
-  {
-    src: "/images/museo/museo-6.jpeg",
-    title: "Presidio Educativo e Attività a Mare",
-    subtitle: "Allievi, subacquei e volontari riuniti sul molo di Acquamorta per le iniziative didattiche.",
-    tag: "Scuola di Mare",
-    aspect: "aspect-[4/3]",
-    colSpan: "lg:col-span-4",
-  },
-  {
-    src: "/images/museo/museo-7.jpeg",
-    title: "Ricerca Marina e Laboratorio Scientifico",
-    subtitle: "Monitoraggio ecologico subacqueo con ROV e biologi marini lungo la costa flegrea.",
-    tag: "Scienza & Mare",
+    title: "L'Ormeggio della Flotta davanti alla Grotta di Tufo",
+    subtitle: "Janara ormeggiata lungo la banchina di Acquamorta, ai piedi della falesia di tufo dove ha sede l'Associazione.",
+    tag: "Banchina Acquamorta",
     aspect: "aspect-[4/3]",
     colSpan: "lg:col-span-4",
   },
@@ -578,14 +563,13 @@ export default function EmotionalStory() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-5 relative h-80 sm:h-[420px] w-full rounded-xs overflow-hidden border border-slate-200">
-              <Image
-                src="/images/hero-sailing.webp"
-                alt="Regata vele latine"
-                fill
-                className="object-cover"
+              <PhotoPlaceholder
+                title="Eventi, Regate & Palmarès"
+                subtitle="Saint-Tropez · Procida Cup · Barcolana"
+                className="h-full w-full border-0"
               />
               <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 text-[10px] font-mono uppercase tracking-widest border border-slate-300 font-semibold text-[#0a1c2a]">
-                1° Saint-Tropez 2024
+                Palmarès Ufficiale
               </div>
             </div>
 
@@ -664,14 +648,14 @@ export default function EmotionalStory() {
 
             <div className="lg:col-span-5 relative h-72 sm:h-96 w-full rounded-xs overflow-hidden border border-slate-200 group">
               <Image
-                src="/images/fleet-sailing.webp"
-                alt="Voga tradizionale e scuola di mare"
+                src="/images/attivita/voga-acquamorta.jpg"
+                alt="Scuola di Voga Tradizionale Flegrea nel porto di Acquamorta"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-102"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-mono">
-                Scuola di Voga Tradizionale Flegrea · San Michele Arcangelo
+                Scuola di Voga Tradizionale Flegrea · San Michele Arcangelo ad Acquamorta
               </div>
             </div>
           </div>

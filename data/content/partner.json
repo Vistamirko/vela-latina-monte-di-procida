@@ -1,0 +1,16 @@
+[
+  {
+    "id": "partner-comune-mdp",
+    "name": "Comune di Monte di Procida",
+    "category": "Partner Istituzionale",
+    "tagline": "Patrocinio morale e valorizzazione della tradizione marinara flegrea e della vela latina",
+    "badge": "Istituzionale",
+    "logoUrl": "/images/logo-vela-latina.webp",
+    "websiteUrl": "https://www.comune.montediprocida.na.it",
+    "order": 1,
+    "published": true,
+    "notes": "Patrocinio morale istituzionale per la valorizzazione del patrimonio immateriale campano.",
+    "createdAt": "2026-10-14T09:00:00.000Z",
+    "updatedAt": "2026-10-14T09:00:00.000Z"
+  }
+]

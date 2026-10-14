@@ -51,6 +51,7 @@ import AttivitaManager from "@/components/admin/AttivitaManager";
 import InventarioManager from "@/components/admin/InventarioManager";
 import AccountManager from "@/components/admin/AccountManager";
 import FundraisingManager from "@/components/admin/FundraisingManager";
+import PartnerManager from "@/components/admin/PartnerManager";
 import QuickPhotoUploaderModal from "@/components/admin/QuickPhotoUploaderModal";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
@@ -61,6 +62,7 @@ export type AdminTab =
   | "inventario"
   | "account"
   | "fundraising"
+  | "partner"
   | "richieste"
   | "soci"
   | "anagrafica"
@@ -98,7 +100,10 @@ function AdminDashboardContent() {
     whatsapp: "account",
     canali: "account",
     fundraising: "fundraising",
-    sponsor: "fundraising",
+    partner: "partner",
+    sponsor: "partner",
+    partner_sostenitori: "partner",
+    sostenitori: "partner",
     richieste: "richieste",
     iscrizioni: "richieste",
     soci: "soci",
@@ -473,6 +478,7 @@ function AdminDashboardContent() {
                   <option value="db">Database & File JSON</option>
                 </optgroup>
                 <optgroup label="Contenuti Sito Web">
+                  <option value="partner">Partner & Sostenitori</option>
                   <option value="richieste">Iscrizioni & Tesseramento ({bookings.length})</option>
                   <option value="corsi">Corsi di Mare ({courses.length})</option>
                   <option value="eventi">Eventi & Regate ({events.length})</option>
@@ -593,6 +599,18 @@ function AdminDashboardContent() {
             >
               <Compass className={`w-3 h-3 ${activeTab === "progetti" ? "text-[#c99a45]" : "text-slate-500"}`} />
               <span>Progetti</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("partner")}
+              className={`shrink-0 px-2.5 py-1 text-[11px] font-mono font-bold rounded-sm flex items-center gap-1 transition-all ${
+                activeTab === "partner"
+                  ? "bg-[#0a1c2a] text-white shadow-xs"
+                  : "bg-white text-slate-700 border border-slate-200"
+              }`}
+            >
+              <Award className={`w-3 h-3 ${activeTab === "partner" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+              <span>Partner</span>
             </button>
 
             <button
@@ -725,6 +743,18 @@ function AdminDashboardContent() {
               >
                 <Compass className={`w-3.5 h-3.5 ${activeTab === "progetti" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
                 <span>Progetti ({projects.length})</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("partner")}
+                className={`px-3 py-1.5 text-xs font-mono font-bold rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                  activeTab === "partner"
+                    ? "bg-[#0a1c2a] text-white ring-1 ring-[#0a1c2a]"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Award className={`w-3.5 h-3.5 ${activeTab === "partner" ? "text-[#c99a45]" : "text-[#1b5b80]"}`} />
+                <span>Partner & Sostenitori</span>
               </button>
 
               <button
@@ -922,6 +952,11 @@ function AdminDashboardContent() {
            TAB FUNDRAISING, SPONSOR & BANDI
         ============================================================== */}
         {activeTab === "fundraising" && <FundraisingManager />}
+
+        {/* ==============================================================
+           TAB PARTNER & SOSTENITORI
+        ============================================================== */}
+        {activeTab === "partner" && <PartnerManager />}
 
         {/* ==============================================================
            TAB 0: ISCRIZIONI & RICHIESTE

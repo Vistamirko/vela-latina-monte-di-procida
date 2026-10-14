@@ -408,5 +408,17 @@ export interface CruscottoKPI {
   }>;
 }
 
-
-
+export interface PartnerItem {
+  id: string;
+  name: string;
+  category: "Main Partner" | "Sponsor Tecnico" | "Partner Istituzionale" | "Sostenitore";
+  tagline: string;
+  badge?: string;
+  logoUrl?: string;
+  websiteUrl?: string;
+  order: number;
+  published: boolean;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
