@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import {
   ArrowLeft,
   Calendar,
@@ -234,8 +235,8 @@ export default async function ProjectDetailPage({
             </div>
           </div>
 
-          {/* Immagine di Copertina del Progetto */}
-          {project.imageUrl && (
+          {/* Immagine di Copertina del Progetto o Placeholder Foto Mancante */}
+          {project.imageUrl ? (
             <div className="relative w-full h-64 sm:h-96 md:h-[480px] mb-10 sm:mb-14 rounded-xs overflow-hidden border border-slate-200 shadow-sm group">
               <Image
                 src={project.imageUrl}
@@ -255,6 +256,13 @@ export default async function ProjectDetailPage({
                   </span>
                 </div>
               </div>
+            </div>
+          ) : (
+            <div className="mb-10 sm:mb-14">
+              <PhotoPlaceholder
+                title={`Progetto: ${project.title} (${project.highlight})`}
+                className="h-64 sm:h-80"
+              />
             </div>
           )}
 

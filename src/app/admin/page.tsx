@@ -29,10 +29,39 @@ import {
   Users,
   Building2,
   X,
+  Ship,
+  Wrench,
+  CheckSquare,
+  Boxes,
+  ShoppingCart,
+  DollarSign,
+  LayoutDashboard,
 } from "lucide-react";
 import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione } from "@/lib/db/types";
 import LibroSociManager from "@/components/admin/LibroSociManager";
 import AnagraficaManager from "@/components/admin/AnagraficaManager";
+import CruscottoManager from "@/components/admin/CruscottoManager";
+import BarcheManager from "@/components/admin/BarcheManager";
+import AttivitaManager from "@/components/admin/AttivitaManager";
+import InventarioManager from "@/components/admin/InventarioManager";
+import AccountManager from "@/components/admin/AccountManager";
+import FundraisingManager from "@/components/admin/FundraisingManager";
+
+export type AdminTab =
+  | "cruscotto"
+  | "barche"
+  | "attivita"
+  | "inventario"
+  | "account"
+  | "fundraising"
+  | "richieste"
+  | "soci"
+  | "anagrafica"
+  | "eventi"
+  | "blog"
+  | "corsi"
+  | "progetti"
+  | "db";
 
 function AdminDashboardContent() {
   const router = useRouter();
@@ -48,7 +77,21 @@ function AdminDashboardContent() {
   const [authLoading, setAuthLoading] = useState(true);
 
   // Active Tab handling
-  const VALID_TABS: Record<string, "richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db"> = {
+  const VALID_TABS: Record<string, AdminTab> = {
+    cruscotto: "cruscotto",
+    dashboard: "cruscotto",
+    barche: "barche",
+    flotta: "barche",
+    manutenzioni: "barche",
+    attivita: "attivita",
+    task: "attivita",
+    inventario: "inventario",
+    acquisti: "inventario",
+    account: "account",
+    whatsapp: "account",
+    canali: "account",
+    fundraising: "fundraising",
+    sponsor: "fundraising",
     richieste: "richieste",
     iscrizioni: "richieste",
     soci: "soci",
@@ -60,18 +103,14 @@ function AdminDashboardContent() {
     db: "db",
   };
 
-  const resolveTab = (param: string | null) => {
-    if (!param) return "richieste";
-    return VALID_TABS[param.toLowerCase()] || "richieste";
+  const resolveTab = (param: string | null): AdminTab => {
+    if (!param) return "cruscotto";
+    return VALID_TABS[param.toLowerCase()] || "cruscotto";
   };
 
-  const [activeTab, setActiveTab] = useState<"richieste" | "soci" | "anagrafica" | "eventi" | "blog" | "corsi" | "progetti" | "db">(() => resolveTab(tabParam));
-
-  useEffect(() => {
-    if (tabParam && VALID_TABS[tabParam.toLowerCase()]) {
-      setActiveTab(VALID_TABS[tabParam.toLowerCase()]);
-    }
-  }, [tabParam]);
+  const [userSelectedTab, setUserSelectedTab] = useState<AdminTab | null>(null);
+  const activeTab = userSelectedTab ?? resolveTab(tabParam);
+  const setActiveTab = (tab: AdminTab) => setUserSelectedTab(tab);
 
   // Modal invio email corso
   const [emailModalBooking, setEmailModalBooking] = useState<BookingRequest | null>(null);
@@ -395,20 +434,75 @@ function AdminDashboardContent() {
         {/* Tab Navigation */}
         <div className="max-w-7xl mx-auto px-2 sm:px-6 flex items-center gap-1 border-t border-slate-200 overflow-x-auto scrollbar-none">
           <button
-            onClick={() => setActiveTab("richieste")}
+            onClick={() => setActiveTab("cruscotto")}
             className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "richieste"
+              activeTab === "cruscotto"
+                ? "border-[#c99a45] text-[#0a1c2a] bg-amber-50/50"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <LayoutDashboard className="w-3.5 h-3.5 text-[#c99a45]" />
+            <span>Cruscotto</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("barche")}
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
+              activeTab === "barche"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
-            <Inbox className="w-3.5 h-3.5" />
-            <span>Iscrizioni ({bookings.length})</span>
-            {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
-              <span className="px-1.5 py-0.5 text-[9px] bg-amber-600 text-white rounded-full font-bold">
-                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length}
-              </span>
-            )}
+            <Ship className="w-3.5 h-3.5" />
+            <span>Flotta & Lavori</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("attivita")}
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
+              activeTab === "attivita"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <CheckSquare className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Attività & Task</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("inventario")}
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
+              activeTab === "inventario"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <Boxes className="w-3.5 h-3.5 text-purple-600" />
+            <span>Inventario & Acquisti</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("account")}
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
+              activeTab === "account"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Account & WhatsApp</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("fundraising")}
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
+              activeTab === "fundraising"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <DollarSign className="w-3.5 h-3.5 text-[#c99a45]" />
+            <span>Fundraising & 5×1000</span>
           </button>
 
           <button
@@ -458,15 +552,20 @@ function AdminDashboardContent() {
           </button>
 
           <button
-            onClick={() => setActiveTab("blog")}
+            onClick={() => setActiveTab("richieste")}
             className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
-              activeTab === "blog"
+              activeTab === "richieste"
                 ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
                 : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Blog ({blogPosts.length})</span>
+            <Inbox className="w-3.5 h-3.5" />
+            <span>Iscrizioni ({bookings.length})</span>
+            {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length > 0 && (
+              <span className="px-1.5 py-0.5 text-[9px] bg-amber-600 text-white rounded-full font-bold">
+                {bookings.filter((b) => b.status === "in_attesa_pagamento" || b.status === "nuova").length}
+              </span>
+            )}
           </button>
 
           <button
@@ -479,6 +578,18 @@ function AdminDashboardContent() {
           >
             <GraduationCap className="w-3.5 h-3.5" />
             <span>Corsi ({courses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("blog")}
+            className={`px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] font-mono uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
+              activeTab === "blog"
+                ? "border-[#0a1c2a] text-[#0a1c2a] bg-white"
+                : "border-transparent text-slate-600 hover:text-[#0a1c2a]"
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Blog ({blogPosts.length})</span>
           </button>
 
           <button
@@ -529,6 +640,38 @@ function AdminDashboardContent() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-5 sm:py-8">
+        {/* ==============================================================
+           TAB CRUSCOTTO OPERATIVO
+        ============================================================== */}
+        {activeTab === "cruscotto" && (
+          <CruscottoManager onNavigateTab={(tab) => setActiveTab(resolveTab(tab))} />
+        )}
+
+        {/* ==============================================================
+           TAB BARCHE & MANUTENZIONI
+        ============================================================== */}
+        {activeTab === "barche" && <BarcheManager />}
+
+        {/* ==============================================================
+           TAB ATTIVITÀ & TASK OPERATIVI
+        ============================================================== */}
+        {activeTab === "attivita" && <AttivitaManager />}
+
+        {/* ==============================================================
+           TAB INVENTARIO & ACQUISTI
+        ============================================================== */}
+        {activeTab === "inventario" && <InventarioManager />}
+
+        {/* ==============================================================
+           TAB ACCOUNT & WHATSAPP
+        ============================================================== */}
+        {activeTab === "account" && <AccountManager />}
+
+        {/* ==============================================================
+           TAB FUNDRAISING, SPONSOR & BANDI
+        ============================================================== */}
+        {activeTab === "fundraising" && <FundraisingManager />}
+
         {/* ==============================================================
            TAB 0: ISCRIZIONI & RICHIESTE
         ============================================================== */}

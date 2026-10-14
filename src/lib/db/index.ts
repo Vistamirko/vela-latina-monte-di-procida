@@ -1,7 +1,28 @@
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
-import { EventItem, BlogPost, CourseSession, AdminUser, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione, DocumentoIstituzionale } from "./types";
+import {
+  EventItem,
+  BlogPost,
+  CourseSession,
+  AdminUser,
+  ProjectItem,
+  BookingRequest,
+  SocioItem,
+  AnagraficaAssociazione,
+  DocumentoIstituzionale,
+  BarcaItem,
+  ManutenzioneItem,
+  AttivitaPortfolioItem,
+  TaskOperativoItem,
+  InventarioItem,
+  AcquistoItem,
+  AccountDigitaleItem,
+  GruppoWhatsAppItem,
+  FundraisingItem,
+  PropostaSoftwareItem,
+  CruscottoKPI,
+} from "./types";
 import { hashPassword } from "../auth";
 
 const DB_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -1607,5 +1628,502 @@ export const AnagraficaRepo = {
     return this.save({ documenti: updatedDocs });
   },
 };
+
+/* ==============================================================
+   REPOSITORY: BARCHE (FLOTTA IMBARCAZIONI)
+============================================================== */
+export const BarcheRepo = {
+  async getAll(): Promise<BarcaItem[]> {
+    return readLocalJson<BarcaItem[]>("barche.json", []);
+  },
+
+  async getById(id: string): Promise<BarcaItem | null> {
+    const list = await this.getAll();
+    return list.find((b) => b.id === id) || null;
+  },
+
+  async save(data: Partial<BarcaItem> & { id?: string; nome: string }): Promise<BarcaItem> {
+    const now = new Date().toISOString();
+    const list = await this.getAll();
+    const id = data.id || `BAR${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((b) => b.id === id);
+
+    let saved: BarcaItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as BarcaItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        nome: data.nome,
+        tipologia: data.tipologia || "Barca a vela Latina",
+        owner: data.owner || "Associazione Vela Latina Monte di Procida",
+        responsabili: data.responsabili || "Team Vela Latina",
+        ormeggio: data.ormeggio || "Darsena comunale di Monte di Procida",
+        stato: data.stato || "Operativa",
+        assicurazione: data.assicurazione || "Polizza RC Associazione 2026",
+        documenti: data.documenti || "Documentazione di bordo",
+        dotazioni: data.dotazioni || "Attrezzatura tradizionale completa",
+        linkCartella: data.linkCartella || "",
+        note: data.note || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<BarcaItem[]>("barche.json", list);
+    return saved;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    const list = await this.getAll();
+    writeLocalJson<BarcaItem[]>("barche.json", list.filter((b) => b.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: MANUTENZIONI BARCHE E ATTREZZATURE
+============================================================== */
+export const ManutenzioniRepo = {
+  async getAll(): Promise<ManutenzioneItem[]> {
+    return readLocalJson<ManutenzioneItem[]>("manutenzioni.json", []);
+  },
+
+  async getById(id: string): Promise<ManutenzioneItem | null> {
+    const list = await this.getAll();
+    return list.find((m) => m.id === id) || null;
+  },
+
+  async save(data: Partial<ManutenzioneItem> & { id?: string; barcaAttrezzatura: string; intervento: string }): Promise<ManutenzioneItem> {
+    const now = new Date().toISOString();
+    const list = await this.getAll();
+    const id = data.id || `MAN${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((m) => m.id === id);
+
+    let saved: ManutenzioneItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as ManutenzioneItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        barcaAttrezzatura: data.barcaAttrezzatura,
+        tipo: data.tipo || "Ordinaria",
+        intervento: data.intervento,
+        owner: data.owner || "Susy",
+        priorita: data.priorita || "Media",
+        stato: data.stato || "Da fare",
+        dataPrevista: data.dataPrevista || "",
+        dataCompletamento: data.dataCompletamento || "",
+        costo: data.costo || "",
+        note: data.note || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<ManutenzioneItem[]>("manutenzioni.json", list);
+    return saved;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    const list = await this.getAll();
+    writeLocalJson<ManutenzioneItem[]>("manutenzioni.json", list.filter((m) => m.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: ATTIVITÀ & TASK OPERATIVI (PORTFOLIO PROGETTI & TASKS)
+============================================================== */
+export const AttivitaRepo = {
+  async getPortfolio(): Promise<AttivitaPortfolioItem[]> {
+    return readLocalJson<AttivitaPortfolioItem[]>("attivita_progetti.json", []);
+  },
+
+  async savePortfolio(data: Partial<AttivitaPortfolioItem> & { id?: string; titolo: string }): Promise<AttivitaPortfolioItem> {
+    const now = new Date().toISOString();
+    const list = await this.getPortfolio();
+    const id = data.id || `PRJ${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((p) => p.id === id);
+
+    let saved: AttivitaPortfolioItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as AttivitaPortfolioItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        area: data.area || "Attività Generale",
+        tipoAttivita: data.tipoAttivita || "Progetto",
+        titolo: data.titolo,
+        owner: data.owner || "Consiglio Direttivo",
+        dataInizio: data.dataInizio || "",
+        scadenza: data.scadenza || "",
+        stato: data.stato || "Da fare",
+        priorita: data.priorita || "Media",
+        ricorrenza: data.ricorrenza || "Annuale",
+        avanzamento: data.avanzamento || 0,
+        descrizione: data.descrizione || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<AttivitaPortfolioItem[]>("attivita_progetti.json", list);
+    return saved;
+  },
+
+  async deletePortfolio(id: string): Promise<boolean> {
+    const list = await this.getPortfolio();
+    writeLocalJson<AttivitaPortfolioItem[]>("attivita_progetti.json", list.filter((p) => p.id !== id));
+    return true;
+  },
+
+  async getTasks(): Promise<TaskOperativoItem[]> {
+    return readLocalJson<TaskOperativoItem[]>("tasks.json", []);
+  },
+
+  async saveTask(data: Partial<TaskOperativoItem> & { id?: string; attivita: string }): Promise<TaskOperativoItem> {
+    const now = new Date().toISOString();
+    const list = await this.getTasks();
+    const id = data.id || `T${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((t) => t.id === id);
+
+    let saved: TaskOperativoItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as TaskOperativoItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        progettoId: data.progettoId || "PRJ001",
+        attivita: data.attivita,
+        checklist: data.checklist || [],
+        categoria: data.categoria || "Operativa",
+        owner: data.owner || "Staff Vela Latina",
+        collaboratori: data.collaboratori || "",
+        dataInizio: data.dataInizio || "",
+        scadenza: data.scadenza || "",
+        stato: data.stato || "Da fare",
+        priorita: data.priorita || "Media",
+        avanzamento: data.avanzamento || 0,
+        costoPrevisto: data.costoPrevisto || "",
+        note: data.note || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<TaskOperativoItem[]>("tasks.json", list);
+    return saved;
+  },
+
+  async deleteTask(id: string): Promise<boolean> {
+    const list = await this.getTasks();
+    writeLocalJson<TaskOperativoItem[]>("tasks.json", list.filter((t) => t.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: INVENTARIO ATTREZZATURE
+============================================================== */
+export const InventarioRepo = {
+  async getAll(): Promise<InventarioItem[]> {
+    return readLocalJson<InventarioItem[]>("inventario.json", []);
+  },
+
+  async save(data: Partial<InventarioItem> & { id?: string; oggetto: string }): Promise<InventarioItem> {
+    const now = new Date().toISOString();
+    const list = await this.getAll();
+    const id = data.id || `INV${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((i) => i.id === id);
+
+    let saved: InventarioItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as InventarioItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        oggetto: data.oggetto,
+        categoria: data.categoria || "Generale",
+        quantita: data.quantita || "1",
+        unita: data.unita || "pz",
+        posizione: data.posizione || "Sede Sociale / Darsena",
+        responsabile: data.responsabile || "Staff Vela Latina",
+        stato: data.stato || "In uso",
+        dataAcquisto: data.dataAcquisto || "",
+        costo: data.costo || "",
+        qrCodeLink: data.qrCodeLink || "",
+        fotoLink: data.fotoLink || "",
+        note: data.note || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<InventarioItem[]>("inventario.json", list);
+    return saved;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    const list = await this.getAll();
+    writeLocalJson<InventarioItem[]>("inventario.json", list.filter((i) => i.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: ACQUISTI E FORNITORI
+============================================================== */
+export const AcquistiRepo = {
+  async getAll(): Promise<AcquistoItem[]> {
+    return readLocalJson<AcquistoItem[]>("acquisti.json", []);
+  },
+
+  async save(data: Partial<AcquistoItem> & { id?: string; oggetto: string }): Promise<AcquistoItem> {
+    const now = new Date().toISOString();
+    const list = await this.getAll();
+    const id = data.id || `ACQ${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((a) => a.id === id);
+
+    let saved: AcquistoItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as AcquistoItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        oggetto: data.oggetto,
+        categoria: data.categoria || "Generale",
+        quantita: data.quantita || "1",
+        priorita: data.priorita || "Alta",
+        stato: data.stato || "Da acquistare",
+        richiedente: data.richiedente || "Consiglio Direttivo",
+        fornitore: data.fornitore || "",
+        preventivo: data.preventivo || "",
+        costoPrevisto: data.costoPrevisto || "",
+        costoEffettivo: data.costoEffettivo || "",
+        dataPrevista: data.dataPrevista || "",
+        note: data.note || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<AcquistoItem[]>("acquisti.json", list);
+    return saved;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    const list = await this.getAll();
+    writeLocalJson<AcquistoItem[]>("acquisti.json", list.filter((a) => a.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: ACCOUNT DIGITALI E GRUPPI WHATSAPP
+============================================================== */
+export const AccountRepo = {
+  async getAccounts(): Promise<AccountDigitaleItem[]> {
+    return readLocalJson<AccountDigitaleItem[]>("account.json", []);
+  },
+
+  async saveAccount(data: Partial<AccountDigitaleItem> & { id?: string; servizio: string }): Promise<AccountDigitaleItem> {
+    const list = await this.getAccounts();
+    const id = data.id || `ACC${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((a) => a.id === id);
+
+    let saved: AccountDigitaleItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id } as AccountDigitaleItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        servizio: data.servizio,
+        emailUsername: data.emailUsername || "",
+        owner: data.owner || "Associazione Vela Latina",
+        amministratori: data.amministratori || [],
+        emailRecupero: data.emailRecupero || "",
+        telefonoRecupero: data.telefonoRecupero || "",
+        statoRevisione: data.statoRevisione || "Attivo",
+        note: data.note || "",
+      };
+      list.push(saved);
+    }
+    writeLocalJson<AccountDigitaleItem[]>("account.json", list);
+    return saved;
+  },
+
+  async deleteAccount(id: string): Promise<boolean> {
+    const list = await this.getAccounts();
+    writeLocalJson<AccountDigitaleItem[]>("account.json", list.filter((a) => a.id !== id));
+    return true;
+  },
+
+  async getGruppiWhatsApp(): Promise<GruppoWhatsAppItem[]> {
+    return readLocalJson<GruppoWhatsAppItem[]>("gruppi_whatsapp.json", []);
+  },
+
+  async saveGruppoWhatsApp(data: Partial<GruppoWhatsAppItem> & { id?: string; nome: string }): Promise<GruppoWhatsAppItem> {
+    const list = await this.getGruppiWhatsApp();
+    const id = data.id || `WA-${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((g) => g.id === id);
+
+    let saved: GruppoWhatsAppItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id } as GruppoWhatsAppItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        icona: data.icona || "💬",
+        nome: data.nome,
+        funzione: data.funzione || "",
+        link: data.link || "",
+        amministratori: data.amministratori || [],
+      };
+      list.push(saved);
+    }
+    writeLocalJson<GruppoWhatsAppItem[]>("gruppi_whatsapp.json", list);
+    return saved;
+  },
+
+  async deleteGruppoWhatsApp(id: string): Promise<boolean> {
+    const list = await this.getGruppiWhatsApp();
+    writeLocalJson<GruppoWhatsAppItem[]>("gruppi_whatsapp.json", list.filter((g) => g.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: FUNDRAISING, SPONSOR & BANDI
+============================================================== */
+export const FundraisingRepo = {
+  async getAll(): Promise<FundraisingItem[]> {
+    return readLocalJson<FundraisingItem[]>("fundraising.json", []);
+  },
+
+  async save(data: Partial<FundraisingItem> & { id?: string; progetto: string }): Promise<FundraisingItem> {
+    const now = new Date().toISOString();
+    const list = await this.getAll();
+    const id = data.id || `FUND${String(list.length + 1).padStart(3, "0")}`;
+    const idx = list.findIndex((f) => f.id === id);
+
+    let saved: FundraisingItem;
+    if (idx >= 0) {
+      saved = { ...list[idx], ...data, id, updatedAt: now } as FundraisingItem;
+      list[idx] = saved;
+    } else {
+      saved = {
+        id,
+        progetto: data.progetto,
+        categoria: data.categoria || "Raccolta fondi",
+        descrizione: data.descrizione || "",
+        responsabile: data.responsabile || "Consiglio Direttivo",
+        stato: data.stato || "Pianificato",
+        priorita: data.priorita || "Alta",
+        periodo: data.periodo || "Annuale",
+        obiettivoEuro: Number(data.obiettivoEuro) || 0,
+        raccoltoEuro: Number(data.raccoltoEuro) || 0,
+        scadenza: data.scadenza || "",
+        note: data.note || "",
+        createdAt: now,
+        updatedAt: now,
+      };
+      list.push(saved);
+    }
+    writeLocalJson<FundraisingItem[]>("fundraising.json", list);
+    return saved;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    const list = await this.getAll();
+    writeLocalJson<FundraisingItem[]>("fundraising.json", list.filter((f) => f.id !== id));
+    return true;
+  },
+};
+
+/* ==============================================================
+   REPOSITORY: CRUSCOTTO OPERATIVO & PROPOSTE SOFTWARE
+============================================================== */
+export const CruscottoRepo = {
+  async getKPI(): Promise<CruscottoKPI> {
+    const [portfolio, tasks, manutenzioni, eventi, acquisti, inventario, accounts] = await Promise.all([
+      AttivitaRepo.getPortfolio(),
+      AttivitaRepo.getTasks(),
+      ManutenzioniRepo.getAll(),
+      readLocalJson<EventItem[]>("eventi.json", []),
+      AcquistiRepo.getAll(),
+      InventarioRepo.getAll(),
+      AccountRepo.getAccounts(),
+    ]);
+
+    const prioritaImmediate = [
+      {
+        id: "T004",
+        titolo: "Albero nuovo Janara",
+        area: "Flotta Janara",
+        owner: "Susy",
+        stato: "Da fare",
+        priorita: "Alta",
+      },
+      {
+        id: "T014",
+        titolo: "Router Wi-Fi e Digitalizzazione",
+        area: "Innovazione",
+        owner: "Staff",
+        stato: "Da fare",
+        priorita: "Alta",
+      },
+      {
+        id: "T012",
+        titolo: "Revisione Account Social e Canali",
+        area: "Social & Canali",
+        owner: "Mary Aruta / Petrone",
+        stato: "Da fare",
+        priorita: "Alta",
+      },
+      {
+        id: "T010",
+        titolo: "Preparazione Dossier UNESCO",
+        area: "UNESCO / Patrimonio",
+        owner: "Consiglio Direttivo",
+        stato: "Da fare",
+        priorita: "Media",
+      },
+      {
+        id: "T007",
+        titolo: "Preparazione Operazione Quandel 2026",
+        area: "Eventi & Manifestazioni",
+        owner: "Equipaggio Janara",
+        stato: "Pianificata",
+        priorita: "Alta",
+      },
+    ];
+
+    return {
+      totaleProgetti: portfolio.length,
+      attivitaAperte: tasks.filter((t) => t.stato !== "Completata").length,
+      manutenzioniTotali: manutenzioni.length,
+      manutenzioniDaFare: manutenzioni.filter((m) => m.stato === "Da fare").length,
+      eventiProgrammati: eventi.length,
+      acquistiDaFare: acquisti.filter((a) => a.stato !== "Ricevuto" && a.stato !== "Annullato").length,
+      inventarioTotale: inventario.length,
+      accountDaVerificare: accounts.filter((a) => a.statoRevisione.toLowerCase().includes("verificare") || a.statoRevisione.toLowerCase().includes("sospeso") || a.statoRevisione.toLowerCase().includes("configurare")).length,
+      prioritaImmediate,
+    };
+  },
+
+  async getProposteSoftware(): Promise<PropostaSoftwareItem[]> {
+    return readLocalJson<PropostaSoftwareItem[]>("proposte_software.json", []);
+  },
+};
+
 
 

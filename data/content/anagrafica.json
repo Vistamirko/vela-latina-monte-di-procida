@@ -1,22 +1,22 @@
 {
-  "ragioneSociale": "Associazione Vela Latina Monte di Procida APS",
-  "formaGiuridica": "Associazione di Promozione Sociale (APS) - Ente del Terzo Settore (ETS)",
+  "ragioneSociale": "APS VELA LATINA Monte di Procida",
+  "formaGiuridica": "Associazione di promozione sociale (APS) / Ente non commerciale senza fini di lucro",
   "acronimo": "APS Vela Latina MdP",
-  "codiceFiscale": "96025130635",
-  "partitaIva": "96025130635",
+  "codiceFiscale": "96035970639",
+  "partitaIva": "10687651215",
   "codiceDestinatarioSdi": "0000000",
   "pec": "velalatinamontediprocida@pec.it",
   "email": "velalatinamontediprocida@gmail.com",
   "emailSecondaria": "vistamirko@gmail.com",
-  "telefono": "+39 338 763 3350",
+  "telefono": "+39 338 633 4406",
   "telefonoSecondario": "+39 081 868 1234",
   "sitoWeb": "https://vela-latina-monte-di-procida.vercel.app",
   "annoFondazione": 2008,
-  "indirizzo": "Via Guglielmo Marconi snc",
+  "indirizzo": "Via Solferino 74",
   "comune": "Monte di Procida",
   "cap": "80070",
   "provincia": "NA",
-  "approdoNautico": "Porticciolo di Monte di Procida, Banchina Pescatori",
+  "approdoNautico": "Darsena Comunale di Monte di Procida (Acquamorta)",
   "coordinateGeografiche": "40° 47′ 42″ N · 14° 03′ 05″ E",
   "runts": {
     "statoIscrizione": "Iscritta",
@@ -35,22 +35,22 @@
   "banca": {
     "istituto": "Banca Nazionale del Lavoro - Gruppo BNP Paribas",
     "filiale": "Filiale Bacoli / Pozzuoli",
-    "iban": "IT34X0100503400000000123456",
+    "iban": "IT61P0306909606100000405783",
     "bicSwift": "BNLIITRRXXX",
-    "intestatario": "Associazione Vela Latina Monte di Procida APS",
+    "intestatario": "APS VELA LATINA Monte di Procida",
     "causaleIscrizione": "Quota associativa annuale socio [Nome Cognome] anno 2026",
     "causaleDonazione": "Erogazione liberale per progetti culturali marineria flegrea"
   },
   "presidente": {
     "nomeCompleto": "Antonio Pugliese",
     "ruolo": "Presidente e Legale Rappresentante",
-    "codiceFiscale": "PGLNTN74D07F839Z",
+    "codiceFiscale": "PGLNTN74D07F839Q",
     "dataNascita": "1974-04-07",
     "luogoNascita": "Napoli (NA)",
     "cittadinanza": "Italiana",
     "residenza": "Monte di Procida (NA), 80070",
-    "telefono": "+39 338 763 3350",
-    "email": "vistamirko@gmail.com",
+    "telefono": "+39 338 633 4406",
+    "email": "velalatinamontediprocida@gmail.com",
     "qualificaProfessionale": "Tecnico Costruttore Navale & Maestro d'Ascia",
     "dataNomina": "2008-03-12 (Rinnovato 2024-03-20)",
     "scadenzaMandato": "2027-03-20",
@@ -67,41 +67,89 @@
       "id": "cd-1",
       "ruolo": "Presidente & Legale Rappresentante",
       "nome": "Antonio Pugliese",
-      "telefono": "+39 338 763 3350",
-      "email": "vistamirko@gmail.com",
-      "note": "Tecnico costruttore navale, fondatore"
+      "telefono": "+39 338 633 4406",
+      "email": "velalatinamontediprocida@gmail.com",
+      "note": "Maestro d ascia, costruttore navale tradizionale e fondatore"
     },
     {
       "id": "cd-2",
       "ruolo": "Vice Presidente",
-      "nome": "Domenico Scotto di Vetta",
-      "telefono": "+39 339 123 4567",
-      "email": "vice@velalatinamontediprocida.it",
-      "note": "Responsabile logistica banchina e sicurezza"
+      "nome": "Antonio Mancino",
+      "telefono": "+39 338 633 4406",
+      "email": "velalatinamontediprocida@gmail.com",
+      "note": "Coordinamento operativo, logistica flotta e community"
     },
     {
       "id": "cd-3",
-      "ruolo": "Segretario Generale & Tesoriere",
+      "ruolo": "Docente Vela Latina & Istruttore Tecnico",
       "nome": "Giovanni Forte",
       "telefono": "+39 333 987 6543",
-      "email": "segreteria@velalatinamontediprocida.it",
-      "note": "Amministrazione, gestione RUNTS e soci"
+      "email": "formazione@velalatinamontediprocida.it",
+      "note": "C.F. FRTGNN61B04H703J - Maestro di navigazione tradizionale e armo"
     },
     {
       "id": "cd-4",
-      "ruolo": "Consigliere Tecnico Attività Velica",
-      "nome": "Luigi Pugliese",
-      "telefono": "+39 347 555 1234",
+      "ruolo": "Responsabile Lavori Flotta & Janara",
+      "nome": "Susy",
+      "telefono": "+39 338 633 4406",
       "email": "flotta@velalatinamontediprocida.it",
-      "note": "Comandante Janara & coordinatore regate"
+      "note": "Owner manutenzioni ordinarie/straordinarie scafo Janara e carrello"
     },
     {
       "id": "cd-5",
-      "ruolo": "Responsabile Progetti Sociali & ROSA",
-      "nome": "Maria Scotto di Santolo",
-      "telefono": "+39 340 888 7766",
-      "email": "sociale@velalatinamontediprocida.it",
-      "note": "Coordinamento Centro Serapide e Team Femminile"
+      "ruolo": "Responsabile Eventi Culturali & Cineforum",
+      "nome": "Domenico Palumbo",
+      "telefono": "+39 339 123 4567",
+      "email": "cultura@velalatinamontediprocida.it",
+      "note": "Curatore delle proiezioni e serate cineforum del giovedi sera"
+    },
+    {
+      "id": "cd-6",
+      "ruolo": "Attrezzista & Assistente Manovre Flotta",
+      "nome": "Michela Vasselli",
+      "telefono": "+39 338 633 4406",
+      "email": "flotta@velalatinamontediprocida.it",
+      "note": "Attrezzista navale a bordo di Janara e gozzi tradizionali"
+    },
+    {
+      "id": "cd-7",
+      "ruolo": "Segreteria, Comunicazione & Territorio",
+      "nome": "Lucia Scotto di Perta",
+      "telefono": "+39 334 567 8901",
+      "email": "segreteria@velalatinamontediprocida.it",
+      "note": "C.F. SCTLCU79C71F839U - Gestione canale eventi sul territorio e PEC"
+    },
+    {
+      "id": "cd-8",
+      "ruolo": "Coordinamento Direttivo & Rapporti Istituzionali",
+      "nome": "Rosaria Lucci",
+      "telefono": "+39 338 633 4406",
+      "email": "direttivo@velalatinamontediprocida.it",
+      "note": "Coordinatrice gruppo operativo e bacheca ufficiale"
+    },
+    {
+      "id": "cd-9",
+      "ruolo": "Responsabile Canali Digitali & Community WhatsApp",
+      "nome": "Michele Petrone",
+      "telefono": "+39 338 633 4406",
+      "email": "community@velalatinamontediprocida.it",
+      "note": "Amministratore bacheca e gruppi WhatsApp della community"
+    },
+    {
+      "id": "cd-10",
+      "ruolo": "Social Media Manager (Instagram & TikTok)",
+      "nome": "Mary Aruta",
+      "telefono": "+39 338 633 4406",
+      "email": "social@velalatinamontediprocida.it",
+      "note": "Creazione contenuti multimediali per le nuove generazioni"
+    },
+    {
+      "id": "cd-11",
+      "ruolo": "Curatrice Rassegne Letterarie & Presentazione Libri",
+      "nome": "Valeria Spinelli",
+      "telefono": "+39 338 633 4406",
+      "email": "cultura@velalatinamontediprocida.it",
+      "note": "Organizzazione incontri con autori e presentazioni sul mare"
     }
   ],
   "documenti": [
@@ -270,6 +318,116 @@
       "fileUrl": "/api/anagrafica/download?doc=banca-iban",
       "formato": "PDF",
       "dimensione": "180 KB",
+      "dataAggiornamento": "2026-01-01",
+      "riservato": false
+    },
+    {
+      "id": "doc-cf-vlmdp",
+      "titolo": "Certificato Codice Fiscale Agenzia delle Entrate",
+      "categoria": "fiscale_bancario",
+      "descrizione": "Attribuzione codice fiscale 96035970639 rilasciato dall Agenzia delle Entrate",
+      "fileName": "Codice_Fiscale_VLMdP.pdf",
+      "fileUrl": "https://drive.google.com/file/d/1jalynNtxVHdTMec6UtoEqNUd-xdGohNu/view?usp=drive_link",
+      "formato": "PDF",
+      "dataAggiornamento": "2026-01-10",
+      "riservato": false
+    },
+    {
+      "id": "doc-piva-vlmdp",
+      "titolo": "Attribuzione Partita IVA Ufficiale",
+      "categoria": "fiscale_bancario",
+      "descrizione": "Documento attribuzione P.IVA 10687651215 rilasciato dall Agenzia delle Entrate",
+      "fileName": "Attribuzione_Partita_IVA_Agenzia delle Entrate.pdf",
+      "fileUrl": "https://drive.google.com/file/d/1m-AdU-Xs8INBFOFs6jZnuXq1iEMLEHu2/view?usp=drive_link",
+      "formato": "PDF",
+      "dataAggiornamento": "2026-01-10",
+      "riservato": false
+    },
+    {
+      "id": "doc-ci-rappresentante",
+      "titolo": "Carta d Identita Legale Rappresentante (Antonio Pugliese)",
+      "categoria": "presidente",
+      "descrizione": "C.I. del Presidente e Legale Rappresentante Antonio Pugliese",
+      "fileName": "CI_RappresentanteLegaleVelaLatina.pdf",
+      "fileUrl": "https://drive.google.com/file/d/1V-ipsFDMk6EdLHYmBvspqAg1uLs8LDxZ/view?usp=drive_link",
+      "formato": "PDF",
+      "dataAggiornamento": "2026-01-10",
+      "riservato": true
+    },
+    {
+      "id": "doc-statuto-drive",
+      "titolo": "Statuto e Atto Costitutivo (Cartella Ufficiale)",
+      "categoria": "dossier",
+      "descrizione": "Archivio Google Drive contenente lo statuto registrato e verbali istituzionali",
+      "fileName": "Statuto_VLMdP_Drive",
+      "fileUrl": "https://drive.google.com/drive/folders/1pa6QMVFUDo9_P9B9YB8OpChmAjxuyjkV",
+      "formato": "DRIVE",
+      "dataAggiornamento": "2026-01-15",
+      "riservato": false
+    },
+    {
+      "id": "doc-logo-vettoriale",
+      "titolo": "Simbolo e Logo Ufficiale Associazione (Vari Formati)",
+      "categoria": "altro",
+      "descrizione": "Cartella cloud contenente il logo ufficiale in vettoriale, PNG trasparente, versioni badge",
+      "fileName": "Logo_Ufficiale_VLMdP",
+      "fileUrl": "https://drive.google.com/drive/folders/1Otz_WrkIFxKLk8Bar03XrEsOV7W5izXd?usp=sharing",
+      "formato": "DRIVE",
+      "dataAggiornamento": "2026-01-15",
+      "riservato": false
+    },
+    {
+      "id": "doc-cv-attivita-2026",
+      "titolo": "Curriculum Attivita 2026 Associazione Vela Latina",
+      "categoria": "dossier",
+      "descrizione": "Curriculum completo delle attivita nautiche, culturali, progetti sociali e regate storiche",
+      "fileName": "Curriculum_Attivita_2026.pdf",
+      "fileUrl": "https://drive.google.com/file/d/1XJ5M6jBvPtGlKnQdNQ57uorlvTdCW9Ww/view?usp=drive_link",
+      "formato": "PDF",
+      "dataAggiornamento": "2026-01-20",
+      "riservato": false
+    },
+    {
+      "id": "doc-runts-scheda",
+      "titolo": "Dati Ufficiali Iscrizione RUNTS (Ministero del Lavoro)",
+      "categoria": "runts",
+      "descrizione": "Estratto ufficiale dei dati associazione stampati dal portale servizi.lavoro.gov.it",
+      "fileName": "Runts_Dati_Ministero_Lavoro.pdf",
+      "fileUrl": "https://drive.google.com/file/d/10cszoJhgCX6mS0699-mfuwecGLSwLKPz/view?usp=drive_link",
+      "formato": "PDF",
+      "dataAggiornamento": "2026-01-20",
+      "riservato": false
+    },
+    {
+      "id": "doc-runts-decreto",
+      "titolo": "Decreto Regionale Iscrizione RUNTS Campania",
+      "categoria": "runts",
+      "descrizione": "Decreto dirigenziale regionale DD_E_2025_27351_2050201 iscrizione registro terzo settore",
+      "fileName": "DD_E_2025_27351_2050201_Iscrizione_Runts.pdf",
+      "fileUrl": "https://drive.google.com/file/d/1OVThBhZOow_iVEF6nKhyYcmQdqZ6zTUm/view?usp=drive_link",
+      "formato": "PDF",
+      "dataAggiornamento": "2025-11-15",
+      "riservato": false
+    },
+    {
+      "id": "doc-rendiconto-runts",
+      "titolo": "Rendiconto Economico Finanziario RUNTS",
+      "categoria": "runts",
+      "descrizione": "Documentazione e bilancio economico depositato sul portale servizi.lavoro.gov.it",
+      "fileName": "Rendiconto_RUNTS_Cartella",
+      "fileUrl": "https://drive.google.com/drive/folders/1atTCyXbnaqKwOrJ7qWkMe3Ns2EkTG3JS?usp=drive_link",
+      "formato": "DRIVE",
+      "dataAggiornamento": "2026-02-01",
+      "riservato": false
+    },
+    {
+      "id": "doc-assicurazione-2026",
+      "titolo": "Polizza Assicurativa Vela Latina 2026",
+      "categoria": "dossier",
+      "descrizione": "Certificato polizza assicurativa RC navigazione e tutela associati anno 2026",
+      "fileName": "Assicurazione_Vela_Latina_2026.pdf",
+      "fileUrl": "https://drive.google.com/file/d/1JtZRlEUmeAc7THfgnuqOnFKlFsQhPfZe/view?usp=drive_link",
+      "formato": "PDF",
       "dataAggiornamento": "2026-01-01",
       "riservato": false
     }

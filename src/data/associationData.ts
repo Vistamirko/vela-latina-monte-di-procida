@@ -65,7 +65,7 @@ export const FLEET_DATA: Boat[] = [
       "Donata all'Istituto Nautico Duca degli Abruzzi di Napoli e affidata all'Associazione, è oggi al centro di sperimentazioni idrodinamiche uniche in Europa.",
     roleToday:
       "Laboratorio navigante di archeologia sperimentale sul Lago di Miseno e protagonista programmata alla celebre Barcolana di Trieste.",
-    image: "/images/hero-sailing.webp",
+    image: "",
     badge: "Ex Amerigo Vespucci",
   },
   {
@@ -84,7 +84,7 @@ export const FLEET_DATA: Boat[] = [
       "Ha il timone scolpito in legno massello di pino a foggia di sirena bicaudata. Nel 2018 è stato scelto per le scene marine del film internazionale su Oscar Wilde 'The Happy Prince'.",
     roleToday:
       "Attualmente in gestione congiunta a Gaeta con Vogamare, il Museo della Navigazione e l'Istituto Nautico Caboto per percorsi didattici d'eccellenza.",
-    image: "/images/fleet-sailing.webp",
+    image: "",
     badge: "Film 'The Happy Prince'",
   },
   {
@@ -102,7 +102,7 @@ export const FLEET_DATA: Boat[] = [
       "È la barca eletta per il programma Inclusione Mare: ha ospitato i corsi speciali di voga per bambini e ragazzi con bisogni speciali del Centro Serapide.",
     roleToday:
       "Nave-scuola per l'addestramento alla voga dei giovani aspiranti allievi marittimi e per iniziative di solidarietà sociale.",
-    image: "/images/janara-regatta.jpeg",
+    image: "",
     badge: "Progetto Inclusione Centro Serapide",
   },
   {
@@ -120,7 +120,7 @@ export const FLEET_DATA: Boat[] = [
       "Esposta nel 2022 nei porti iconici di Marina Grande e Corricella come testimone d'onore per Procida Capitale Italiana della Cultura.",
     roleToday:
       "Impiegata per l'addestramento degli studenti dell'Istituto Nautico Caracciolo di Procida e nelle sessioni con la Capitaneria di Porto.",
-    image: "/images/hero-sailing.webp",
+    image: "",
     badge: "Procida Capitale Cultura 2022",
   },
 ];

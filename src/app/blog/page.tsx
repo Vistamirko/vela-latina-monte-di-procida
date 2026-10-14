@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { BookOpen, Calendar, ArrowRight, User } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
 import { SITE_URL } from "@/lib/config";
@@ -119,7 +120,7 @@ export default async function BlogPage() {
                 className="bg-[#fbfaf6] border border-slate-200 flex flex-col justify-between overflow-hidden group hover:border-[#0a1c2a] transition-all"
               >
                 <div>
-                  {post.coverImage && (
+                  {post.coverImage ? (
                     <div className="relative w-full h-56 overflow-hidden border-b border-slate-200">
                       <Image
                         src={post.coverImage}
@@ -129,6 +130,15 @@ export default async function BlogPage() {
                       />
                       <div className="absolute top-4 left-4">
                         <span className="px-2.5 py-1 bg-white/95 border border-slate-300 text-[#0a1c2a] text-[9px] uppercase tracking-widest font-mono font-bold">
+                          {post.category}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative border-b border-slate-200">
+                      <PhotoPlaceholder title={`Articolo: ${post.title}`} className="h-44 border-0" />
+                      <div className="absolute top-3 left-3">
+                        <span className="px-2 py-0.5 bg-white/95 border border-slate-300 text-[#0a1c2a] text-[9px] uppercase tracking-widest font-mono font-bold">
                           {post.category}
                         </span>
                       </div>

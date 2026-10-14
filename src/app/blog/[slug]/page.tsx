@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { ArrowLeft, Calendar, User, Compass } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
 import { SITE_URL } from "@/lib/config";
@@ -174,8 +175,8 @@ export default async function BlogPostPage({
             </p>
           </div>
 
-          {/* Immagine Copertina se presente */}
-          {post.coverImage && (
+          {/* Immagine Copertina se presente o Placeholder Foto Mancante */}
+          {post.coverImage ? (
             <div className="relative w-full h-72 sm:h-96 md:h-[480px] mb-12 border border-slate-200 overflow-hidden shadow-xs">
               <Image
                 src={post.coverImage}
@@ -184,6 +185,10 @@ export default async function BlogPostPage({
                 priority
                 className="object-cover"
               />
+            </div>
+          ) : (
+            <div className="mb-12">
+              <PhotoPlaceholder title={`Articolo: ${post.title}`} className="h-64 sm:h-80" />
             </div>
           )}
 

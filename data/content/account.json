@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ACC001",
+    "servizio": "Gmail Associazione",
+    "emailUsername": "velalatinamontediprocida@gmail.com",
+    "owner": "Associazione Vela Latina",
+    "amministratori": [
+      "Mancino Antonio",
+      "Petrone Michele"
+    ],
+    "emailRecupero": "vistamirko@gmail.com",
+    "telefonoRecupero": "+39 338 633 4406",
+    "statoRevisione": "Attivo / Da verificare",
+    "note": "Casella email istituzionale per contatti esterni, soci e corsi"
+  },
+  {
+    "id": "ACC002",
+    "servizio": "PEC Istituzionale",
+    "emailUsername": "velalatinamontediprocida@pec.it",
+    "owner": "Legale Rappresentante (Antonio Pugliese)",
+    "amministratori": [
+      "Scotto Lucia",
+      "Pugliese Antonio"
+    ],
+    "emailRecupero": "velalatinamontediprocida@gmail.com",
+    "telefonoRecupero": "+39 338 633 4406",
+    "statoRevisione": "Sospeso / In rinnovo",
+    "note": "Posta Certificata per RUNTS, Comune di Monte di Procida e Regione"
+  },
+  {
+    "id": "ACC003",
+    "servizio": "Facebook Page",
+    "emailUsername": "https://www.facebook.com/VelaLatinaMontediProcida",
+    "owner": "Vela Latina Monte di Procida",
+    "amministratori": [
+      "Petrone Michele",
+      "Mancino Antonio",
+      "Lucci Rosaria"
+    ],
+    "emailRecupero": "",
+    "telefonoRecupero": "",
+    "statoRevisione": "Attivo",
+    "note": "Pagina ufficiale FB per eventi, dirette e comunicazioni"
+  },
+  {
+    "id": "ACC004",
+    "servizio": "Instagram Profile",
+    "emailUsername": "https://www.instagram.com/velalatinamontediprocida",
+    "owner": "Vela Latina Monte di Procida",
+    "amministratori": [
+      "Aruta Mary",
+      "Petrone Michele"
+    ],
+    "emailRecupero": "",
+    "telefonoRecupero": "",
+    "statoRevisione": "Attivo",
+    "note": "Galleria fotografica, reel marineria, uscite e regate"
+  },
+  {
+    "id": "ACC005",
+    "servizio": "YouTube Channel",
+    "emailUsername": "https://www.youtube.com/@VelaLatinaMdP",
+    "owner": "Vela Latina Monte di Procida",
+    "amministratori": [
+      "Mancino Antonio",
+      "Scotto Lucia"
+    ],
+    "emailRecupero": "",
+    "telefonoRecupero": "",
+    "statoRevisione": "Attivo",
+    "note": "Canale video per documentari sul restauro navale e regate storiche"
+  },
+  {
+    "id": "ACC006",
+    "servizio": "TikTok Channel",
+    "emailUsername": "https://www.tiktok.com/@vela.latina/",
+    "owner": "Vela Latina Monte di Procida",
+    "amministratori": [
+      "Aruta Mary",
+      "Petrone Michele"
+    ],
+    "emailRecupero": "",
+    "telefonoRecupero": "",
+    "statoRevisione": "Attivo",
+    "note": "Promozione della tradizione marinara flegrea per i più giovani"
+  },
+  {
+    "id": "ACC007",
+    "servizio": "Google Drive / Archivio Cloud",
+    "emailUsername": "https://drive.google.com/",
+    "owner": "Associazione Vela Latina",
+    "amministratori": [
+      "Mancino Antonio",
+      "Scotto Lucia"
+    ],
+    "emailRecupero": "velalatinamontediprocida@gmail.com",
+    "telefonoRecupero": "",
+    "statoRevisione": "Attivo",
+    "note": "Archivio verbali direttivo, bilanci, loghi alta definizione"
+  },
+  {
+    "id": "ACC008",
+    "servizio": "Calendario Online",
+    "emailUsername": "Calendario Eventi & Corsi",
+    "owner": "Staff Operativo",
+    "amministratori": [
+      "Petrone Michele",
+      "Scotto Lucia"
+    ],
+    "emailRecupero": "",
+    "telefonoRecupero": "",
+    "statoRevisione": "Da configurare",
+    "note": "Pianificazione uscite Janara e lezioni scuola vela"
+  }
+]

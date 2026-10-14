@@ -13,6 +13,7 @@ import {
   ChevronRight,
   CheckCircle2,
 } from "lucide-react";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
 export default function AssociazionePage() {
   const [selectedBoatIndex, setSelectedBoatIndex] = useState(0);
@@ -184,18 +185,24 @@ export default function AssociazionePage() {
 
           {/* Scheda Imbarcazione Selezionata */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center bg-white border border-slate-200 p-6 sm:p-10 lg:p-14 shadow-xs">
-            <div className="lg:col-span-7 relative h-72 sm:h-96 md:h-[480px] w-full rounded-xs overflow-hidden border border-slate-200">
-              <Image
-                src={activeBoat.image}
-                alt={activeBoat.name}
-                fill
-                className="object-cover"
-              />
-              {activeBoat.badge && (
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.2em] font-mono font-semibold shadow-xs">
-                  <Award className="w-3 h-3 text-[#b8860b]" />
-                  <span>{activeBoat.badge}</span>
-                </div>
+            <div className="lg:col-span-7 relative h-72 sm:h-96 md:h-[480px] w-full rounded-xs overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
+              {activeBoat.image ? (
+                <>
+                  <Image
+                    src={activeBoat.image}
+                    alt={activeBoat.name}
+                    fill
+                    className="object-cover"
+                  />
+                  {activeBoat.badge && (
+                    <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-slate-300 text-[#0a1c2a] text-[10px] uppercase tracking-[0.2em] font-mono font-semibold shadow-xs">
+                      <Award className="w-3 h-3 text-[#b8860b]" />
+                      <span>{activeBoat.badge}</span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <PhotoPlaceholder title={`Imbarcazione ${activeBoat.name}`} />
               )}
             </div>
 
