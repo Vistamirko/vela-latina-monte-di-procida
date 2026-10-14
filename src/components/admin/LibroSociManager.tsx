@@ -30,9 +30,9 @@ export default function LibroSociManager({
   const [selectedYear, setSelectedYear] = useState<number | "tutti">("tutti");
   const [search, setSearch] = useState("");
 
-  // Anni disponibili
+  // Anni disponibili (liste ufficiali: 2026 e 2023)
   const availableYears = useMemo(() => {
-    const set = new Set<number>([2026, 2024, 2023]);
+    const set = new Set<number>([2026, 2023]);
     soci.forEach((s) => {
       if (s.anno) set.add(s.anno);
     });
@@ -64,9 +64,8 @@ export default function LibroSociManager({
   const stats = useMemo(() => {
     const total = soci.length;
     const y2026 = soci.filter((s) => s.anno === 2026).length;
-    const y2024 = soci.filter((s) => s.anno === 2024).length;
     const y2023 = soci.filter((s) => s.anno === 2023).length;
-    return { total, y2026, y2024, y2023 };
+    return { total, y2026, y2023 };
   }, [soci]);
 
   // Eliminazione
@@ -102,7 +101,7 @@ export default function LibroSociManager({
             Libro Soci & Registro Iscritti
           </h2>
           <p className="text-xs text-slate-700 font-light mt-1">
-            Gestione anagrafica soci, quote e tessere (storico 2023-2024 importato da Excel e nuove registrazioni 2026).
+            Gestione anagrafica soci, quote e tessere (stagione 2026 e archivio storico 2023 da Excel).
           </p>
         </div>
 
@@ -126,38 +125,30 @@ export default function LibroSociManager({
         </div>
       </div>
 
-      {/* Schede di Riepilogo */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {/* Schede di Riepilogo (3 Colonne: Totale, 2026 Attivi, 2023 Storico) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 bg-white border border-slate-200">
-          <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold">Totale Soci</div>
+          <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold">Totale Soci Archiviati</div>
           <div className="text-2xl sm:text-3xl font-light font-['Cormorant_Garamond'] text-[#0a1c2a] mt-1">
             {stats.total}
           </div>
-          <div className="text-[10px] text-slate-600 font-mono mt-0.5">Tutti gli anni archiviati</div>
+          <div className="text-[10px] text-slate-600 font-mono mt-0.5">Entrambi gli elenchi ufficiali</div>
         </div>
 
         <div className="p-4 bg-white border border-emerald-300 bg-emerald-50/20">
-          <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-800 font-bold">Anno 2026 (Attivi)</div>
+          <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-800 font-bold">Anno 2026 (Iscritti Attivi)</div>
           <div className="text-2xl sm:text-3xl font-light font-['Cormorant_Garamond'] text-emerald-900 mt-1">
             {stats.y2026}
           </div>
-          <div className="text-[10px] text-emerald-700 font-mono mt-0.5">Iscritti stagione corrente</div>
+          <div className="text-[10px] text-emerald-700 font-mono mt-0.5">Stagione corrente (Seconda lista Excel)</div>
         </div>
 
         <div className="p-4 bg-white border border-slate-200">
-          <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold">Anno 2024</div>
-          <div className="text-2xl sm:text-3xl font-light font-['Cormorant_Garamond'] text-[#0a1c2a] mt-1">
-            {stats.y2024}
-          </div>
-          <div className="text-[10px] text-slate-600 font-mono mt-0.5">Registro storico 2024</div>
-        </div>
-
-        <div className="p-4 bg-white border border-slate-200">
-          <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold">Anno 2023</div>
+          <div className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold">Anno 2023 (Archivio Storico)</div>
           <div className="text-2xl sm:text-3xl font-light font-['Cormorant_Garamond'] text-[#0a1c2a] mt-1">
             {stats.y2023}
           </div>
-          <div className="text-[10px] text-slate-600 font-mono mt-0.5">Registro storico 2023</div>
+          <div className="text-[10px] text-slate-600 font-mono mt-0.5">Prima lista Excel archiviata</div>
         </div>
       </div>
 
