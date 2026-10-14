@@ -32,18 +32,23 @@ export default function LibroSociManager({
   const [selectedYear, setSelectedYear] = useState<number | "tutti">("tutti");
   const [search, setSearch] = useState("");
 
+  // Normalizza soci: se presenti soci con anno 2024, sono della stagione 2026
+  const normalizedSoci = useMemo(() => {
+    return (soci || []).map((s) => (s.anno === 2024 ? { ...s, anno: 2026 } : s));
+  }, [soci]);
+
   // Anni disponibili (liste ufficiali: 2026 e 2023)
   const availableYears = useMemo(() => {
     const set = new Set<number>([2026, 2023]);
-    soci.forEach((s) => {
-      if (s.anno) set.add(s.anno);
+    normalizedSoci.forEach((s) => {
+      if (s.anno && s.anno !== 2024) set.add(s.anno);
     });
     return Array.from(set).sort((a, b) => b - a);
-  }, [soci]);
+  }, [normalizedSoci]);
 
   // Filtra soci
   const filteredSoci = useMemo(() => {
-    return soci.filter((s) => {
+    return normalizedSoci.filter((s) => {
       if (selectedYear !== "tutti" && s.anno !== selectedYear) {
         return false;
       }
@@ -60,15 +65,15 @@ export default function LibroSociManager({
       }
       return true;
     });
-  }, [soci, selectedYear, search]);
+  }, [normalizedSoci, selectedYear, search]);
 
   // Statistiche
   const stats = useMemo(() => {
-    const total = soci.length;
-    const y2026 = soci.filter((s) => s.anno === 2026).length;
-    const y2023 = soci.filter((s) => s.anno === 2023).length;
+    const total = normalizedSoci.length;
+    const y2026 = normalizedSoci.filter((s) => s.anno === 2026).length;
+    const y2023 = normalizedSoci.filter((s) => s.anno === 2023).length;
     return { total, y2026, y2023 };
-  }, [soci]);
+  }, [normalizedSoci]);
 
   // Eliminazione
   const handleDeleteSocio = async (id: string, nome: string) => {
@@ -165,11 +170,11 @@ export default function LibroSociManager({
                 : "bg-white text-slate-700 border-slate-300 hover:border-slate-800"
             }`}
           >
-            Tutti ({soci.length})
+            Tutti ({normalizedSoci.length})
           </button>
 
           {availableYears.map((yr) => {
-            const count = soci.filter((s) => s.anno === yr).length;
+            const count = normalizedSoci.filter((s) => s.anno === yr).length;
             return (
               <button
                 key={yr}

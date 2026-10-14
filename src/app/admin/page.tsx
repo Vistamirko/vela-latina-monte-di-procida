@@ -609,7 +609,7 @@ function AdminDashboardContent() {
                 {(isTabAllowed("cruscotto") || isTabAllowed("soci") || isTabAllowed("barche") || isTabAllowed("attivita") || isTabAllowed("inventario") || isTabAllowed("account") || isTabAllowed("fundraising") || isTabAllowed("anagrafica") || isTabAllowed("db")) && (
                   <optgroup label="Gestionale & Operativo">
                     {isTabAllowed("cruscotto") && <option value="cruscotto">Cruscotto Operativo</option>}
-                    {isTabAllowed("soci") && <option value="soci">Libro Soci ({soci.filter((s) => s.anno === 2026).length})</option>}
+                    {isTabAllowed("soci") && <option value="soci">Libro Soci ({soci.filter((s) => s.anno === 2026 || s.anno === 2024).length})</option>}
                     {isTabAllowed("barche") && <option value="barche">Flotta & Manutenzioni</option>}
                     {isTabAllowed("attivita") && <option value="attivita">Attività & Task</option>}
                     {isTabAllowed("inventario") && <option value="inventario">Inventario & Acquisti</option>}
@@ -1065,9 +1065,9 @@ function AdminDashboardContent() {
                   >
                     <Users className="w-3.5 h-3.5 text-indigo-600" />
                     <span>Libro Soci ({soci.length})</span>
-                    {soci.filter((s) => s.anno === 2026).length > 0 && (
+                    {soci.filter((s) => s.anno === 2026 || s.anno === 2024).length > 0 && (
                       <span className="px-1.5 py-0.2 text-[9px] bg-emerald-700 text-white rounded-full font-bold">
-                        {soci.filter((s) => s.anno === 2026).length}
+                        {soci.filter((s) => s.anno === 2026 || s.anno === 2024).length}
                       </span>
                     )}
                   </button>

@@ -786,6 +786,14 @@ export async function initDb(): Promise<void> {
         console.warn("[initDb] Avviso seed soci:", errSoci);
       }
 
+      // Allineamento automatico stagione soci: la seconda lista excel corrisponde alla stagione 2026 (non 2024)
+      try {
+        await sql`UPDATE soci SET anno = 2026 WHERE anno = 2024;`;
+        await sql`UPDATE soci SET id = REPLACE(id, 'socio-2024-', 'socio-2026-') WHERE id LIKE 'socio-2024-%';`;
+      } catch (errMigrate) {
+        console.warn("[initDb] Avviso migrazione soci 2024 -> 2026:", errMigrate);
+      }
+
       // Assicura la presenza degli utenti per ciascun ruolo
       for (const u of DEFAULT_ADMIN_USERS) {
         const found = await sql`SELECT id FROM admin_users WHERE LOWER(email) = LOWER(${u.email}) LIMIT 1;`;
@@ -1474,7 +1482,9 @@ export const BookingsRepo = {
 export const SociRepo = {
   async getAll(anno?: number): Promise<SocioItem[]> {
     if (!DB_URL) {
-      const items = readLocalJson<SocioItem[]>("soci.json", []);
+      const items = readLocalJson<SocioItem[]>("soci.json", []).map((s) =>
+        s.anno === 2024 ? { ...s, anno: 2026, id: s.id.replace("socio-2024-", "socio-2026-") } : s
+      );
       const filtered = anno ? items.filter((s) => s.anno === anno) : items;
       return filtered.sort((a, b) => {
         if (b.anno !== a.anno) return b.anno - a.anno;
@@ -1484,12 +1494,12 @@ export const SociRepo = {
     try {
       const sql = neon(DB_URL);
       const rows = anno
-        ? await sql`SELECT * FROM soci WHERE anno = ${anno} ORDER BY progressivo ASC NULLS LAST, created_at ASC;`
-        : await sql`SELECT * FROM soci ORDER BY anno DESC, progressivo ASC NULLS LAST, created_at ASC;`;
+        ? await sql`SELECT * FROM soci WHERE (anno = ${anno} OR (anno = 2024 AND ${anno} = 2026)) ORDER BY progressivo ASC NULLS LAST, created_at ASC;`
+        : await sql`SELECT * FROM soci ORDER BY (CASE WHEN anno = 2024 THEN 2026 ELSE anno END) DESC, progressivo ASC NULLS LAST, created_at ASC;`;
 
       return rows.map((r: any) => ({
-        id: r.id,
-        anno: Number(r.anno),
+        id: r.id ? String(r.id).replace("socio-2024-", "socio-2026-") : r.id,
+        anno: Number(r.anno) === 2024 ? 2026 : Number(r.anno),
         progressivo: r.progressivo ? Number(r.progressivo) : undefined,
         nome: r.nome,
         dataLuogoNascita: r.data_luogo_nascita || undefined,
@@ -1510,7 +1520,9 @@ export const SociRepo = {
       }));
     } catch (err) {
       console.error("[SociRepo.getAll] Errore DB Neon, uso fallback:", err);
-      const items = readLocalJson<SocioItem[]>("soci.json", []);
+      const items = readLocalJson<SocioItem[]>("soci.json", []).map((s) =>
+        s.anno === 2024 ? { ...s, anno: 2026, id: s.id.replace("socio-2024-", "socio-2026-") } : s
+      );
       const filtered = anno ? items.filter((s) => s.anno === anno) : items;
       return filtered.sort((a, b) => {
         if (b.anno !== a.anno) return b.anno - a.anno;
