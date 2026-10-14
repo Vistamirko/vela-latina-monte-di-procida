@@ -46,6 +46,7 @@ import AttivitaManager from "@/components/admin/AttivitaManager";
 import InventarioManager from "@/components/admin/InventarioManager";
 import AccountManager from "@/components/admin/AccountManager";
 import FundraisingManager from "@/components/admin/FundraisingManager";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
 export type AdminTab =
   | "cruscotto"
@@ -1524,7 +1525,7 @@ function AdminDashboardContent() {
                   key={c.id}
                   className="bg-white border border-slate-300 p-4 shadow-2xs space-y-3 overflow-hidden"
                 >
-                  {c.imageUrl && (
+                  {c.imageUrl ? (
                     <div className="relative w-full h-36 border-b border-slate-200 overflow-hidden bg-slate-100 -mt-4 -mx-4 mb-2">
                       <Image
                         src={c.imageUrl}
@@ -1532,6 +1533,10 @@ function AdminDashboardContent() {
                         fill
                         className="object-cover"
                       />
+                    </div>
+                  ) : (
+                    <div className="-mt-4 -mx-4 mb-2">
+                      <PhotoPlaceholder title={c.courseTitle} className="h-28 border-0 border-b border-slate-200" />
                     </div>
                   )}
                   <div className="flex items-start justify-between gap-2">
@@ -1637,7 +1642,7 @@ function AdminDashboardContent() {
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            {c.imageUrl && (
+                            {c.imageUrl ? (
                               <div className="relative w-12 h-9 shrink-0 border border-slate-300 bg-slate-100 overflow-hidden shadow-2xs">
                                 <Image
                                   src={c.imageUrl}
@@ -1646,6 +1651,8 @@ function AdminDashboardContent() {
                                   className="object-cover"
                                 />
                               </div>
+                            ) : (
+                              <PhotoPlaceholder compact title={c.courseTitle} className="w-fit shrink-0" />
                             )}
                             <div>
                               <div className="font-sans font-semibold text-sm text-[#0a1c2a]">

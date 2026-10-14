@@ -19,7 +19,7 @@ function CourseEditorContent() {
   const [courseData, setCourseData] = useState<Partial<CourseSession>>({
     courseKey: "voga",
     courseTitle: "Scuola di Voga Tradizionale Flegrea",
-    imageUrl: "/images/museo/museo-3.jpeg",
+    imageUrl: "",
     startDate: new Date().toISOString().split("T")[0],
     schedule: "Sabato mattina ore 09:30 – 12:30",
     totalSeats: 12,

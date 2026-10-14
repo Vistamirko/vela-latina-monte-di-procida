@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { GraduationCap, CheckCircle2, Calendar, Clock } from "lucide-react";
 import { CourseSession } from "@/lib/db/types";
 
@@ -126,14 +127,8 @@ export default function CorsiPage() {
             {/* 01 · Voga in Piedi */}
             <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
-                  <Image
-                    src="/images/museo/museo-3.jpeg"
-                    alt="Voga Tradizionale Flegrea"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
+                  <PhotoPlaceholder title="Scuola di Voga Tradizionale Flegrea" className="border-0 bg-transparent min-h-0" />
                   <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
                     01 · SCUOLA DI VOGA
                   </span>
@@ -172,7 +167,7 @@ export default function CorsiPage() {
               <div>
                 <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
                   <Image
-                    src="/images/janara-regatta.jpeg"
+                    src="/images/corso-conduzione-janara.jpg"
                     alt="Corso di Vela Latina"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -213,14 +208,8 @@ export default function CorsiPage() {
             {/* 03 · Progetto ROSA */}
             <div className="group border border-[#0a1c2a] bg-white flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#b8860b] transition-all">
               <div>
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
-                  <Image
-                    src="/images/janara-crew.jpeg"
-                    alt="Progetto ROSA Equipaggio Femminile"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
+                  <PhotoPlaceholder title="Equipaggio Femminile 2027" className="border-0 bg-transparent min-h-0" />
                   <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#b8860b] text-white text-[10px] font-mono uppercase tracking-widest font-bold shadow-xs">
                     03 · PROGETTO ROSA
                   </span>
@@ -319,13 +308,8 @@ export default function CorsiPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {calendarSessions.map((session) => {
-              const defaultPhotos: Record<string, string> = {
-                voga: "/images/museo/museo-3.jpeg",
-                vela: "/images/janara-regatta.jpeg",
-                rosa: "/images/janara-crew.jpeg",
-                inclusione: "/images/museo/museo-6.jpeg",
-              };
-              const photo = session.imageUrl || defaultPhotos[session.courseKey] || "/images/janara-regatta.jpeg";
+              const isVela = session.courseKey === "vela" || session.courseTitle.toLowerCase().includes("vela latina");
+              const photo = session.imageUrl || (isVela ? "/images/corso-conduzione-janara.jpg" : "");
 
               return (
                 <div
@@ -333,14 +317,21 @@ export default function CorsiPage() {
                   className="bg-[#fbfaf6] border border-slate-200 flex flex-col justify-between hover:border-[#0a1c2a] transition-all overflow-hidden group shadow-2xs hover:shadow-md"
                 >
                   <div>
-                    {/* Header Image della sessione */}
-                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
-                      <Image
-                        src={photo}
-                        alt={session.courseTitle}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                    {/* Header Image della sessione o PhotoPlaceholder */}
+                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
+                      {photo ? (
+                        <>
+                          <Image
+                            src={photo}
+                            alt={session.courseTitle}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/40 via-transparent to-transparent pointer-events-none" />
+                        </>
+                      ) : (
+                        <PhotoPlaceholder title={session.courseTitle} className="border-0 bg-transparent min-h-0" />
+                      )}
                       <div className="absolute top-2.5 left-2.5">
                         <span
                           className={`px-2 py-0.5 text-[9px] uppercase tracking-wider font-mono font-bold border backdrop-blur-xs ${
