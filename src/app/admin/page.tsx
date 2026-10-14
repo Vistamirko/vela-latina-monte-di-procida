@@ -40,6 +40,7 @@ import {
   Award,
   CreditCard,
   ChevronDown,
+  Camera,
 } from "lucide-react";
 import { EventItem, BlogPost, CourseSession, ProjectItem, BookingRequest, SocioItem, AnagraficaAssociazione } from "@/lib/db/types";
 import LibroSociManager from "@/components/admin/LibroSociManager";
@@ -50,6 +51,7 @@ import AttivitaManager from "@/components/admin/AttivitaManager";
 import InventarioManager from "@/components/admin/InventarioManager";
 import AccountManager from "@/components/admin/AccountManager";
 import FundraisingManager from "@/components/admin/FundraisingManager";
+import QuickPhotoUploaderModal from "@/components/admin/QuickPhotoUploaderModal";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
 export type AdminTab =
@@ -135,6 +137,7 @@ function AdminDashboardContent() {
   const [bookingFilter, setBookingFilter] = useState<"tutte" | "nuova" | "in_attesa_pagamento" | "contattato" | "iscritto">("tutte");
   const [loadingData, setLoadingData] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   const showToast = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
@@ -416,6 +419,15 @@ function AdminDashboardContent() {
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="truncate max-w-[140px]">{currentUser?.name || currentUser?.email}</span>
             </div>
+
+            <button
+              onClick={() => setShowPhotoModal(true)}
+              className="px-2.5 py-1 sm:py-1.5 bg-[#0a1c2a] hover:bg-[#1b5b80] text-white text-[11px] sm:text-xs font-mono font-semibold flex items-center gap-1.5 transition-colors cursor-pointer rounded-xs shadow-2xs"
+              title="Carica o scatta foto da cellulare"
+            >
+              <Camera className="w-3.5 h-3.5 text-[#c99a45]" />
+              <span className="hidden xs:inline">Carica Foto</span>
+            </button>
 
             <Link
               href="/"
@@ -2520,6 +2532,16 @@ function AdminDashboardContent() {
           </div>
         </div>
       )}
+
+      {/* Modal Caricamento Foto Rapido da Smartphone / Desktop */}
+      <QuickPhotoUploaderModal
+        isOpen={showPhotoModal}
+        onClose={() => setShowPhotoModal(false)}
+        onPhotoUploaded={() => {
+          showToast("success", "Foto caricata con successo!");
+          loadAllData();
+        }}
+      />
     </div>
   );
 }

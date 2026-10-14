@@ -2,7 +2,7 @@
 
 import { useState, useRef, ChangeEvent, DragEvent } from "react";
 import Image from "next/image";
-import { Upload, X, Image as ImageIcon, Loader2, Check, Sparkles } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, Check, Sparkles, Camera } from "lucide-react";
 
 interface ImageUploaderProps {
   label: string;
@@ -20,6 +20,74 @@ const GALLERY_PRESETS = [
   { label: "Logo Ufficiale", url: "/images/logo-vela-latina.webp" },
 ];
 
+/**
+ * Ridimensiona e ottimizza automaticamente le foto scattate con smartphone (spesso 12-48MP / 10MB+)
+ * convertendole in JPEG ottimizzato max 1920px per un caricamento veloce e senza errori da cellulare.
+ */
+async function optimizeImageForUpload(file: File): Promise<File> {
+  if (!file.type.startsWith("image/") || file.type.includes("svg") || file.type.includes("gif")) {
+    return file;
+  }
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = document.createElement("img");
+      img.onload = () => {
+        const maxDimension = 1920;
+        let width = img.width;
+        let height = img.height;
+
+        if (width <= maxDimension && height <= maxDimension && file.size < 1.5 * 1024 * 1024) {
+          resolve(file);
+          return;
+        }
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const cleanFileName = file.name.replace(/\.[^/.]+$/, "") + ".jpeg";
+              const optimizedFile = new File([blob], cleanFileName, {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              });
+              resolve(optimizedFile);
+            } else {
+              resolve(file);
+            }
+          },
+          "image/jpeg",
+          0.85
+        );
+      };
+      img.onerror = () => resolve(file);
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = () => resolve(file);
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function ImageUploader({
   label,
   value,
@@ -32,12 +100,15 @@ export default function ImageUploader({
   const [showPresets, setShowPresets] = useState(false);
   const [showManualInput, setShowManualInput] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleUploadFile = async (file: File) => {
+  const handleUploadFile = async (rawFile: File) => {
     setError(null);
     setIsUploading(true);
 
     try {
+      // Ottimizza per dispositivi mobili prima dell'invio
+      const file = await optimizeImageForUpload(rawFile);
       const formData = new FormData();
       formData.append("file", file);
 
@@ -54,7 +125,7 @@ export default function ImageUploader({
       onChange(data.url);
     } catch (err: unknown) {
       setError(
-        err instanceof Error ? err.message : "Errore durante l&apos;upload dell&apos;immagine"
+        err instanceof Error ? err.message : "Errore durante l'upload dell'immagine"
       );
     } finally {
       setIsUploading(false);
@@ -66,6 +137,8 @@ export default function ImageUploader({
     if (file) {
       handleUploadFile(file);
     }
+    // reset input per permettere di ricaricare lo stesso file
+    e.target.value = "";
   };
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -135,13 +208,21 @@ export default function ImageUploader({
             <p className="text-[10px] text-slate-700 font-mono mt-0.5">
               Immagine caricata correttamente e pronta per la pubblicazione
             </p>
-            <div className="flex items-center gap-3 mt-2">
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              <button
+                type="button"
+                onClick={() => cameraInputRef.current?.click()}
+                className="text-[10px] font-mono uppercase tracking-wider text-[#0a1c2a] hover:text-[#b8860b] font-bold cursor-pointer inline-flex items-center gap-1 bg-white px-2 py-0.5 border border-slate-300"
+              >
+                <Camera className="w-3 h-3 text-[#1b5b80]" />
+                <span>Riscatta foto</span>
+              </button>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 className="text-[10px] font-mono uppercase tracking-wider text-[#1b5b80] hover:underline font-bold cursor-pointer"
               >
-                Sostituisci file
+                Scegli dalla galleria
               </button>
               <span className="text-slate-300">·</span>
               <button
@@ -155,46 +236,76 @@ export default function ImageUploader({
           </div>
         </div>
       ) : (
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-xs p-6 text-center cursor-pointer transition-colors ${
-            isDragging
-              ? "border-[#1b5b80] bg-[#1b5b80]/5"
-              : "border-slate-300 hover:border-[#0a1c2a] bg-[#fbfaf6]"
-          }`}
-        >
+        <div className="border border-slate-300 bg-[#fbfaf6] p-3 sm:p-5 rounded-xs space-y-3">
           {isUploading ? (
-            <div className="flex flex-col items-center justify-center py-2 space-y-2">
-              <Loader2 className="w-6 h-6 animate-spin text-[#1b5b80]" />
-              <span className="text-xs font-mono text-slate-700">
-                Caricamento e ottimizzazione immagine in corso...
+            <div className="flex flex-col items-center justify-center py-6 space-y-2">
+              <Loader2 className="w-7 h-7 animate-spin text-[#1b5b80]" />
+              <span className="text-xs font-mono font-semibold text-[#0a1c2a]">
+                Caricamento & ottimizzazione foto da cellulare in corso...
+              </span>
+              <span className="text-[10px] font-mono text-slate-500">
+                Ridimensionamento automatico ad alta qualità in corso
               </span>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 mb-1">
-                <Upload className="w-5 h-5 text-[#0a1c2a]" />
+            <>
+              {/* Due azioni rapide per smartphone e desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => cameraInputRef.current?.click()}
+                  className="px-4 py-3 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold rounded-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+                >
+                  <Camera className="w-4 h-4 text-[#c99a45]" />
+                  <span>Scatta Foto con Fotocamera</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-4 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs font-mono font-bold rounded-xs border border-slate-300 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+                >
+                  <Upload className="w-4 h-4 text-[#1b5b80]" />
+                  <span>Scegli da Galleria / File</span>
+                </button>
               </div>
-              <div className="text-xs font-medium text-[#0a1c2a]">
-                <strong className="underline text-[#1b5b80]">Clicca per caricare</strong>{" "}
-                dal tuo computer oppure trascina qui il file
+
+              {/* Area Drag & Drop alternativa da Desktop */}
+              <div
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onClick={() => fileInputRef.current?.click()}
+                className={`hidden sm:block border-2 border-dashed rounded-xs p-4 text-center cursor-pointer transition-colors ${
+                  isDragging
+                    ? "border-[#1b5b80] bg-[#1b5b80]/5"
+                    : "border-slate-300/80 hover:border-[#0a1c2a] bg-white"
+                }`}
+              >
+                <p className="text-[11px] text-slate-600 font-mono">
+                  Oppure trascina qui il file dal computer (JPG, PNG, WEBP, HEIC fino a 25MB)
+                </p>
               </div>
-              <p className="text-[10px] font-mono text-slate-700">
-                JPG, PNG, WEBP, SVG fino a 10MB
-              </p>
-            </div>
+            </>
           )}
         </div>
       )}
 
-      {/* Input File Nascosto */}
+      {/* Input File Nascosto: Galleria / File Generico */}
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,image/avif"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="hidden"
+      />
+
+      {/* Input Fotocamera Nascosto: Apre Direttamente la Fotocamera del Telefono */}
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
         onChange={handleFileChange}
         className="hidden"
       />

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import ImageUploader from "@/components/ImageUploader";
 import { BarcaItem, ManutenzioneItem } from "@/lib/db/types";
 
 export default function BarcheManager() {
@@ -563,15 +564,11 @@ export default function BarcheManager() {
               </div>
 
               <div>
-                <label className="block font-mono text-slate-700 mb-1 font-semibold">
-                  URL Fotografia Ufficiale (Lasciare vuoto se mancante)
-                </label>
-                <input
-                  type="text"
+                <ImageUploader
+                  label="Fotografia Ufficiale Imbarcazione"
                   value={modalBarca.foto || ""}
-                  onChange={(e) => setModalBarca({ ...modalBarca, foto: e.target.value })}
-                  placeholder="Es. /images/janara-regatta.jpeg (vuoto = [Foto mancante])"
-                  className="w-full px-3 py-2 border border-slate-300 rounded font-medium focus:outline-none"
+                  onChange={(url) => setModalBarca({ ...modalBarca, foto: url })}
+                  placeholder="/images/janara-regatta.jpeg"
                 />
               </div>
 
