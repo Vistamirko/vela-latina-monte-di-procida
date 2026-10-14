@@ -388,17 +388,6 @@ export interface FundraisingItem {
   updatedAt: string;
 }
 
-export interface PropostaSoftwareItem {
-  ordine: string;
-  software: string;
-  semplicita: string;
-  costo: string;
-  puntiDiForza: string;
-  limiti: string;
-  quandoValutarlo: string;
-  stato: string;
-  note: string;
-}
 
 export interface CruscottoKPI {
   totaleProgetti: number;

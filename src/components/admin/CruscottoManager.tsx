@@ -12,7 +12,6 @@ import {
   Calendar,
   Sparkles,
   ArrowRight,
-  TrendingUp,
   Layers,
   Camera,
   ImageOff,
@@ -23,7 +22,7 @@ import {
   Inbox,
   Users,
 } from "lucide-react";
-import { CruscottoKPI, PropostaSoftwareItem } from "@/lib/db/types";
+import { CruscottoKPI } from "@/lib/db/types";
 
 interface CruscottoManagerProps {
   onNavigateTab: (tab: string) => void;
@@ -32,7 +31,6 @@ interface CruscottoManagerProps {
 export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProps) {
   const [data, setData] = useState<{
     kpi: CruscottoKPI;
-    proposteSoftware: PropostaSoftwareItem[];
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -68,8 +66,6 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
     accountDaVerificare: 6,
     prioritaImmediate: [],
   };
-
-  const softwareList = data?.proposteSoftware || [];
 
   return (
     <div className="space-y-8 animate-fadeIn">
@@ -402,54 +398,6 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
           </div>
         </div>
       </div>
-
-      {/* Sezione Roadmap Software & Proposte Future */}
-      {softwareList.length > 0 && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 sm:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#c99a45]" />
-              <h2 className="font-serif font-bold text-slate-900 text-sm sm:text-base">
-                Valutazione Software Project Management (Foglio Proposte Future)
-              </h2>
-            </div>
-            <span className="text-xs text-slate-500 font-mono">Roadmap Evolutiva</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {softwareList.map((soft) => (
-              <div
-                key={soft.software}
-                className="p-4 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-                      <span className="text-xs font-mono text-slate-400">#{soft.ordine}</span>
-                      {soft.software}
-                    </span>
-                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-blue-50 text-blue-700 border border-blue-200 rounded font-semibold">
-                      {soft.semplicita}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-slate-600 mb-2 leading-relaxed">
-                    <strong className="text-slate-800">Punti di forza:</strong> {soft.puntiDiForza}
-                  </p>
-                  <p className="text-xs text-slate-500 mb-2 leading-relaxed">
-                    <strong className="text-slate-700">Limiti:</strong> {soft.limiti}
-                  </p>
-                </div>
-
-                <div className="pt-2 border-t border-slate-200 text-[11px] font-mono text-slate-500 flex items-center justify-between">
-                  <span>Costo: {soft.costo}</span>
-                  <span className="text-[#0a1c2a] font-semibold">{soft.quandoValutarlo}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -10,16 +10,12 @@ export async function GET() {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
     }
 
-    const [kpi, software] = await Promise.all([
-      CruscottoRepo.getKPI(),
-      CruscottoRepo.getProposteSoftware(),
-    ]);
+    const kpi = await CruscottoRepo.getKPI();
 
     return NextResponse.json({
       success: true,
       data: {
         kpi,
-        proposteSoftware: software,
       },
     });
   } catch (error) {

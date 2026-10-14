@@ -20,7 +20,6 @@ import {
   AccountDigitaleItem,
   GruppoWhatsAppItem,
   FundraisingItem,
-  PropostaSoftwareItem,
   CruscottoKPI,
 } from "./types";
 import { hashPassword } from "../auth";
@@ -2118,10 +2117,6 @@ export const CruscottoRepo = {
       accountDaVerificare: accounts.filter((a) => a.statoRevisione.toLowerCase().includes("verificare") || a.statoRevisione.toLowerCase().includes("sospeso") || a.statoRevisione.toLowerCase().includes("configurare")).length,
       prioritaImmediate,
     };
-  },
-
-  async getProposteSoftware(): Promise<PropostaSoftwareItem[]> {
-    return readLocalJson<PropostaSoftwareItem[]>("proposte_software.json", []);
   },
 };
 
