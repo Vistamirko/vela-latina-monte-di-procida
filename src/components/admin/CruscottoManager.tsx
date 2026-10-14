@@ -351,24 +351,24 @@ export default function CruscottoManager({ onNavigateTab }: CruscottoManagerProp
                 Progetti & Cantieri
               </span>
               <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded">
-                2 / 8 con foto
+                0 / 8 con foto (8 placeholder)
               </span>
             </div>
             <ul className="space-y-1.5 font-mono text-[11px]">
-              <li className="flex items-center justify-between text-emerald-700 font-medium">
-                <span>• Progetto ROSA (Janara)</span>
-                <CheckCircle2 className="w-3.5 h-3.5" />
-              </li>
-              <li className="flex items-center justify-between text-emerald-700 font-medium">
-                <span>• America&apos;s Cup (Janara)</span>
-                <CheckCircle2 className="w-3.5 h-3.5" />
+              <li className="flex items-center justify-between text-amber-800">
+                <span>• Progetto ROSA</span>
+                <span className="text-[9px] bg-amber-100 px-1 rounded font-bold">Foto mancante</span>
               </li>
               <li className="flex items-center justify-between text-amber-800">
-                <span>• Barcolana / Quandel Lab</span>
-                <span className="text-[9px] bg-amber-100 px-1 rounded font-bold">Foto mancanti (6)</span>
+                <span>• America&apos;s Cup / Barcolana</span>
+                <span className="text-[9px] bg-amber-100 px-1 rounded font-bold">Foto mancante</span>
               </li>
               <li className="flex items-center justify-between text-amber-800">
-                <span>• Breccia Museo / Inclusione</span>
+                <span>• Quandel Lab / Operazione Quandel</span>
+                <span className="text-[9px] bg-amber-100 px-1 rounded font-bold">Foto mancante</span>
+              </li>
+              <li className="flex items-center justify-between text-amber-800">
+                <span>• Breccia Museo / Inclusione / Stintino</span>
                 <span className="text-[9px] bg-amber-100 px-1 rounded font-bold">Placeholder attivo</span>
               </li>
             </ul>

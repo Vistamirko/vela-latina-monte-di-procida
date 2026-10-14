@@ -573,7 +573,7 @@ export default function EmotionalStory() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-slate-700 font-mono font-semibold mb-4">
             <Calendar className="w-3.5 h-3.5 text-[#0a1c2a]" />
-            <span>03 · Palmarès & Manifestazioni</span>
+            <span>03 · Sezione Eventi, Regate & Palmarès</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -591,17 +591,15 @@ export default function EmotionalStory() {
 
             <div className="lg:col-span-7 space-y-6">
               <h2 className="font-['Cormorant_Garamond'] text-5xl sm:text-7xl md:text-8xl font-light text-[#0a1c2a] leading-[0.92]">
-                Dove il vento si fa <br />
+                Eventi, Regate & <br />
                 <span className="italic text-slate-700">
-                  sfida, rito e vittoria.
+                  la Sfida delle Vele.
                 </span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-700 font-light leading-relaxed">
                 Dalla vittoria assoluta di Janara a Les Voiles Latines di
-                Saint-Tropez nel 2024 al trionfo alla Procida Cup 2025, fino alle
-                tradizioni popolari della Festa del Porto di Ischia e del Palio
-                Marinaro.
+                Saint-Tropez nel 2024 al trionfo alla Procida Cup 2025, fino all&apos;Operazione Quandel, al Palio dell&apos;Assunta e alla rotta verso la Barcolana 2026.
               </p>
 
               <div className="pt-4 flex flex-wrap gap-4 items-center">
@@ -609,11 +607,11 @@ export default function EmotionalStory() {
                   href="/eventi"
                   className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#0a1c2a] text-white text-[10px] uppercase tracking-[0.25em] font-semibold hover:bg-[#b8860b] transition-all rounded-xs shadow-xs"
                 >
-                  <span>Consulta il Calendario & Palmarès</span>
+                  <span>Apri la Sezione Eventi & Palmarès</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
                 <span className="text-xs font-mono text-slate-700 font-medium">
-                  Procida Cup · Ischia · Taranto · Saint-Tropez
+                  Saint-Tropez · Procida Cup · Palio Assunta · Barcolana
                 </span>
               </div>
             </div>

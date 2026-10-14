@@ -2,6 +2,7 @@ import { Camera } from "lucide-react";
 
 interface PhotoPlaceholderProps {
   title?: string;
+  subtitle?: string;
   className?: string;
   compact?: boolean;
   aspect?: "auto" | "video" | "square" | "portrait";
@@ -9,6 +10,7 @@ interface PhotoPlaceholderProps {
 
 export default function PhotoPlaceholder({
   title,
+  subtitle,
   className = "",
   compact = false,
   aspect = "auto",
@@ -47,8 +49,13 @@ export default function PhotoPlaceholder({
         Foto mancante
       </span>
       {title && (
-        <span className="font-serif italic text-xs text-slate-500 mt-1 max-w-xs line-clamp-1">
+        <span className="font-serif italic text-xs text-slate-700 mt-1 max-w-xs line-clamp-1 font-semibold">
           {title}
+        </span>
+      )}
+      {subtitle && (
+        <span className="font-mono text-[10px] text-slate-500 mt-0.5 max-w-xs line-clamp-1">
+          {subtitle}
         </span>
       )}
       <span className="font-mono text-[9px] text-slate-400 mt-1 tracking-wide">

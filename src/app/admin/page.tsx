@@ -1097,6 +1097,17 @@ function AdminDashboardContent() {
                     </button>
                   </div>
 
+                  {/* Anteprima Foto o Placeholder Foto Mancante */}
+                  <div className="rounded-xs overflow-hidden border border-slate-200">
+                    {evt.imageUrl ? (
+                      <div className="relative h-28 w-full">
+                        <Image src={evt.imageUrl} alt={evt.title} fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <PhotoPlaceholder title={evt.title} className="h-24 border-0" />
+                    )}
+                  </div>
+
                   <div>
                     <h3 className="font-sans font-bold text-sm text-[#0a1c2a] leading-snug">
                       {evt.title}
@@ -1194,11 +1205,22 @@ function AdminDashboardContent() {
                           </button>
                         </td>
                         <td className="p-4">
-                          <div className="font-sans font-semibold text-sm text-[#0a1c2a]">
-                            {evt.title}
-                          </div>
-                          <div className="text-slate-600 font-sans text-xs line-clamp-1 mt-0.5 font-light">
-                            {evt.description}
+                          <div className="flex items-center gap-3">
+                            {evt.imageUrl ? (
+                              <div className="relative w-12 h-10 rounded-xs overflow-hidden border border-slate-300 shrink-0">
+                                <Image src={evt.imageUrl} alt={evt.title} fill className="object-cover" />
+                              </div>
+                            ) : (
+                              <PhotoPlaceholder compact title={evt.title} className="w-fit shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <div className="font-sans font-semibold text-sm text-[#0a1c2a]">
+                                {evt.title}
+                              </div>
+                              <div className="text-slate-600 font-sans text-xs line-clamp-1 mt-0.5 font-light">
+                                {evt.description}
+                              </div>
+                            </div>
                           </div>
                         </td>
                         <td className="p-4 whitespace-nowrap text-slate-700">
@@ -1786,6 +1808,17 @@ function AdminDashboardContent() {
                     </button>
                   </div>
 
+                  {/* Anteprima Foto o Placeholder Foto Mancante */}
+                  <div className="rounded-xs overflow-hidden border border-slate-200">
+                    {proj.imageUrl ? (
+                      <div className="relative h-28 w-full">
+                        <Image src={proj.imageUrl} alt={proj.title} fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <PhotoPlaceholder title={proj.title} className="h-24 border-0" />
+                    )}
+                  </div>
+
                   <div>
                     <h3 className="font-sans font-bold text-sm text-[#0a1c2a] leading-snug">
                       {proj.title}
@@ -1931,15 +1964,26 @@ function AdminDashboardContent() {
                           {proj.number}
                         </td>
                         <td className="p-4 max-w-xs">
-                          <span className="font-sans font-semibold text-sm text-[#0a1c2a] block">
-                            {proj.title}
-                          </span>
-                          <span className="text-[11px] text-slate-600 italic font-serif block">
-                            {proj.highlight}
-                          </span>
-                          <span className="text-[10px] text-slate-500 block mt-0.5 truncate">
-                            {proj.partner || "Campi Flegrei"}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            {proj.imageUrl ? (
+                              <div className="relative w-12 h-10 rounded-xs overflow-hidden border border-slate-300 shrink-0">
+                                <Image src={proj.imageUrl} alt={proj.title} fill className="object-cover" />
+                              </div>
+                            ) : (
+                              <PhotoPlaceholder compact title={proj.title} className="w-fit shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <span className="font-sans font-semibold text-sm text-[#0a1c2a] block">
+                                {proj.title}
+                              </span>
+                              <span className="text-[11px] text-slate-600 italic font-serif block">
+                                {proj.highlight}
+                              </span>
+                              <span className="text-[10px] text-slate-500 block mt-0.5 truncate">
+                                {proj.partner || "Campi Flegrei"}
+                              </span>
+                            </div>
+                          </div>
                         </td>
                         <td className="p-4">
                           <span className="inline-block px-2 py-0.5 text-[9px] bg-slate-100 border border-slate-300 text-slate-800 font-bold mb-1">

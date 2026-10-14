@@ -5,6 +5,7 @@ import { TIMELINE_DATA, TimelineItem } from "@/data/associationData";
 import { Calendar, Award, Film, Tv, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { initDb, EventsRepo } from "@/lib/db";
 import { SITE_URL } from "@/lib/config";
 
@@ -133,6 +134,17 @@ export default async function EventiPage() {
                       <span className="text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 bg-white border border-slate-300 text-[#0a1c2a] font-bold">
                         {evt.badge}
                       </span>
+                    )}
+                  </div>
+
+                  {/* Anteprima Foto o Placeholder Foto Mancante */}
+                  <div className="mb-4 rounded-xs overflow-hidden border border-slate-200">
+                    {evt.imageUrl ? (
+                      <div className="relative h-44 w-full">
+                        <Image src={evt.imageUrl} alt={evt.title} fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <PhotoPlaceholder title={evt.title} compact className="h-40" />
                     )}
                   </div>
 

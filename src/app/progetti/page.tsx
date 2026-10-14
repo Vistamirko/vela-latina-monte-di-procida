@@ -4,6 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { initDb, ProjectsRepo } from "@/lib/db";
 import { Compass, ArrowUpRight, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { SITE_URL } from "@/lib/config";
 
 export const revalidate = 60;
@@ -126,6 +128,26 @@ export default async function ProgettiPage() {
                       <span className="text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 bg-white border border-slate-300 text-[#0a1c2a] font-semibold">
                         {proj.badge}
                       </span>
+                    )}
+                  </div>
+
+                  {/* Anteprima Immagine o Placeholder Foto Mancante */}
+                  <div className="mb-5 rounded-xs overflow-hidden border border-slate-200">
+                    {proj.imageUrl ? (
+                      <div className="relative h-44 sm:h-52 w-full">
+                        <Image
+                          src={proj.imageUrl}
+                          alt={proj.title}
+                          fill
+                          className="object-cover group-hover:scale-102 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <PhotoPlaceholder
+                        title={proj.title}
+                        subtitle={`Cantiere ${proj.number} · ${proj.category}`}
+                        className="h-44 sm:h-52"
+                      />
                     )}
                   </div>
 
