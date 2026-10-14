@@ -93,6 +93,16 @@ export default function CorsiPage() {
       .catch(() => {});
   }, []);
 
+  const vogaSession = calendarSessions.find((s) => s.courseKey === "voga" || s.id.includes("voga"));
+  const velaSession = calendarSessions.find((s) => s.courseKey === "vela" || s.id.includes("vela"));
+  const rosaSession = calendarSessions.find((s) => s.courseKey === "rosa" || s.id.includes("rosa"));
+  const inclusioneSession = calendarSessions.find((s) => s.courseKey === "inclusione" || s.id.includes("inclusione"));
+
+  const vogaPhoto = vogaSession?.imageUrl;
+  const velaPhoto = velaSession?.imageUrl || "/images/corso-conduzione-janara.jpg";
+  const rosaPhoto = rosaSession?.imageUrl;
+  const inclusionePhoto = inclusioneSession?.imageUrl;
+
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">
       <Header />
@@ -128,7 +138,19 @@ export default function CorsiPage() {
             <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
                 <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
-                  <PhotoPlaceholder title="Scuola di Voga Tradizionale Flegrea" className="border-0 bg-transparent min-h-0" />
+                  {vogaPhoto ? (
+                    <>
+                      <Image
+                        src={vogaPhoto}
+                        alt="Scuola di Voga Tradizionale Flegrea"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                    </>
+                  ) : (
+                    <PhotoPlaceholder title="Scuola di Voga Tradizionale Flegrea" className="border-0 bg-transparent min-h-0" />
+                  )}
                   <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
                     01 · SCUOLA DI VOGA
                   </span>
@@ -165,14 +187,20 @@ export default function CorsiPage() {
             {/* 02 · Vela Latina */}
             <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
-                  <Image
-                    src="/images/corso-conduzione-janara.jpg"
-                    alt="Corso di Vela Latina"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
+                  {velaPhoto ? (
+                    <>
+                      <Image
+                        src={velaPhoto}
+                        alt="Corso di Vela Latina"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                    </>
+                  ) : (
+                    <PhotoPlaceholder title="Corso di Vela Latina" className="border-0 bg-transparent min-h-0" />
+                  )}
                   <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
                     02 · CONDUZIONE TRADIZIONALE
                   </span>
@@ -209,7 +237,19 @@ export default function CorsiPage() {
             <div className="group border border-[#0a1c2a] bg-white flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#b8860b] transition-all">
               <div>
                 <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
-                  <PhotoPlaceholder title="Equipaggio Femminile 2027" className="border-0 bg-transparent min-h-0" />
+                  {rosaPhoto ? (
+                    <>
+                      <Image
+                        src={rosaPhoto}
+                        alt="Equipaggio Femminile 2027"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                    </>
+                  ) : (
+                    <PhotoPlaceholder title="Equipaggio Femminile 2027" className="border-0 bg-transparent min-h-0" />
+                  )}
                   <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#b8860b] text-white text-[10px] font-mono uppercase tracking-widest font-bold shadow-xs">
                     03 · PROGETTO ROSA
                   </span>
@@ -246,14 +286,23 @@ export default function CorsiPage() {
             {/* 04 · Inclusione Mare */}
             <div className="group border border-slate-200 bg-[#fbfaf6] flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-md hover:border-[#0a1c2a] transition-all">
               <div>
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200">
-                  <Image
-                    src="/images/museo/museo-6.jpeg"
-                    alt="Inclusione Mare Centro Serapide"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 border-b border-slate-200 flex items-center justify-center">
+                  {inclusionePhoto ? (
+                    <>
+                      <Image
+                        src={inclusionePhoto}
+                        alt="Inclusione Mare Centro Serapide"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1c2a]/60 via-transparent to-transparent pointer-events-none" />
+                    </>
+                  ) : (
+                    <PhotoPlaceholder
+                      title="Inclusione Mare · Laboratorio Voga e Sensi"
+                      className="border-0 bg-transparent min-h-0"
+                    />
+                  )}
                   <span className="absolute bottom-3 left-3 px-2.5 py-1 bg-[#0a1c2a]/90 backdrop-blur-xs text-white text-[10px] font-mono uppercase tracking-widest font-semibold">
                     04 · SOLIDARIETÀ & BENESSERE
                   </span>
