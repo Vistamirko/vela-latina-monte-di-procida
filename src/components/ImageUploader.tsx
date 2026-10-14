@@ -88,6 +88,53 @@ async function optimizeImageForUpload(file: File): Promise<File> {
   });
 }
 
+function uploadFileWithProgress(
+  file: File,
+  onProgress: (percent: number, loadedBytes: number, totalBytes: number) => void
+): Promise<{ url: string; fileName?: string }> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    xhr.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        onProgress(percent, event.loaded, event.total);
+      }
+    });
+
+    xhr.addEventListener("load", () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          resolve(data);
+        } catch {
+          reject(new Error("Risposta del server non valida"));
+        }
+      } else {
+        try {
+          const errData = JSON.parse(xhr.responseText);
+          reject(new Error(errData.error || `Errore HTTP ${xhr.status}`));
+        } catch {
+          reject(new Error(`Errore di caricamento (HTTP ${xhr.status})`));
+        }
+      }
+    });
+
+    xhr.addEventListener("error", () => {
+      reject(new Error("Errore di connessione di rete durante l'upload"));
+    });
+
+    xhr.addEventListener("abort", () => {
+      reject(new Error("Caricamento interrotto"));
+    });
+
+    xhr.open("POST", "/api/upload");
+    xhr.send(formData);
+  });
+}
+
 export default function ImageUploader({
   label,
   value,
@@ -95,6 +142,9 @@ export default function ImageUploader({
   placeholder = "/images/janara-regatta.jpeg",
 }: ImageUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [uploadBytesInfo, setUploadBytesInfo] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
@@ -105,29 +155,49 @@ export default function ImageUploader({
   const handleUploadFile = async (rawFile: File) => {
     setError(null);
     setIsUploading(true);
+    setUploadProgress(10);
+    setUploadStatus("Lettura foto...");
+    setUploadBytesInfo("");
 
     try {
       // Ottimizza per dispositivi mobili prima dell'invio
+      setUploadProgress(20);
+      setUploadStatus("Compressione e ottimizzazione per cellulare...");
       const file = await optimizeImageForUpload(rawFile);
-      const formData = new FormData();
-      formData.append("file", file);
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      setUploadProgress(30);
+      setUploadStatus("Inizio trasferimento al server...");
+
+      const data = await uploadFileWithProgress(file, (percent, loaded, total) => {
+        // Mappa da 0-100% dell'invio di rete al 30% - 95%
+        const mappedPercent = Math.min(95, 30 + Math.round((percent / 100) * 65));
+        setUploadProgress(mappedPercent);
+
+        const loadedFormatted =
+          loaded > 1024 * 1024
+            ? `${(loaded / (1024 * 1024)).toFixed(1)} MB`
+            : `${Math.round(loaded / 1024)} KB`;
+        const totalFormatted =
+          total > 1024 * 1024
+            ? `${(total / (1024 * 1024)).toFixed(1)} MB`
+            : `${Math.round(total / 1024)} KB`;
+
+        setUploadBytesInfo(`${loadedFormatted} di ${totalFormatted}`);
+        setUploadStatus(`Invio al server (${percent}%)...`);
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Errore durante il caricamento");
-      }
+      setUploadProgress(100);
+      setUploadStatus("Foto caricata con successo!");
 
-      onChange(data.url);
+      setTimeout(() => {
+        onChange(data.url);
+        setIsUploading(false);
+      }, 350);
+      return;
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : "Errore durante l'upload dell'immagine"
       );
-    } finally {
       setIsUploading(false);
     }
   };
@@ -187,8 +257,42 @@ export default function ImageUploader({
         </div>
       </div>
 
-      {/* Box Principale di Caricamento o Anteprima */}
-      {value ? (
+      {/* Box Principale di Caricamento, Avanzamento o Anteprima */}
+      {isUploading ? (
+        <div className="border border-slate-300 bg-white p-4 sm:p-5 rounded-xs space-y-3 shadow-xs">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin text-[#1b5b80]" />
+              <span className="text-xs font-mono font-bold text-[#0a1c2a]">
+                {uploadStatus || "Caricamento foto in corso..."}
+              </span>
+            </div>
+            <span className="text-xs font-mono font-bold text-[#1b5b80]">
+              {uploadProgress}%
+            </span>
+          </div>
+
+          {/* Barra di avanzamento fluida con gradiente ed animazione */}
+          <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5 border border-slate-200">
+            <div
+              className="bg-gradient-to-r from-[#1b5b80] via-[#0a1c2a] to-[#c99a45] h-full rounded-full transition-all duration-300 ease-out shadow-xs"
+              style={{ width: `${Math.max(6, uploadProgress)}%` }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
+            <span>
+              {uploadBytesInfo ||
+                (uploadProgress < 30
+                  ? "Compressione & ottimizzazione fotocamera HD"
+                  : "Trasferimento al server")}
+            </span>
+            <span className="text-[#0a1c2a] font-semibold">
+              {uploadProgress === 100 ? "Salvataggio completato!" : "Attendere prego..."}
+            </span>
+          </div>
+        </div>
+      ) : value ? (
         <div className="relative border border-slate-300 bg-slate-50 p-2 rounded-xs flex items-center gap-4">
           <div className="relative w-28 h-20 bg-slate-200 border border-slate-300 shrink-0 overflow-hidden rounded-xs">
             {/* Immagine con anteprima */}
@@ -237,57 +341,43 @@ export default function ImageUploader({
         </div>
       ) : (
         <div className="border border-slate-300 bg-[#fbfaf6] p-3 sm:p-5 rounded-xs space-y-3">
-          {isUploading ? (
-            <div className="flex flex-col items-center justify-center py-6 space-y-2">
-              <Loader2 className="w-7 h-7 animate-spin text-[#1b5b80]" />
-              <span className="text-xs font-mono font-semibold text-[#0a1c2a]">
-                Caricamento & ottimizzazione foto da cellulare in corso...
-              </span>
-              <span className="text-[10px] font-mono text-slate-500">
-                Ridimensionamento automatico ad alta qualità in corso
-              </span>
-            </div>
-          ) : (
-            <>
-              {/* Due azioni rapide per smartphone e desktop */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => cameraInputRef.current?.click()}
-                  className="px-4 py-3 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold rounded-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
-                >
-                  <Camera className="w-4 h-4 text-[#c99a45]" />
-                  <span>Scatta Foto con Fotocamera</span>
-                </button>
+          {/* Due azioni rapide per smartphone e desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => cameraInputRef.current?.click()}
+              className="px-4 py-3 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold rounded-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+            >
+              <Camera className="w-4 h-4 text-[#c99a45]" />
+              <span>Scatta Foto con Fotocamera</span>
+            </button>
 
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs font-mono font-bold rounded-xs border border-slate-300 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
-                >
-                  <Upload className="w-4 h-4 text-[#1b5b80]" />
-                  <span>Scegli da Galleria / File</span>
-                </button>
-              </div>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="px-4 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs font-mono font-bold rounded-xs border border-slate-300 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+            >
+              <Upload className="w-4 h-4 text-[#1b5b80]" />
+              <span>Scegli da Galleria / File</span>
+            </button>
+          </div>
 
-              {/* Area Drag & Drop alternativa da Desktop */}
-              <div
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onClick={() => fileInputRef.current?.click()}
-                className={`hidden sm:block border-2 border-dashed rounded-xs p-4 text-center cursor-pointer transition-colors ${
-                  isDragging
-                    ? "border-[#1b5b80] bg-[#1b5b80]/5"
-                    : "border-slate-300/80 hover:border-[#0a1c2a] bg-white"
-                }`}
-              >
-                <p className="text-[11px] text-slate-600 font-mono">
-                  Oppure trascina qui il file dal computer (JPG, PNG, WEBP, HEIC fino a 25MB)
-                </p>
-              </div>
-            </>
-          )}
+          {/* Area Drag & Drop alternativa da Desktop */}
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onClick={() => fileInputRef.current?.click()}
+            className={`hidden sm:block border-2 border-dashed rounded-xs p-4 text-center cursor-pointer transition-colors ${
+              isDragging
+                ? "border-[#1b5b80] bg-[#1b5b80]/5"
+                : "border-slate-300/80 hover:border-[#0a1c2a] bg-white"
+            }`}
+          >
+            <p className="text-[11px] text-slate-600 font-mono">
+              Oppure trascina qui il file dal computer (JPG, PNG, WEBP, HEIC fino a 25MB)
+            </p>
+          </div>
         </div>
       )}
 

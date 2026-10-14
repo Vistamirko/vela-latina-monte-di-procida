@@ -86,12 +86,62 @@ async function optimizeImageForUpload(file: File): Promise<File> {
   });
 }
 
+function uploadFileWithProgress(
+  file: File,
+  onProgress: (percent: number, loadedBytes: number, totalBytes: number) => void
+): Promise<{ url: string; fileName?: string }> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    xhr.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        onProgress(percent, event.loaded, event.total);
+      }
+    });
+
+    xhr.addEventListener("load", () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          resolve(data);
+        } catch {
+          reject(new Error("Risposta del server non valida"));
+        }
+      } else {
+        try {
+          const errData = JSON.parse(xhr.responseText);
+          reject(new Error(errData.error || `Errore HTTP ${xhr.status}`));
+        } catch {
+          reject(new Error(`Errore di caricamento (HTTP ${xhr.status})`));
+        }
+      }
+    });
+
+    xhr.addEventListener("error", () => {
+      reject(new Error("Errore di rete durante il caricamento"));
+    });
+
+    xhr.addEventListener("abort", () => {
+      reject(new Error("Caricamento interrotto"));
+    });
+
+    xhr.open("POST", "/api/upload");
+    xhr.send(formData);
+  });
+}
+
 export default function QuickPhotoUploaderModal({
   isOpen,
   onClose,
   onPhotoUploaded,
 }: QuickPhotoUploaderModalProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [uploadBytesInfo, setUploadBytesInfo] = useState("");
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -108,31 +158,50 @@ export default function QuickPhotoUploaderModal({
     setError(null);
     setAssignSuccess(null);
     setIsUploading(true);
+    setUploadProgress(10);
+    setUploadStatus("Lettura foto da cellulare...");
+    setUploadBytesInfo("");
 
     try {
+      setUploadProgress(20);
+      setUploadStatus("Compressione e ottimizzazione per cellulare...");
       const file = await optimizeImageForUpload(rawFile);
-      const formData = new FormData();
-      formData.append("file", file);
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      setUploadProgress(30);
+      setUploadStatus("Inizio trasferimento al server...");
+
+      const data = await uploadFileWithProgress(file, (percent, loaded, total) => {
+        const mappedPercent = Math.min(95, 30 + Math.round((percent / 100) * 65));
+        setUploadProgress(mappedPercent);
+
+        const loadedFormatted =
+          loaded > 1024 * 1024
+            ? `${(loaded / (1024 * 1024)).toFixed(1)} MB`
+            : `${Math.round(loaded / 1024)} KB`;
+        const totalFormatted =
+          total > 1024 * 1024
+            ? `${(total / (1024 * 1024)).toFixed(1)} MB`
+            : `${Math.round(total / 1024)} KB`;
+
+        setUploadBytesInfo(`${loadedFormatted} di ${totalFormatted}`);
+        setUploadStatus(`Invio al server (${percent}%)...`);
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Errore durante il caricamento");
-      }
+      setUploadProgress(100);
+      setUploadStatus("Foto caricata con successo!");
 
-      setUploadedUrl(data.url);
-      if (onPhotoUploaded) {
-        onPhotoUploaded(data.url);
-      }
+      setTimeout(() => {
+        setUploadedUrl(data.url);
+        if (onPhotoUploaded) {
+          onPhotoUploaded(data.url);
+        }
+        setIsUploading(false);
+      }, 350);
+      return;
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : "Errore durante l'upload da cellulare"
       );
-    } finally {
       setIsUploading(false);
     }
   };
@@ -231,13 +300,39 @@ export default function QuickPhotoUploaderModal({
             </button>
           </div>
 
-          {/* Loader Upload */}
+          {/* Box Avanzamento Caricamento */}
           {isUploading && (
-            <div className="p-6 bg-[#fbfaf6] border border-slate-200 rounded-lg text-center space-y-2">
-              <Loader2 className="w-8 h-8 animate-spin text-[#1b5b80] mx-auto" />
-              <div className="font-bold text-[#0a1c2a]">Caricamento in corso...</div>
-              <div className="text-[11px] text-slate-500">
-                La foto viene ottimizzata e salvata sul server.
+            <div className="p-4 sm:p-5 bg-white border border-slate-300 rounded-lg space-y-3 shadow-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-[#1b5b80]" />
+                  <span className="font-bold text-[#0a1c2a] text-xs">
+                    {uploadStatus || "Caricamento in corso..."}
+                  </span>
+                </div>
+                <span className="font-bold text-[#1b5b80] text-xs font-mono">
+                  {uploadProgress}%
+                </span>
+              </div>
+
+              {/* Barra di avanzamento con gradiente fluido */}
+              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5 border border-slate-200">
+                <div
+                  className="bg-gradient-to-r from-[#1b5b80] via-[#0a1c2a] to-[#c99a45] h-full rounded-full transition-all duration-300 ease-out shadow-xs"
+                  style={{ width: `${Math.max(6, uploadProgress)}%` }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                <span>
+                  {uploadBytesInfo ||
+                    (uploadProgress < 30
+                      ? "Compressione HD per cellulare..."
+                      : "Invio dati al server...")}
+                </span>
+                <span className="text-[#0a1c2a] font-semibold">
+                  {uploadProgress === 100 ? "Salvataggio completato!" : "Attendere prego..."}
+                </span>
               </div>
             </div>
           )}
