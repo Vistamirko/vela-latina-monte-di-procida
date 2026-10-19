@@ -180,7 +180,7 @@ export function NauticalBathymetry({
  */
 export function NauticalBorderRuler({
   className = "w-full text-slate-400/40",
-  coordinate = "40° 47′ N",
+  coordinate = "40° 47.53′ N",
 }: {
   className?: string;
   coordinate?: string;
@@ -258,7 +258,7 @@ export function NauticalCartouche({
  * Piccolo mirino di coordinate nautiche (+ crocetta e coordinate)
  */
 export function NauticalCrosshair({
-  coords = "40°47.7′N · 14°03.1′E",
+  coords = "40° 47.53′ N · 014° 02.55′ E",
   label = "Pt. Cospicuo",
   className = "",
 }: {

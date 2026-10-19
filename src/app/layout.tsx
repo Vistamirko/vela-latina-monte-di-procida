@@ -136,8 +136,8 @@ const GLOBAL_SCHEMA_JSON = {
       },
       geo: {
         "@type": "GeoCoordinates",
-        latitude: 40.795,
-        longitude: 14.051,
+        latitude: 40.7922,
+        longitude: 14.0425,
       },
       knowsAbout: [
         "Vela Latina",
@@ -148,7 +148,7 @@ const GLOBAL_SCHEMA_JSON = {
       ],
       contactPoint: {
         "@type": "ContactPoint",
-        email: "vistamirko@gmail.com",
+        email: "velalatinamontediprocida@gmail.com",
         contactType: "Segreteria & Relazioni Esterne",
         availableLanguage: ["Italian", "English"],
       },

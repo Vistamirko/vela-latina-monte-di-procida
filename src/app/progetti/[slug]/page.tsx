@@ -269,7 +269,7 @@ export default async function ProjectDetailPage({
           {/* Sintesi Introduttiva in Risalto */}
           <div className="p-6 sm:p-8 rounded-xs bg-[#fbfaf6] border-l-4 border-[#0a1c2a] mb-12 shadow-2xs">
             <div className="mb-2">
-              <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Relazione di Cantiere" />
+              <NauticalCrosshair coords="40° 47.53′ N · 014° 02.55′ E" label="Relazione di Cantiere" />
             </div>
             <p className="font-['Cormorant_Garamond'] text-xl sm:text-2xl italic text-[#0a1c2a] leading-relaxed">
               “{project.description}”

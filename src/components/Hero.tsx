@@ -26,7 +26,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto w-full pt-4 sm:pt-8 flex flex-wrap items-center justify-between gap-4 border-b border-[#c99f5a]/15 pb-4">
         <div className="flex items-center gap-2.5 text-[10px] sm:text-[11px] uppercase tracking-[0.28em] text-[#e0be82]/80 font-mono">
           <Compass className="w-3.5 h-3.5 text-[#c99f5a]" />
-          <span>40° 47′ 42″ N · 14° 03′ 05″ E · MONTE DI PROCIDA</span>
+          <span>40° 47.53′ N · 014° 02.55′ E · ACQUAMORTA · MONTE DI PROCIDA</span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-[#f4efe6]/60">
           <span className="w-1.5 h-1.5 rounded-full bg-[#38b2ac] animate-ping" />

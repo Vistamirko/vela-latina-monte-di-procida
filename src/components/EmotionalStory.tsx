@@ -105,7 +105,7 @@ export default function EmotionalStory() {
 
         {/* Sottile scala graduata nautica con Latitudine sotto al menu e logo */}
         <div className="max-w-7xl mx-auto w-full relative z-10 pb-1 sm:pb-2">
-          <NauticalBorderRuler coordinate="40° 47′ 42″ N · LATITUDINE CANALE DI PROCIDA" />
+          <NauticalBorderRuler coordinate="40° 47.15′ N · 014° 02.00′ E · ASSE CANALE DI PROCIDA" />
         </div>
 
         {/* Titolo Monumentale con Grazie & Payoff */}
@@ -135,7 +135,7 @@ export default function EmotionalStory() {
           {/* Il Payoff Ufficiale & Mirino Cartografico */}
           <div className="mt-5 sm:mt-10 max-w-3xl border-l-2 border-[#0a1c2a] pl-3.5 sm:pl-8">
             <div className="mb-2 sm:mb-3">
-              <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Ril. Faro & Scogliera" />
+              <NauticalCrosshair coords="40° 47.53′ N · 014° 02.55′ E" label="Ril. Faro & Scogliera" />
             </div>
             <p className="font-['Cormorant_Garamond'] text-2xl sm:text-4xl md:text-5xl italic font-light text-[#0a1c2a] leading-snug sm:leading-tight">
               “Un punto cospicuo sul Mediterraneo.”
@@ -312,7 +312,7 @@ export default function EmotionalStory() {
               <span>Sede Storica & Presidio a Terra · Porticciolo di Acquamorta</span>
             </div>
             <div className="flex items-center gap-3">
-              <NauticalCrosshair coords="40°47′42″N · 14°03′05″E" label="Sonda Banchina: 3.8m" />
+              <NauticalCrosshair coords="40° 47.53′ N · 014° 02.55′ E" label="Sonda Banchina: 3.8m" />
               <span className="hidden lg:inline text-slate-300">|</span>
               <span className="hidden lg:inline text-slate-600 font-medium">
                 Via Guglielmo Marconi snc · Monte di Procida
@@ -707,7 +707,7 @@ export default function EmotionalStory() {
           <div className="font-serif italic text-base text-[#0a1c2a] normal-case tracking-normal">
             “Un punto cospicuo sul Mediterraneo.”
           </div>
-          <div>40°47′N · 14°03′E · Campi Flegrei</div>
+          <div>40° 47.53′ N · 014° 02.55′ E · Acquamorta</div>
         </div>
       </section>
 

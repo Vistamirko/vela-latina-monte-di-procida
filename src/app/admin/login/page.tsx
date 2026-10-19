@@ -237,7 +237,7 @@ export default function AdminLoginPage() {
 
       {/* Footer */}
       <div className="max-w-xl mx-auto w-full text-center text-[10px] uppercase tracking-widest font-mono text-slate-700 font-bold">
-        APS Vela Latina Monte di Procida · 40°47′N · 14°03′E
+        APS Vela Latina Monte di Procida · 40° 47.53′ N · 014° 02.55′ E
       </div>
     </div>
   );

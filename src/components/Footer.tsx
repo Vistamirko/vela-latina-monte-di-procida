@@ -81,8 +81,8 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-2">
             <Mail className="w-3.5 h-3.5 text-[#0a1c2a] shrink-0" />
-            <a href="mailto:vistamirko@gmail.com" className="hover:text-[#0a1c2a] font-medium transition-colors">
-              vistamirko@gmail.com
+            <a href="mailto:velalatinamontediprocida@gmail.com" className="hover:text-[#0a1c2a] font-medium transition-colors">
+              velalatinamontediprocida@gmail.com
             </a>
           </div>
         </div>
@@ -91,7 +91,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto w-full pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-[#0a1c2a] font-mono font-bold">
         <div>© 2008–{new Date().getFullYear()} APS Vela Latina Monte di Procida</div>
         <div className="flex items-center gap-4">
-          <span>40° 47′ 42″ N · 14° 03′ 05″ E</span>
+          <span>40° 47.53′ N · 014° 02.55′ E</span>
           <span>·</span>
           <Link href="/admin" className="text-slate-600 hover:text-[#0a1c2a] font-mono underline decoration-slate-300">
             Area Riservata API

@@ -231,7 +231,7 @@ export default function Header() {
           </div>
 
           <div className="pt-6 border-t border-slate-300 text-xs text-slate-700 space-y-2 font-mono">
-            <p>40° 47′ N · 14° 03′ E · Porticciolo di Monte di Procida</p>
+            <p>40° 47.53′ N · 014° 02.55′ E · Darsena di Acquamorta</p>
             <p className="italic font-serif text-[#0a1c2a] text-sm">
               “Un punto cospicuo sul Mediterraneo.”
             </p>
