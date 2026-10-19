@@ -160,37 +160,48 @@ async function sendEmailMessage({ to, cc, replyTo, subject, html, tag }: SendEma
  * Notifica per la Segreteria / Admin
  */
 export async function sendBookingNotification(data: BookingNotificationData) {
-  const rawNotificationEnv =
-    process.env.NOTIFICATION_EMAIL || "velalatinamontediprocida@gmail.com, vistamirko@gmail.com";
+  // Indirizzi ufficiali:
+  // - TO primario: velalatinamontediprocida@gmail.com (segreteria associazione)
+  // - CC per conoscenza / verifica ricezione: vistamirko@gmail.com
+  const ASSOCIATION_OFFICIAL_EMAIL = "velalatinamontediprocida@gmail.com";
+  const MIRKO_CC_EMAIL = "vistamirko@gmail.com";
+
+  const rawNotificationEnv = process.env.NOTIFICATION_EMAIL;
   const rawCcEnv = process.env.NOTIFICATION_CC;
 
-  // Estrazione destinatari: il primo è il destinatario principale To, i successivi o NOTIFICATION_CC vanno in Cc
-  const recipients = rawNotificationEnv
-    .split(",")
-    .map((e) => e.trim())
+  const configuredRecipients = (rawNotificationEnv ? rawNotificationEnv.split(",") : [])
+    .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
-  const primaryTo = recipients[0] || "velalatinamontediprocida@gmail.com";
 
-  const ccSet = new Set<string>();
-  if (recipients.length > 1) {
-    recipients.slice(1).forEach((e) => ccSet.add(e));
+  // Il destinatario primario è sempre velalatinamontediprocida@gmail.com
+  // Anche se in ambiente è rimasto il vecchio NOTIFICATION_EMAIL=vistamirko@gmail.com,
+  // la mail di Mirko viene spostata in CC e l'associazione rimane il destinatario primario TO.
+  let primaryTo = ASSOCIATION_OFFICIAL_EMAIL;
+  const customAssocEmail = configuredRecipients.find((e) => e !== MIRKO_CC_EMAIL.toLowerCase());
+  if (customAssocEmail) {
+    primaryTo = customAssocEmail;
   }
+
+  // In Cc inseriamo sempre vistamirko@gmail.com per conoscenza, più eventuali altri CC configurati
+  const ccSet = new Set<string>();
+  ccSet.add(MIRKO_CC_EMAIL);
+
   if (rawCcEnv) {
     rawCcEnv
       .split(",")
-      .map((e) => e.trim())
+      .map((e) => e.trim().toLowerCase())
       .filter(Boolean)
       .forEach((e) => ccSet.add(e));
-  } else if (ccSet.size === 0) {
-    // Default: vistamirko@gmail.com in copia conoscenza per verificare ricezione
-    const defaultCc = "vistamirko@gmail.com";
-    if (primaryTo.toLowerCase() !== defaultCc.toLowerCase()) {
-      ccSet.add(defaultCc);
+  }
+
+  for (const r of configuredRecipients) {
+    if (r !== primaryTo.toLowerCase()) {
+      ccSet.add(r);
     }
   }
 
-  // Rimuovi eventuale duplicato del primaryTo dai CC
-  ccSet.delete(primaryTo);
+  // Rimuovi dal Cc il destinatario primario To per evitare ridondanze
+  ccSet.delete(primaryTo.toLowerCase());
   const ccList = Array.from(ccSet);
 
   const isCorso = data.type === "corso";
