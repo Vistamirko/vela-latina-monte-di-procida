@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useId } from "react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import MediaLibraryModal from "@/components/admin/MediaLibraryModal";
 import {
   Bold,
   Italic,
@@ -41,6 +42,7 @@ export default function RichContentEditor({
 }: RichContentEditorProps) {
   const [viewMode, setViewMode] = useState<"write" | "preview" | "split">("write");
   const [showHelp, setShowHelp] = useState(false);
+  const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const editorId = useId();
 
@@ -93,13 +95,14 @@ export default function RichContentEditor({
   };
 
   /**
-   * Inserisce un'immagine tramite prompt
+   * Apre la galleria media con ricerca per inserire un'immagine
    */
-  const handleInsertImage = () => {
-    const url = window.prompt("Inserisci l'URL dell'immagine (es. /images/janara-crew.jpeg o https://...):", "/images/");
-    if (!url) return;
-    const alt = window.prompt("Descrizione didascalia dell'immagine:", "Gozzo a vela latina") || "Immagine";
-    insertFormatting(`\n\n![${alt}](`, ")\n\n", url);
+  const handleOpenMediaLibrary = () => {
+    setIsMediaModalOpen(true);
+  };
+
+  const handleSelectMedia = (url: string, title?: string) => {
+    insertFormatting(`\n\n![${title || "Fotografia"}](`, ")\n\n", url);
   };
 
   /**
@@ -245,11 +248,11 @@ export default function RichContentEditor({
           </button>
           <button
             type="button"
-            onClick={handleInsertImage}
-            title="Inserisci Immagine nel testo"
-            className="p-1.5 hover:bg-slate-200 text-slate-700 rounded-xs transition-colors"
+            onClick={handleOpenMediaLibrary}
+            title="Sfoglia e Cerca nell'Archivio Immagini"
+            className="p-1.5 hover:bg-slate-200 text-slate-700 rounded-xs transition-colors flex items-center gap-1"
           >
-            <ImageIcon className="w-4 h-4" />
+            <ImageIcon className="w-4 h-4 text-[#1b5b80]" />
           </button>
           <button
             type="button"
@@ -395,6 +398,14 @@ export default function RichContentEditor({
         </div>
         {helperText && <span className="text-slate-400 italic">{helperText}</span>}
       </div>
+
+      {/* Modale Libreria Immagini con Ricerca (Search) */}
+      <MediaLibraryModal
+        isOpen={isMediaModalOpen}
+        onClose={() => setIsMediaModalOpen(false)}
+        onSelect={handleSelectMedia}
+        title="Archivio Fotografico — Inserisci Immagine nel Racconto"
+      />
     </div>
   );
 }

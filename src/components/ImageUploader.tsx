@@ -2,7 +2,8 @@
 
 import { useState, useRef, ChangeEvent, DragEvent } from "react";
 import Image from "next/image";
-import { Upload, X, Image as ImageIcon, Loader2, Check, Sparkles, Camera } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, Check, Sparkles, Camera, Search } from "lucide-react";
+import MediaLibraryModal from "@/components/admin/MediaLibraryModal";
 
 interface ImageUploaderProps {
   label: string;
@@ -149,6 +150,7 @@ export default function ImageUploader({
   const [isDragging, setIsDragging] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
   const [showManualInput, setShowManualInput] = useState(false);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -240,11 +242,11 @@ export default function ImageUploader({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setShowPresets(!showPresets)}
-            className="text-[10px] font-mono uppercase tracking-wider text-[#1b5b80] hover:text-[#0a1c2a] font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+            onClick={() => setIsLibraryOpen(true)}
+            className="text-[10px] font-mono uppercase tracking-wider text-[#1b5b80] hover:text-[#0a1c2a] font-bold transition-colors flex items-center gap-1.5 px-2.5 py-1 bg-white border border-slate-300 rounded-xs shadow-2xs cursor-pointer"
           >
-            <Sparkles className="w-3 h-3" />
-            <span>{showPresets ? "Nascondi archivio" : "Scegli dall&apos;archivio"}</span>
+            <Search className="w-3 h-3 text-[#c99a45]" />
+            <span>Cerca Foto nell&apos;Archivio</span>
           </button>
           <span className="text-slate-300">·</span>
           <button
@@ -315,6 +317,14 @@ export default function ImageUploader({
             <div className="flex flex-wrap items-center gap-3 mt-2">
               <button
                 type="button"
+                onClick={() => setIsLibraryOpen(true)}
+                className="text-[10px] font-mono uppercase tracking-wider text-[#1b5b80] hover:text-[#0a1c2a] font-bold cursor-pointer inline-flex items-center gap-1 bg-white px-2 py-0.5 border border-slate-300"
+              >
+                <Search className="w-3 h-3 text-[#c99a45]" />
+                <span>Cerca nell&apos;archivio</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => cameraInputRef.current?.click()}
                 className="text-[10px] font-mono uppercase tracking-wider text-[#0a1c2a] hover:text-[#b8860b] font-bold cursor-pointer inline-flex items-center gap-1 bg-white px-2 py-0.5 border border-slate-300"
               >
@@ -341,24 +351,33 @@ export default function ImageUploader({
         </div>
       ) : (
         <div className="border border-slate-300 bg-[#fbfaf6] p-3 sm:p-5 rounded-xs space-y-3">
-          {/* Due azioni rapide per smartphone e desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {/* Tre azioni rapide per smartphone e desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setIsLibraryOpen(true)}
+              className="px-3 py-3 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold rounded-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+            >
+              <Search className="w-4 h-4 text-[#c99a45]" />
+              <span>Cerca nell&apos;Archivio</span>
+            </button>
+
             <button
               type="button"
               onClick={() => cameraInputRef.current?.click()}
-              className="px-4 py-3 bg-[#0a1c2a] hover:bg-[#152e42] text-white text-xs font-mono font-bold rounded-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+              className="px-3 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs font-mono font-bold rounded-xs border border-slate-300 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
             >
-              <Camera className="w-4 h-4 text-[#c99a45]" />
-              <span>Scatta Foto con Fotocamera</span>
+              <Camera className="w-4 h-4 text-[#1b5b80]" />
+              <span>Scatta Foto</span>
             </button>
 
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs font-mono font-bold rounded-xs border border-slate-300 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+              className="px-3 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs font-mono font-bold rounded-xs border border-slate-300 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
             >
               <Upload className="w-4 h-4 text-[#1b5b80]" />
-              <span>Scegli da Galleria / File</span>
+              <span>Carica da File</span>
             </button>
           </div>
 
@@ -472,6 +491,15 @@ export default function ImageUploader({
           </span>
         </div>
       )}
+
+      {/* Modale Galleria Fotografica con Ricerca */}
+      <MediaLibraryModal
+        isOpen={isLibraryOpen}
+        onClose={() => setIsLibraryOpen(false)}
+        onSelect={(url) => onChange(url)}
+        initialSelectedUrl={value}
+        title={`Archivio Fotografico — ${label}`}
+      />
     </div>
   );
 }
