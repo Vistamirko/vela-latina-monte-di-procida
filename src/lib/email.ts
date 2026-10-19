@@ -14,7 +14,8 @@ export interface BookingNotificationData {
 }
 
 interface SendEmailParams {
-  to: string;
+  to: string | string[];
+  cc?: string | string[];
   replyTo?: string;
   subject: string;
   html: string;
@@ -26,7 +27,7 @@ interface SendEmailParams {
  * 1. Resend API
  * 2. Fallback SMTP (Gmail)
  */
-async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailParams) {
+async function sendEmailMessage({ to, cc, replyTo, subject, html, tag }: SendEmailParams) {
   const resendApiKey = process.env.RESEND_API_KEY;
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
@@ -39,10 +40,20 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
       ? "Vela Latina <onboarding@resend.dev>"
       : `"Vela Latina Monte di Procida" <${user || "vistamirko@gmail.com"}>`);
 
-  const adminEmail = (process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com").toLowerCase();
-  const isSendToAdmin = to.toLowerCase() === adminEmail;
+  const toList = Array.isArray(to) ? to : [to];
+  const ccList = cc ? (Array.isArray(cc) ? cc : [cc]) : [];
+  const toFormatted = toList.join(", ");
+  const ccFormatted = ccList.length > 0 ? ccList.join(", ") : undefined;
+
   const isResendTesting = !process.env.SMTP_FROM && (!from || from.includes("onboarding@resend.dev"));
   const hasSmtp = Boolean(host && user && pass);
+
+  // In modalità di test Resend (onboarding@resend.dev), Resend consente di inviare SOLO all'indirizzo email
+  // registrato sull'account Resend (es. vistamirko@gmail.com). Se c'è un destinatario esterno (to o cc),
+  // Resend API restituisce 403 Forbidden.
+  const resendTestOwnerEmail = (process.env.RESEND_ALLOWED_TEST_EMAIL || process.env.SMTP_USER || "vistamirko@gmail.com").toLowerCase();
+  const allRecipients = [...toList, ...ccList].map((e) => e.toLowerCase().trim());
+  const canSendViaResendTest = allRecipients.every((e) => e === resendTestOwnerEmail);
 
   // Helper per invio via SMTP (Gmail)
   const sendViaSmtp = async () => {
@@ -57,13 +68,16 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
 
       const info = await transporter.sendMail({
         from: `"Vela Latina Monte di Procida" <${user}>`,
-        to,
+        to: toFormatted,
+        cc: ccFormatted,
         replyTo,
         subject,
         html,
       });
 
-      console.log(`[SMTP ${tag}] Inviata con successo a ${to}: ${info.messageId}`);
+      console.log(
+        `[SMTP ${tag}] Inviata con successo a ${toFormatted}${ccFormatted ? ` (cc: ${ccFormatted})` : ""}: ${info.messageId}`
+      );
       return { sent: true, provider: "smtp", messageId: info.messageId };
     } catch (err: any) {
       console.error(`[SMTP ${tag} ERROR]`, err.message || err);
@@ -75,24 +89,31 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
   const sendViaResend = async () => {
     if (!resendApiKey) return null;
     try {
+      const payload: Record<string, any> = {
+        from,
+        to: toList,
+        reply_to: replyTo,
+        subject,
+        html,
+      };
+      if (ccList.length > 0) {
+        payload.cc = ccList;
+      }
+
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${resendApiKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          from,
-          to: [to],
-          reply_to: replyTo,
-          subject,
-          html,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const resendData = await res.json();
       if (res.ok) {
-        console.log(`[RESEND ${tag}] Inviata con successo a ${to}: ${resendData.id}`);
+        console.log(
+          `[RESEND ${tag}] Inviata con successo a ${toFormatted}${ccFormatted ? ` (cc: ${ccFormatted})` : ""}: ${resendData.id}`
+        );
         return { sent: true, provider: "resend", messageId: resendData.id };
       }
 
@@ -104,9 +125,9 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
     }
   };
 
-  // Se Resend è in modalità test (onboarding@resend.dev) e l'email è per un utente esterno,
-  // usiamo prioritariamente SMTP perché Resend blocca destinatari esterni non verificati (403)
-  if (hasSmtp && isResendTesting && !isSendToAdmin) {
+  // Se Resend è in modalità test (onboarding@resend.dev) e i destinatari includono email esterne,
+  // usiamo prioritariamente SMTP perché Resend blocca destinatari non verificati con HTTP 403
+  if (hasSmtp && isResendTesting && !canSendViaResendTest) {
     const smtpResult = await sendViaSmtp();
     if (smtpResult?.sent) return smtpResult;
 
@@ -139,7 +160,39 @@ async function sendEmailMessage({ to, replyTo, subject, html, tag }: SendEmailPa
  * Notifica per la Segreteria / Admin
  */
 export async function sendBookingNotification(data: BookingNotificationData) {
-  const notificationRecipient = process.env.NOTIFICATION_EMAIL || "vistamirko@gmail.com";
+  const rawNotificationEnv =
+    process.env.NOTIFICATION_EMAIL || "velalatinamontediprocida@gmail.com, vistamirko@gmail.com";
+  const rawCcEnv = process.env.NOTIFICATION_CC;
+
+  // Estrazione destinatari: il primo è il destinatario principale To, i successivi o NOTIFICATION_CC vanno in Cc
+  const recipients = rawNotificationEnv
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
+  const primaryTo = recipients[0] || "velalatinamontediprocida@gmail.com";
+
+  const ccSet = new Set<string>();
+  if (recipients.length > 1) {
+    recipients.slice(1).forEach((e) => ccSet.add(e));
+  }
+  if (rawCcEnv) {
+    rawCcEnv
+      .split(",")
+      .map((e) => e.trim())
+      .filter(Boolean)
+      .forEach((e) => ccSet.add(e));
+  } else if (ccSet.size === 0) {
+    // Default: vistamirko@gmail.com in copia conoscenza per verificare ricezione
+    const defaultCc = "vistamirko@gmail.com";
+    if (primaryTo.toLowerCase() !== defaultCc.toLowerCase()) {
+      ccSet.add(defaultCc);
+    }
+  }
+
+  // Rimuovi eventuale duplicato del primaryTo dai CC
+  ccSet.delete(primaryTo);
+  const ccList = Array.from(ccSet);
+
   const isCorso = data.type === "corso";
   const safeName = escapeHtml(data.name);
   const safeItemTitle = escapeHtml(data.itemTitle);
@@ -230,6 +283,13 @@ export async function sendBookingNotification(data: BookingNotificationData) {
         <div class="label">Data Invio</div>
         <div class="value">${new Date(data.createdAt).toLocaleString("it-IT", { timeZone: "Europe/Rome" })}</div>
       </div>
+      <div class="row">
+        <div class="label">Notifica A</div>
+        <div class="value">
+          <strong>${primaryTo}</strong>
+          ${ccList.length > 0 ? `<br><span style="color: #64748b; font-size: 11px;">Copia conoscenza (Cc): ${ccList.join(", ")}</span>` : ""}
+        </div>
+      </div>
 
       ${
         safeMessage
@@ -261,7 +321,8 @@ export async function sendBookingNotification(data: BookingNotificationData) {
   `;
 
   return sendEmailMessage({
-    to: notificationRecipient,
+    to: primaryTo,
+    cc: ccList.length > 0 ? ccList : undefined,
     replyTo: data.email,
     subject,
     html,
