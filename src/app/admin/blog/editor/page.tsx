@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import ImageUploader from "@/components/ImageUploader";
+import RichContentEditor from "@/components/admin/RichContentEditor";
 import { BlogPost } from "@/lib/db/types";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 
@@ -222,19 +223,15 @@ function BlogEditorContent() {
             />
           </div>
 
-          <div>
-            <label className="block text-xs uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1.5">
-              Contenuto Completo del Racconto *
-            </label>
-            <textarea
-              required
-              rows={14}
-              value={blogData.content || ""}
-              onChange={(e) => setBlogData({ ...blogData, content: e.target.value })}
-              placeholder="Scrivi qui il testo completo. Puoi andare a capo tra i paragrafi o usare formattazione Markdown..."
-              className="w-full px-3.5 py-2.5 border border-slate-300 text-sm text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono leading-relaxed"
-            />
-          </div>
+          <RichContentEditor
+            label="Contenuto Completo del Racconto"
+            required
+            value={blogData.content || ""}
+            onChange={(val) => setBlogData({ ...blogData, content: val })}
+            placeholder="Scrivi qui il racconto completo: usa la toolbar o le scorciatoie per formattare titoli, corsivi, citazioni e liste..."
+            rows={14}
+            helperText="Puoi passare alla scheda Anteprima o Affiancato per verificare la resa prima di pubblicare"
+          />
 
           <div className="p-4 bg-[#fbfaf6] border border-slate-200 flex items-center justify-between">
             <div>

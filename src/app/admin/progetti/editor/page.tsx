@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import ImageUploader from "@/components/ImageUploader";
+import RichContentEditor from "@/components/admin/RichContentEditor";
 import { ProjectItem } from "@/lib/db/types";
 import { CheckCircle2, AlertCircle, Building2, User } from "lucide-react";
 
@@ -304,18 +305,14 @@ function ProjectEditorContent() {
               />
             </div>
 
-            <div>
-              <label className="block text-xs uppercase font-mono tracking-widest text-[#0a1c2a] font-bold mb-1.5">
-                Relazione Approfondita per la Pagina Dedicata (/progetti/[slug])
-              </label>
-              <textarea
-                rows={10}
-                value={projectData.content || ""}
-                onChange={(e) => setProjectData({ ...projectData, content: e.target.value })}
-                placeholder="Inserisci la relazione completa di cantiere: storia, percorso tecnico, imbarcazioni, partner..."
-                className="w-full px-3.5 py-2.5 border border-slate-300 text-sm text-[#0a1c2a] outline-none focus:border-[#0a1c2a] font-mono leading-relaxed"
-              />
-            </div>
+            <RichContentEditor
+              label="Relazione Approfondita per la Pagina Dedicata (/progetti/[slug])"
+              value={projectData.content || ""}
+              onChange={(val) => setProjectData({ ...projectData, content: val })}
+              placeholder="Inserisci la relazione completa di cantiere: storia, percorso tecnico, imbarcazioni, partner..."
+              rows={12}
+              helperText="Supporta titoli di capitolo, grassetto, corsivo, elenchi e citazioni"
+            />
           </div>
 
           {/* SEZIONE 2: Anagrafica Referente & Dati Amministrativi */}

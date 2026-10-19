@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 import {
   ArrowLeft,
   Calendar,
@@ -277,43 +278,11 @@ export default async function ProjectDetailPage({
           </div>
 
           {/* Spiegazione Approfondita del Progetto */}
-          <div className="prose prose-slate max-w-none text-slate-800 text-base sm:text-lg leading-relaxed font-light space-y-6">
+          <div className="prose prose-slate max-w-none">
             {project.content ? (
-              project.content.split("\n\n").map((block, idx) => {
-                // Header livello 3
-                if (block.startsWith("### ")) {
-                  return (
-                    <h3
-                      key={idx}
-                      className="font-['Cormorant_Garamond'] text-2xl sm:text-3xl font-light text-[#0a1c2a] pt-6 pb-1 border-b border-slate-200"
-                    >
-                      {block.replace("### ", "")}
-                    </h3>
-                  );
-                }
-                // Elenco puntato
-                if (block.includes("\n- ") || block.startsWith("- ")) {
-                  const lines = block.split("\n");
-                  return (
-                    <ul key={idx} className="space-y-2 my-4 pl-4 font-normal text-sm sm:text-base text-slate-700">
-                      {lines.map((l, li) => (
-                        <li key={li} className="flex items-start gap-2.5">
-                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#1b5b80] mt-2 shrink-0" />
-                          <span>{l.replace(/^-\s*/, "")}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  );
-                }
-                // Paragrafo standard
-                return (
-                  <p key={idx} className="leading-relaxed">
-                    {block}
-                  </p>
-                );
-              })
+              <MarkdownRenderer content={project.content} />
             ) : (
-              <p className="leading-relaxed">{project.description}</p>
+              <p className="leading-relaxed text-slate-800 text-base sm:text-lg">{project.description}</p>
             )}
           </div>
 

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { ArrowLeft, Calendar, User, Compass } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
 import { SITE_URL } from "@/lib/config";
@@ -192,13 +193,9 @@ export default async function BlogPostPage({
             </div>
           )}
 
-          {/* Testo dell'articolo */}
-          <div className="prose prose-slate max-w-none text-slate-800 text-base sm:text-lg leading-relaxed font-light space-y-6">
-            {post.content.split("\n\n").map((paragraph, i) => (
-              <p key={i} className="leading-relaxed">
-                {paragraph}
-              </p>
-            ))}
+          {/* Testo dell'articolo formattato */}
+          <div className="prose prose-slate max-w-none">
+            <MarkdownRenderer content={post.content} />
           </div>
 
           {/* Box Autore & Condivisione */}
