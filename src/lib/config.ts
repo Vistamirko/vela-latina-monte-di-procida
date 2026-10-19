@@ -6,7 +6,7 @@
 export const SITE_URL: string = (
   process.env.SITE_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
-  "https://vela-latina-monte-di-procida.vercel.app"
+  "https://www.velalatinamontediprocida.com"
 ).replace(/\/$/, "");
 
 export function getAbsoluteUrl(path: string = ""): string {
