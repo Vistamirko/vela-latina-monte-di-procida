@@ -640,14 +640,15 @@ export default function EmotionalStory() {
 
             <div className="lg:col-span-5 relative h-72 sm:h-96 w-full rounded-xs overflow-hidden border border-slate-200 group">
               <Image
-                src="/images/attivita/voga-acquamorta.jpg"
-                alt="Scuola di Voga Tradizionale Flegrea nel porto di Acquamorta"
+                src="/images/attivita/voga-in-piedi-tramonto.webp"
+                alt="Scuola di Voga Tradizionale Flegrea - Vogare in piedi al tramonto ad Acquamorta"
                 fill
+                sizes="(max-width: 1024px) 100vw, 40vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-102"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-mono">
-                Scuola di Voga Tradizionale Flegrea · San Michele Arcangelo ad Acquamorta
+                Scuola di Voga Tradizionale Flegrea · Voga in piedi al tramonto
               </div>
             </div>
           </div>
