@@ -84,7 +84,7 @@ export default function SponsorsSection() {
 
           <div>
             <a
-              href="mailto:vistamirko@gmail.com?subject=Richiesta%20Dossier%20Sponsorizzazione"
+              href="mailto:velalatinamontediprocida@gmail.com?subject=Richiesta%20Dossier%20Sponsorizzazione"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#fbfaf6] hover:bg-[#0a1c2a] text-[#0a1c2a] hover:text-white border border-slate-300 hover:border-[#0a1c2a] text-[10px] uppercase tracking-[0.25em] font-semibold transition-all duration-300 shadow-2xs font-mono"
             >
               <span>Diventa Partner</span>
@@ -181,7 +181,7 @@ export default function SponsorsSection() {
                   Visibilità su vele, eventi e rassegna stampa
                 </span>
                 <a
-                  href="mailto:vistamirko@gmail.com?subject=Richiesta%20Informazioni%20Partnership"
+                  href="mailto:velalatinamontediprocida@gmail.com?subject=Richiesta%20Informazioni%20Partnership"
                   className="text-xs font-mono font-bold text-[#0a1c2a] hover:text-[#b8860b] underline underline-offset-4"
                 >
                   Contattaci →

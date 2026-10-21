@@ -531,7 +531,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
     <div class="footer">
       Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
-      Email di contatto: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
+      Email di contatto: <a href="mailto:velalatinamontediprocida@gmail.com" style="color: #64748b;">velalatinamontediprocida@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
     </div>
   </div>
 </body>
@@ -540,7 +540,7 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
 
   return sendEmailMessage({
     to: data.email,
-    replyTo: "vistamirko@gmail.com",
+    replyTo: "velalatinamontediprocida@gmail.com",
     subject,
     html,
     tag: "USER_CONFIRMATION",
@@ -656,7 +656,7 @@ export async function sendMembershipApprovedNotification(params: {
 
   return sendEmailMessage({
     to: params.email,
-    replyTo: "vistamirko@gmail.com",
+    replyTo: "velalatinamontediprocida@gmail.com",
     subject,
     html,
     tag: "MEMBERSHIP_APPROVED",
@@ -747,7 +747,7 @@ export async function sendCourseResponse(params: {
     <div class="footer">
       Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
-      Email: <a href="mailto:vistamirko@gmail.com" style="color: #64748b;">vistamirko@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
+      Email: <a href="mailto:velalatinamontediprocida@gmail.com" style="color: #64748b;">velalatinamontediprocida@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
     </div>
   </div>
 </body>
@@ -756,7 +756,7 @@ export async function sendCourseResponse(params: {
 
   return sendEmailMessage({
     to: params.email,
-    replyTo: "vistamirko@gmail.com",
+    replyTo: "velalatinamontediprocida@gmail.com",
     subject,
     html,
     tag: "COURSE_RESPONSE",

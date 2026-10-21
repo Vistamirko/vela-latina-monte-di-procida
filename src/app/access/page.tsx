@@ -143,8 +143,8 @@ function AccessForm() {
           <div className="mt-8 pt-6 border-t border-white/10 text-center">
             <p className="text-[11px] text-slate-400 font-light leading-relaxed">
               Per informazioni o per ricevere l&apos;accesso direttivo, contatta la segreteria a{" "}
-              <a href="mailto:vistamirko@gmail.com" className="text-[#c99a45] hover:underline">
-                vistamirko@gmail.com
+              <a href="mailto:velalatinamontediprocida@gmail.com" className="text-[#c99a45] hover:underline">
+                velalatinamontediprocida@gmail.com
               </a>
             </p>
           </div>
