@@ -98,10 +98,10 @@ export default function CorsiPage() {
   const rosaSession = calendarSessions.find((s) => s.courseKey === "rosa" || s.id.includes("rosa"));
   const inclusioneSession = calendarSessions.find((s) => s.courseKey === "inclusione" || s.id.includes("inclusione"));
 
-  const vogaPhoto = vogaSession?.imageUrl;
+  const vogaPhoto = vogaSession?.imageUrl || "/images/attivita/voga-in-piedi-tramonto.webp";
   const velaPhoto = velaSession?.imageUrl || "/images/corso-conduzione-janara.jpg";
-  const rosaPhoto = rosaSession?.imageUrl;
-  const inclusionePhoto = inclusioneSession?.imageUrl;
+  const rosaPhoto = rosaSession?.imageUrl || "/images/attivita/equipaggio-rosa.jpeg";
+  const inclusionePhoto = inclusioneSession?.imageUrl || "/images/gozzo-san-michele.jpeg";
 
   return (
     <div className="min-h-screen bg-white text-[#0a1c2a] sail-grid selection:bg-[#0a1c2a] selection:text-white">

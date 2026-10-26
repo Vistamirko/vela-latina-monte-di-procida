@@ -106,7 +106,7 @@ const DEFAULT_EVENTS: EventItem[] = [
     badge: "1° Posto Assoluto",
     description:
       "Vittoria storica di Janara tra oltre 60 scafi tradizionali provenienti da tutto il Mediterraneo. La marineria montese sul gradino più alto del podio.",
-    imageUrl: "/images/hero-sailing.webp",
+    imageUrl: "/images/attivita/saint-tropez-regatta.jpeg",
     result: "1° Classificato Assoluto",
     articleSlug: "anima-di-legno-il-segreto-del-gozzo-flegreo",
     published: true,
@@ -122,7 +122,7 @@ const DEFAULT_EVENTS: EventItem[] = [
     badge: "1° Posto Janara",
     description:
       "Trionfo di Janara nelle acque di casa: perfetta conduzione tattica nelle correnti e nei salti di brezza tra Monte di Procida e Vivara.",
-    imageUrl: "/images/janara-regatta.jpeg",
+    imageUrl: "/images/attivita/janara-regatta-procida.jpg",
     result: "1° Posto",
     articleSlug: "leggere-il-vento-di-maestro-nel-canale-di-procida",
     published: true,
@@ -138,7 +138,7 @@ const DEFAULT_EVENTS: EventItem[] = [
     badge: "Roadmap 2026",
     description:
       "La maestosa lancia in legno Quandel del 1968, ex Amerigo Vespucci, rappresenterà la vela tradizionale campana alla regata più affollata al mondo.",
-    imageUrl: "",
+    imageUrl: "/images/attivita/vele-illuminate-notte.jpeg",
     result: "Iscrizione Ufficiale",
     published: true,
     createdAt: new Date().toISOString(),
@@ -153,7 +153,7 @@ const DEFAULT_EVENTS: EventItem[] = [
     badge: "Orizzonti 2027",
     description:
       "Janara e la flotta storica montese sfileranno accanto ai foil moderni dell'America's Cup, celebrando la continuità tra la maestria d'ascia millenaria e la tecnologia d'avanguardia.",
-    imageUrl: "",
+    imageUrl: "/images/attivita/janara-notturna-ormeggio.jpeg",
     result: "Presenza Ufficiale",
     published: true,
     createdAt: new Date().toISOString(),
@@ -243,7 +243,7 @@ const DEFAULT_COURSES: CourseSession[] = [
     id: "course-rosa-2027",
     courseKey: "rosa",
     courseTitle: "Progetto ROSA · Selezioni Equipaggio Femminile 2027",
-    imageUrl: "",
+    imageUrl: "/images/attivita/equipaggio-rosa.jpeg",
     startDate: "2026-05-16",
     schedule: "Weekend quindicinali",
     totalSeats: 16,
@@ -260,7 +260,7 @@ const DEFAULT_COURSES: CourseSession[] = [
     id: "course-inclusione-continuo",
     courseKey: "inclusione",
     courseTitle: "Inclusione Mare · Laboratorio Voga e Sensi (Centro Serapide)",
-    imageUrl: "",
+    imageUrl: "/images/gozzo-san-michele.jpeg",
     startDate: "2026-05-10",
     schedule: "Giovedì e Sabato mattina su prenotazione",
     totalSeats: 20,
@@ -288,7 +288,7 @@ const DEFAULT_PROJECTS: ProjectItem[] = [
     status: "In Corso",
     timeline: "2026 – 2027",
     location: "Acquamorta & Saint-Tropez (Francia)",
-    imageUrl: "",
+    imageUrl: "/images/attivita/equipaggio-rosa.jpeg",
     description:
       "Formazione del primo equipaggio stabile interamente femminile dell'Associazione. Un percorso intensivo di voga, conduzione di vela latina, manovre d'altura e sicurezza marittima con traguardo fissato a Les Voiles Latines di Saint-Tropez 2027.",
     content: `Il Progetto ROSA rappresenta una delle sfide sportive, umane e culturali più ambiziose intraprese dall'Associazione Vela Latina Monte di Procida. Nato dalla volontà di superare secoli di tradizioni marinare a prevalenza maschile, il cantiere mira a formare il primo equipaggio stabile interamente femminile capace di condurre in sicurezza e con ambizioni di vertice un gozzo a vela latina in mare aperto.
@@ -321,7 +321,7 @@ Il progetto non si esaurisce nell'agonismo: l'Associazione ha istituito borse fo
     status: "In Programmazione",
     timeline: "Primavera 2027",
     location: "Golfo di Napoli · Lungomare Caracciolo",
-    imageUrl: "",
+    imageUrl: "/images/attivita/janara-regatta-procida.jpg",
     description:
       "Partecipazione ufficiale programmata con l'ammiraglia Janara alla cerimonia inaugurale dell'America's Cup nel Golfo di Napoli, portando le radici della vela tradizionale tra i colossi della vela moderna.",
     content: `La presenza della vela latina montese nel contesto dell'America's Cup a Napoli rappresenta un ponte simbolico e visivo tra le radici millenarie della marineria mediterranea e l'apice della tecnologia velica contemporanea.
@@ -350,7 +350,7 @@ Durante le giornate di regata, presso il Villaggio dell'America's Cup verrà all
     status: "In Programmazione",
     timeline: "Ottobre 2026",
     location: "Golfo di Trieste",
-    imageUrl: "",
+    imageUrl: "/images/attivita/vele-illuminate-notte.jpeg",
     description:
       "La grande lancia Ludovico Quandel, ex Amerigo Vespucci, sarà schierata sulla linea di partenza del Golfo di Trieste per testimoniare la potenza dell'armo a filucone e della marineria flegrea.",
     content: `La Barcolana di Trieste è la regata con il maggior numero di imbarcazioni iscritte al mondo: oltre 2.000 vele che trasformano il golfo giuliano in una distesa bianca spettacolare. Nel 2026, l'Associazione Vela Latina Monte di Procida porterà sulla linea di partenza la sua barca più imponente: la lancia storica Ludovico Quandel.
@@ -379,7 +379,7 @@ L'iniziativa consolida i legami storici e culturali con i circoli dell'Alto Adri
     status: "In Corso",
     timeline: "Settembre 2026",
     location: "Tirreno Centrale · Canale di Procida & Golfo di Gaeta",
-    imageUrl: "",
+    imageUrl: "/images/attivita/operazione-quandel-equipaggio.jpg",
     description:
       "Traversata a vela latina in mare aperto che unisce Monte di Procida e Gaeta. Giunta all'8ª edizione, rinnova i secolari scambi commerciali, culturali e nautici tra le due storiche marinerie tirreniche.",
     content: `L'Operazione Quandel è la tradizionale traversata d'altura a vela latina che unisce annualmente il porticciolo di Acquamorta a Monte di Procida con la città marinara di Gaeta. Giunta alla sua ottava edizione, la navigazione rinnova una rotta commerciale e culturale attiva da oltre tre secoli tra le due comunità tirreniche.
@@ -408,7 +408,7 @@ All'arrivo nelle acque della base nautica di Gaeta, la flotta viene accolta dall
     status: "In Corso",
     timeline: "Itinerario Permanente",
     location: "Falesia di Monte di Procida & Acquamorta",
-    imageUrl: "",
+    imageUrl: "/images/attivita/janara-falesia-procida.jpg",
     description:
       "Percorso turistico e scientifico fruibile via mare lungo la costa di Monte di Procida, dedicato alla formazione vulcanica della Breccia Museo e alla geologia millenaria dei Campi Flegrei.",
     content: `La costa di Monte di Procida è uno dei siti vulcanologici e geomorfologici più importanti e spettacolari d'Europa. La cosiddetta 'Breccia Museo' è una straordinaria formazione rocciosa a falesia, generata dal deposito vulcanico dell'Ignimbrite Campana circa 39.000 anni fa, che racchiude al suo interno blocchi di tufo, lave e pomici provenienti da tutte le formazioni geologiche precedenti dei Campi Flegrei.
@@ -437,7 +437,7 @@ Durante le uscite scientifiche, gli equipaggi eseguono rilievi fotografici perio
     status: "In Corso",
     timeline: "2025 – 2028",
     location: "Laboratori Accademici & Cantiere di Acquamorta",
-    imageUrl: "",
+    imageUrl: "/images/attivita/operazione-quandel-navigazione.jpg",
     description:
       "Sperimentazioni idrodinamiche, archeologia navale e rilievi costieri in collaborazione con l'Università degli Studi di Napoli Federico II, l'Università Suor Orsola Benincasa e il Museo Nazionale di Haifa.",
     content: `Il Quandel Lab è il polo di ricerca scientifica e archeologia navale istituito dall'Associazione Vela Latina Monte di Procida in stretta collaborazione con l'Università degli Studi di Napoli Federico II (Dipartimento di Ingegneria Industriale e Navale), l'Università Suor Orsola Benincasa e il Museo Nazionale Marittimo di Haifa.
@@ -466,7 +466,7 @@ Il laboratorio raccoglie inoltre testimonianze video, interviste orali e glossar
     status: "In Corso",
     timeline: "Iniziativa Permanente",
     location: "Banchina di Acquamorta & Canale di Procida",
-    imageUrl: "",
+    imageUrl: "/images/gozzo-san-michele.jpeg",
     description:
       "Il mare come spazio educativo e terapeutico per bambini e ragazzi con disabilità o bisogni speciali. Attraverso la voga assistita a bordo del San Michele Arcangelo, promuoviamo l'accessibilità reale e il benessere.",
     content: `Il mare è uno straordinario maestro di uguaglianza: a bordo di una barca a remi e a vela, le differenze svaniscono per lasciare spazio alla collaborazione, alla fiducia reciproca e alla gioia della condivisione. 'Inclusione Mare' è il progetto a forte impatto sociale sviluppato dall'Associazione Vela Latina Monte di Procida in collaborazione stabile con il Centro Serapide e le associazioni del Terzo Settore flegreo.
@@ -495,7 +495,7 @@ Fedele ai propri principi fondativi, l'Associazione garantisce la totale gratuit
     status: "Completato",
     timeline: "Edizioni Storiche & Prossimi Raduni",
     location: "Stintino (Sardegna) & Marina di Pisciotta (Cilento)",
-    imageUrl: "",
+    imageUrl: "/images/attivita/premiazione-trofeo-tre-torri.jpeg",
     description:
       "Partecipazione ai raduni della vela latina a Stintino e al Trofeo Tre Torri di Marina di Pisciotta (dove l'equipaggio ha conquistato il prestigioso Trofeo Fair Play e podio di classe).",
     content: `I raduni nazionali della vela latina rappresentano i momenti cardine in cui armatori, marinai e maestri d'ascia di tutta Italia si ritrovano per confrontarsi sul piano sportivo e celebrare l'identità marinara comune. Monte di Procida è da anni protagonista attiva e stimata nei due principali teatri storici del Tirreno: Stintino in Sardegna e Marina di Pisciotta nel Cilento.
@@ -846,7 +846,10 @@ export async function initDb(): Promise<void> {
           ON CONFLICT (id) DO UPDATE SET
             slug = COALESCE(progetti.slug, EXCLUDED.slug),
             content = COALESCE(progetti.content, EXCLUDED.content),
-            image_url = COALESCE(progetti.image_url, EXCLUDED.image_url),
+            image_url = CASE 
+              WHEN NULLIF(TRIM(progetti.image_url), '') IS NOT NULL THEN progetti.image_url 
+              ELSE EXCLUDED.image_url 
+            END,
             location = COALESCE(progetti.location, EXCLUDED.location),
             timeline = COALESCE(progetti.timeline, EXCLUDED.timeline);
         `;

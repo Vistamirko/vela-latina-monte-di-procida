@@ -78,6 +78,44 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// PUT /api/barche - Aggiorna foto o attributi rapidi di un'imbarcazione
+export async function PUT(req: NextRequest) {
+  try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+    }
+    if (user.role !== "superadmin" && user.role !== "admin" && user.role !== "segreteria" && user.role !== "istruttore") {
+      return NextResponse.json({ error: "Accesso non autorizzato per il tuo profilo" }, { status: 403 });
+    }
+
+    const body = await req.json();
+    const { barcaId, foto } = body;
+    if (!barcaId || !foto) {
+      return NextResponse.json({ error: "barcaId e foto obbligatori" }, { status: 400 });
+    }
+
+    const barche = await BarcheRepo.getAll();
+    const targetKey = barcaId.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const match = barche.find((b) => {
+      const bKey = b.nome.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const bId = b.id.toLowerCase().replace(/[^a-z0-9]/g, "");
+      return bId === targetKey || bKey.includes(targetKey) || targetKey.includes(bKey);
+    });
+
+    if (match) {
+      match.foto = foto;
+      const saved = await BarcheRepo.save(match);
+      return NextResponse.json({ success: true, data: saved, message: "Foto barca aggiornata" });
+    }
+
+    return NextResponse.json({ error: `Barca con ID o nome '${barcaId}' non trovata` }, { status: 404 });
+  } catch (error) {
+    console.error("PUT /api/barche error:", error);
+    return NextResponse.json({ error: "Errore aggiornamento foto barca" }, { status: 500 });
+  }
+}
+
 // DELETE /api/barche - Elimina una barca o un intervento
 export async function DELETE(req: NextRequest) {
   try {

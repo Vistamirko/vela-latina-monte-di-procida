@@ -65,7 +65,7 @@ export const FLEET_DATA: Boat[] = [
       "Donata all'Istituto Nautico Duca degli Abruzzi di Napoli e affidata all'Associazione, è oggi al centro di sperimentazioni idrodinamiche uniche in Europa.",
     roleToday:
       "Laboratorio navigante di archeologia sperimentale sul Lago di Miseno e protagonista programmata alla celebre Barcolana di Trieste.",
-    image: "",
+    image: "/images/attivita/operazione-quandel-navigazione.jpg",
     badge: "Ex Amerigo Vespucci",
   },
   {
@@ -102,7 +102,7 @@ export const FLEET_DATA: Boat[] = [
       "È la barca eletta per il programma Inclusione Mare: ha ospitato i corsi speciali di voga per bambini e ragazzi con bisogni speciali del Centro Serapide.",
     roleToday:
       "Nave-scuola per l'addestramento alla voga dei giovani aspiranti allievi marittimi e per iniziative di solidarietà sociale.",
-    image: "",
+    image: "/images/gozzo-san-michele.jpeg",
     badge: "Progetto Inclusione Centro Serapide",
   },
   {

@@ -228,11 +228,15 @@ export default async function EventiPage() {
           </div>
 
           <div className="lg:col-span-6 relative h-80 sm:h-96 w-full rounded-xs overflow-hidden border border-slate-200">
-            <PhotoPlaceholder
-              title="Cinema & Televisione · Riprese Storiche"
-              subtitle="The Happy Prince · Rai 1 Linea Blu · Camper"
-              className="h-full border-0"
+            <Image
+              src="/images/attivita/rai-camper-janara.jpg"
+              alt="Rai 1 Camper — Riprese a Monte di Procida con Giuseppe Calabrese e Antonio Pugliese"
+              fill
+              className="object-cover"
             />
+            <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 text-[10px] font-mono uppercase tracking-widest border border-slate-300 font-semibold text-[#0a1c2a]">
+              Rai 1 Camper · Acquamorta
+            </div>
           </div>
         </div>
       </section>

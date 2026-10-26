@@ -555,10 +555,11 @@ export default function EmotionalStory() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-5 relative h-80 sm:h-[420px] w-full rounded-xs overflow-hidden border border-slate-200">
-              <PhotoPlaceholder
-                title="Eventi, Regate & Palmarès"
-                subtitle="Saint-Tropez · Procida Cup · Barcolana"
-                className="h-full w-full border-0"
+              <Image
+                src="/images/attivita/saint-tropez-regatta.jpeg"
+                alt="Janara alle Voiles Latines di Saint-Tropez"
+                fill
+                className="object-cover"
               />
               <div className="absolute top-4 left-4 bg-white/95 px-3 py-1 text-[10px] font-mono uppercase tracking-widest border border-slate-300 font-semibold text-[#0a1c2a]">
                 Palmarès Ufficiale

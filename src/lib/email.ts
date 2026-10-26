@@ -38,7 +38,7 @@ async function sendEmailMessage({ to, cc, replyTo, subject, html, tag }: SendEma
     process.env.SMTP_FROM ||
     (resendApiKey
       ? "Vela Latina <onboarding@resend.dev>"
-      : `"Vela Latina Monte di Procida" <${user || "vistamirko@gmail.com"}>`);
+      : `"Vela Latina Monte di Procida" <${user || "velalatinamontediprocida@gmail.com"}>`);
 
   const toList = Array.isArray(to) ? to : [to];
   const ccList = cc ? (Array.isArray(cc) ? cc : [cc]) : [];
@@ -79,9 +79,10 @@ async function sendEmailMessage({ to, cc, replyTo, subject, html, tag }: SendEma
         `[SMTP ${tag}] Inviata con successo a ${toFormatted}${ccFormatted ? ` (cc: ${ccFormatted})` : ""}: ${info.messageId}`
       );
       return { sent: true, provider: "smtp", messageId: info.messageId };
-    } catch (err: any) {
-      console.error(`[SMTP ${tag} ERROR]`, err.message || err);
-      return { sent: false, error: err.message || "Errore SMTP" };
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      console.error(`[SMTP ${tag} ERROR]`, errorMsg);
+      return { sent: false, error: errorMsg || "Errore SMTP" };
     }
   };
 
@@ -89,7 +90,7 @@ async function sendEmailMessage({ to, cc, replyTo, subject, html, tag }: SendEma
   const sendViaResend = async () => {
     if (!resendApiKey) return null;
     try {
-      const payload: Record<string, any> = {
+      const payload: Record<string, unknown> = {
         from,
         to: toList,
         reply_to: replyTo,
@@ -119,9 +120,10 @@ async function sendEmailMessage({ to, cc, replyTo, subject, html, tag }: SendEma
 
       console.warn(`[RESEND ${tag} NOTICE] API ha risposto con errore:`, resendData.message || resendData);
       return { sent: false, error: resendData.message || "Errore Resend" };
-    } catch (err: any) {
-      console.warn(`[RESEND ${tag} ERROR]`, err.message);
-      return { sent: false, error: err.message };
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      console.warn(`[RESEND ${tag} ERROR]`, errorMsg);
+      return { sent: false, error: errorMsg };
     }
   };
 
