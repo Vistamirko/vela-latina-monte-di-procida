@@ -186,9 +186,6 @@ export default function EmotionalStory() {
                   Vele latine nel vento flegreo
                 </span>
               </div>
-              <span className="text-[9px] sm:text-[10px] font-mono tracking-widest hidden sm:inline bg-black/50 backdrop-blur-sm px-3 py-1 border border-white/20">
-                Numero Velico 098 · Saint-Tropez Champion
-              </span>
             </div>
           </div>
         </div>
@@ -285,7 +282,7 @@ export default function EmotionalStory() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-mono">
-                Porticciolo di Monte di Procida · Via Marconi
+                La Corricella di Procida
               </div>
             </div>
           </div>
