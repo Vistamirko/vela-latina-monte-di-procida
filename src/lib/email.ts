@@ -346,17 +346,33 @@ export async function sendBookingNotification(data: BookingNotificationData) {
 /**
  * Ricevuta / Mail di riepilogo inviata all'utente che si è registrato
  */
-export async function sendUserConfirmation(data: BookingNotificationData & { dataLuogoNascita?: string; codiceFiscale?: string }) {
+export async function sendUserConfirmation(
+  data: BookingNotificationData & {
+    dataLuogoNascita?: string;
+    codiceFiscale?: string;
+    isRenewal?: boolean;
+    paymentMethod?: "bonifico" | "contanti";
+    annoRinnovo?: number;
+    numeroTessera?: string;
+    iban?: string;
+  }
+) {
   const isCorso = data.type === "corso";
+  const isRenewal = Boolean(data.isRenewal) || data.itemTitle.toLowerCase().includes("rinnovo");
+  const isContanti = data.paymentMethod === "contanti";
+  const annoTarget = data.annoRinnovo || (isRenewal && new Date().getMonth() >= 9 ? new Date().getFullYear() + 1 : 2026);
   const safeName = escapeHtml(data.name);
   const safeItemTitle = escapeHtml(data.itemTitle);
   const safeEmail = escapeHtml(data.email);
   const safePhone = data.phone ? escapeHtml(data.phone) : "";
   const safeDataLuogoNascita = data.dataLuogoNascita ? escapeHtml(data.dataLuogoNascita) : "";
   const safeMessage = data.message ? escapeHtml(data.message) : "";
+  const safeTessera = data.numeroTessera ? escapeHtml(data.numeroTessera) : "";
 
   const subject = isCorso
     ? `Conferma ricezione richiesta: ${safeItemTitle} | Vela Latina Monte di Procida`
+    : isRenewal
+    ? `Richiesta Rinnovo Tessera ${annoTarget} Ricevuta (${isContanti ? "Contanti in Sede" : "Bonifico"}) | Vela Latina Monte di Procida`
     : `Domanda di Tesseramento Ricevuta (In attesa di pagamento) | Vela Latina Monte di Procida`;
 
   const formattedDate = new Date(data.createdAt).toLocaleString("it-IT", {
@@ -368,7 +384,12 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
     minute: "2-digit",
   });
 
-  const ibanCode = process.env.ASSOCIATION_IBAN || "IBAN in fase di aggiornamento segreteria (rispondi alla mail per riceverlo)";
+  const ibanCode = escapeHtml(
+    data.iban || process.env.ASSOCIATION_IBAN || "IT61P0306909606100000405783"
+  );
+  const causalePagamento = isRenewal
+    ? `Rinnovo Quota Sociale ${annoTarget} - ${safeName}${safeTessera ? ` (Tessera #${safeTessera})` : ""}`
+    : `Quota Sociale ${annoTarget} - ${safeName}`;
 
   const html = `
 <!DOCTYPE html>
@@ -417,30 +438,47 @@ export async function sendUserConfirmation(data: BookingNotificationData & { dat
   <div class="card">
     <div class="header">
       <div class="header-logo">Vela Latina Monte di Procida APS</div>
-      <h1>${isCorso ? "Scuola di Mare & Marineria Tradizionale" : "Domanda di Tesseramento Socio"}</h1>
+      <h1>${isCorso ? "Scuola di Mare & Marineria Tradizionale" : isRenewal ? `Rinnovo Tessera Socio ${annoTarget}` : "Domanda di Tesseramento Socio"}</h1>
       <p>Porticciolo di Acquamorta · Campi Flegrei</p>
     </div>
     <div class="body">
       <span class="badge ${isCorso ? "badge-ok" : "badge-pending"}">
-        ${isCorso ? "Richiesta Ricevuta" : "In Attesa di Pagamento Quota"}
+        ${isCorso ? "Richiesta Ricevuta" : isRenewal ? (isContanti ? "Rinnovo · Pagamento in Sede" : "Rinnovo · In Attesa Bonifico") : "In Attesa di Pagamento Quota"}
       </span>
       <h2 class="greeting">Gentile ${safeName},</h2>
       <p class="intro">
         ${
           isCorso
             ? `Abbiamo registrato con successo la tua richiesta di partecipazione per <strong>"${safeItemTitle}"</strong>. Grazie per l'interesse dimostrato verso la nostra associazione!`
+            : isRenewal
+            ? `Abbiamo registrato la tua richiesta di <strong>rinnovo tesseramento ${annoTarget}</strong> presso l'Associazione Vela Latina Monte di Procida APS${safeTessera ? ` (Tessera #${safeTessera})` : ""}. ${
+                isContanti
+                  ? "Hai scelto di versare la quota associativa <strong>in contanti presso la sede al Porticciolo di Acquamorta</strong>."
+                  : "Di seguito trovi il riepilogo con le coordinate bancarie per completare il versamento tramite <strong>bonifico bancario</strong>."
+              }`
             : `Abbiamo ricevuto la tua domanda di tesseramento come <strong>"${safeItemTitle}"</strong> per l'Associazione Vela Latina Monte di Procida APS. Come previsto dallo statuto, l'iscrizione formale al <strong>Libro Soci Ufficiale</strong> e l'assegnazione del <strong>Numero di Tessera</strong> si perfezionano a seguito del versamento della quota associativa.`
         }
       </p>
 
       ${
         !isCorso
-          ? `
+          ? isContanti
+            ? `
+      <div class="payment-box">
+        <div class="payment-title">Istruzioni per il Pagamento in Contanti in Sede</div>
+        <div class="payment-item"><strong>Quota associativa annuale ${annoTarget}:</strong> € 50,00</div>
+        <div class="payment-item"><strong>Dove consegnare la quota:</strong> Porticciolo di Acquamorta, Via Guglielmo Marconi snc — Monte di Procida (NA)</div>
+        <div class="payment-item"><strong>Ricevuta:</strong> Verrà rilasciata ricevuta diretta al momento della consegna con aggiornamento nel Libro Soci ${annoTarget}.</div>
+        <div style="margin-top: 10px; font-size: 12px; color: #78350f; font-style: italic;">
+          Nota: Se dovessi preferire pagare con bonifico bancario, puoi utilizzare l'IBAN <strong>${ibanCode}</strong> (Causale: ${causalePagamento}).
+        </div>
+      </div>`
+            : `
       <div class="payment-box">
         <div class="payment-title">Istruzioni per il Versamento della Quota Sociale</div>
         <div class="payment-item"><strong>Beneficiario:</strong> Associazione Vela Latina Monte di Procida APS</div>
         <div class="payment-item"><strong>Quota associativa annuale:</strong> € 50,00</div>
-        <div class="payment-item"><strong>Causale:</strong> Quota Sociale 2026 - ${safeName}</div>
+        <div class="payment-item"><strong>Causale:</strong> ${causalePagamento}</div>
         <div class="payment-item"><strong>Coordinate IBAN:</strong><br>
           <span class="iban-code">${ibanCode}</span>
         </div>
@@ -895,7 +933,7 @@ export async function sendRenewalRequestEmail(params: RenewalRequestEmailParams)
       </div>
 
       <div class="cta-area">
-        <a href="${SITE_URL}/diventa-socio" class="btn-site" target="_blank">Scopri le Attività ${params.annoRinnovo}</a>
+        <a href="${SITE_URL}/rinnovo-tessera?anno=${params.annoRinnovo}&nome=${encodeURIComponent(params.nome)}&email=${encodeURIComponent(params.email)}${params.numeroTessera ? `&tessera=${encodeURIComponent(String(params.numeroTessera))}` : ""}" class="btn-site" target="_blank">Rinnova Online (Bonifico o Contanti)</a>
       </div>
 
       <div class="signoff">

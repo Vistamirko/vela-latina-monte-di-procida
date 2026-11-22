@@ -97,6 +97,19 @@ export default function DiventaSocioPage() {
               la salvaguardia della marineria flegrea, qui trovi una comunità viva e accogliente.
             </p>
 
+            {/* Switcher Nuovo Socio / Rinnovo Tessera */}
+            <div className="pt-1 flex flex-wrap items-center justify-center gap-3 text-xs font-mono">
+              <span className="px-4 py-2 bg-[#0a1c2a] text-white font-bold uppercase tracking-wider border border-[#0a1c2a]">
+                Nuova Iscrizione Socio
+              </span>
+              <Link
+                href="/rinnovo-tessera"
+                className="px-4 py-2 bg-white text-[#85580a] hover:bg-[#b8860b] hover:text-white border border-[#c99f5a] font-bold uppercase tracking-wider transition-colors"
+              >
+                Sei già Socio? Rinnova la Tessera →
+              </Link>
+            </div>
+
             {/* Quick Metrics Bar */}
             <div className="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-slate-200 text-left">
               <div className="p-3.5 bg-white border border-slate-200 shadow-2xs">

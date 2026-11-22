@@ -209,6 +209,19 @@ export default function Header() {
               </span>
             </Link>
 
+            <Link
+              href="/rinnovo-tessera"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block w-full px-4 py-3 bg-[#fbfaf6] text-[#0a1c2a] border border-[#c99f5a] hover:bg-amber-50 transition-colors"
+            >
+              <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#85580a] font-bold block">
+                Sei già socio?
+              </span>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0a1c2a] block mt-0.5">
+                Rinnova la Tessera Online (Bonifico / Contanti) →
+              </span>
+            </Link>
+
             <span className="text-[11px] tracking-[0.3em] uppercase text-[#0a1c2a] font-mono font-bold block pt-2">
               Menu Principale
             </span>

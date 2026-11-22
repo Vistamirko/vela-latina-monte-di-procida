@@ -34,6 +34,11 @@ export default function Footer() {
             </Link>
           </div>
           <div>
+            <Link href="/rinnovo-tessera" className="text-[#0a1c2a] hover:text-[#b8860b] font-bold transition-colors flex items-center gap-1.5">
+              <span>Rinnovo Tessera Online</span>
+            </Link>
+          </div>
+          <div>
             <Link href="/progetti" className="text-slate-700 hover:text-[#0a1c2a] font-medium transition-colors">
               Progetti & Cantieri 2027
             </Link>

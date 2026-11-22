@@ -176,6 +176,19 @@ export const STATIC_PAGES_SEO: Record<string, BuildPageMetadataOptions> = {
     imageHeight: 800,
     imageAlt: "Equipaggio Vela Latina Monte di Procida - Diventa Socio",
   },
+  "/rinnovo-tessera": {
+    title: "Rinnovo Tessera Online · Bonifico o Contanti in Sede",
+    socialTitle: "Rinnovo Tessera Online | Vela Latina Monte di Procida",
+    description:
+      "Rinnova online la tua tessera dell'Associazione Vela Latina Monte di Procida APS. Scegli comodamente tra bonifico bancario (con IBAN e causale) o pagamento in contanti presso il Porticciolo di Acquamorta.",
+    socialDescription:
+      "Rinnova online la tua quota associativa di Vela Latina Monte di Procida APS con bonifico bancario o contanti in sede ad Acquamorta.",
+    path: "/rinnovo-tessera",
+    image: "/images/janara-regatta.jpeg",
+    imageWidth: 1600,
+    imageHeight: 874,
+    imageAlt: "Rinnovo Tessera Associazione Vela Latina Monte di Procida",
+  },
 };
 
 /**

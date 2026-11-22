@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { initDb, BookingsRepo } from "@/lib/db";
+import { initDb, BookingsRepo, AnagraficaRepo } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { sendBookingNotification, sendUserConfirmation } from "@/lib/email";
 import { rateLimiter, getClientIp } from "@/lib/rateLimit";
@@ -106,8 +106,25 @@ export async function POST(req: NextRequest) {
       };
     }
 
+    // Recupera IBAN ufficiale dall'Anagrafica dell'Associazione
+    let officialIban: string | undefined;
+    try {
+      const anagrafica = await AnagraficaRepo.get();
+      officialIban = anagrafica?.banca?.iban || undefined;
+    } catch {}
+
+    const paymentMethod: "bonifico" | "contanti" | undefined =
+      body.paymentMethod === "contanti"
+        ? "contanti"
+        : body.paymentMethod === "bonifico"
+        ? "bonifico"
+        : undefined;
+    const isRenewal = Boolean(body.isRenewal);
+    const annoRinnovo = body.annoRinnovo ? parseInt(String(body.annoRinnovo), 10) || undefined : undefined;
+    const numeroTessera = body.numeroTessera ? sanitizePlainText(String(body.numeroTessera), 30) : undefined;
+
     // Invia notifiche email in parallelo:
-    // 1. Notifica interna per la segreteria / admin (vistamirko@gmail.com)
+    // 1. Notifica interna per la segreteria / admin
     // 2. Email di riepilogo e conferma per l'utente (booking.email)
     const bookingPayload = {
       type: booking.type,
@@ -120,6 +137,11 @@ export async function POST(req: NextRequest) {
       dataLuogoNascita: booking.dataLuogoNascita,
       codiceFiscale: booking.codiceFiscale,
       createdAt: booking.createdAt,
+      isRenewal,
+      paymentMethod,
+      annoRinnovo,
+      numeroTessera,
+      iban: officialIban,
     };
 
     let adminNotificationResult = null;

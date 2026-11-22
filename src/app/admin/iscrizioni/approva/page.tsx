@@ -64,6 +64,21 @@ function ApprovaIscrizioneContent() {
           if (found.message) {
             setNote(`Da richiesta online: ${found.message}`);
           }
+          // Precompila metodo pagamento, anno e tessera se presenti in una richiesta di rinnovo
+          const combined = `${found.itemTitle || ""} ${found.message || ""}`;
+          if (/contanti/i.test(combined)) {
+            setMetodoPagamento("contanti");
+          } else if (/bonifico/i.test(combined)) {
+            setMetodoPagamento("bonifico");
+          }
+          const yearMatch = combined.match(/\b(202[6-9]|203\d)\b/);
+          if (yearMatch) {
+            setAnno(parseInt(yearMatch[1], 10));
+          }
+          const tesseraMatch = combined.match(/Tessera(?:\s+precedente)?:\s*#?(\d+)/i);
+          if (tesseraMatch) {
+            setNumeroTessera(tesseraMatch[1]);
+          }
         } else {
           setNotification({ type: "error", message: "Richiesta non trovata" });
         }
@@ -76,7 +91,7 @@ function ApprovaIscrizioneContent() {
       .then((res) => res.json())
       .then((data) => {
         if (data?.nextInfo?.nextTessera) {
-          setNumeroTessera(String(data.nextInfo.nextTessera));
+          setNumeroTessera((prev) => prev || String(data.nextInfo.nextTessera));
         }
       })
       .catch(() => {});
