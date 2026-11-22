@@ -22,7 +22,8 @@ import {
   NauticalCrosshair,
 } from "@/components/NauticalChartElements";
 import { initDb, ProjectsRepo } from "@/lib/db";
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, getAbsoluteUrl } from "@/lib/config";
+import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -37,34 +38,20 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "Progetto non trovato · Vela Latina Monte di Procida",
+      title: "Progetto non trovato",
     };
   }
 
-  const canonicalUrl = `${SITE_URL}/progetti/${project.slug}`;
-
-  return {
+  return buildPageMetadata({
     title: `${project.title} · ${project.highlight}`,
+    socialTitle: `${project.title} · ${project.highlight} | ${SITE_NAME}`,
     description: project.description,
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      title: `${project.title} · ${project.highlight} | Vela Latina Monte di Procida`,
-      description: project.description,
-      url: canonicalUrl,
-      images: project.imageUrl
-        ? [
-            {
-              url: project.imageUrl,
-              width: 1200,
-              height: 800,
-              alt: `${project.title} - Vela Latina Monte di Procida`,
-            },
-          ]
-        : undefined,
-    },
-  };
+    path: `/progetti/${project.slug}`,
+    image: project.imageUrl || DEFAULT_OG_IMAGE,
+    imageAlt: `${project.title} - ${SITE_NAME}`,
+    imageWidth: 1200,
+    imageHeight: 800,
+  });
 }
 
 export default async function ProjectDetailPage({
@@ -102,7 +89,7 @@ export default async function ProjectDetailPage({
         headline: `${project.title} · ${project.highlight}`,
         description: project.description,
         url: projectUrl,
-        image: project.imageUrl ? `${SITE_URL}${project.imageUrl}` : undefined,
+        image: project.imageUrl ? getAbsoluteUrl(project.imageUrl) : undefined,
         creator: {
           "@id": `${SITE_URL}/#organization`,
         },

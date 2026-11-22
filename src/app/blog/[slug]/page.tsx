@@ -8,7 +8,8 @@ import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { ArrowLeft, Calendar, User, Compass } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, getAbsoluteUrl } from "@/lib/config";
+import { buildPageMetadata, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -23,37 +24,23 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Articolo non trovato · Vela Latina Monte di Procida",
+      title: "Articolo non trovato",
     };
   }
 
-  const canonicalUrl = `${SITE_URL}/blog/${post.slug}`;
-
-  return {
+  return buildPageMetadata({
     title: `${post.title} | Il Giornale di Bordo`,
+    socialTitle: `${post.title} | ${SITE_NAME}`,
     description: post.excerpt,
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      title: `${post.title} | Vela Latina Monte di Procida`,
-      description: post.excerpt,
-      url: canonicalUrl,
-      type: "article",
-      publishedTime: post.publishedAt || post.createdAt,
-      authors: [post.author],
-      images: post.coverImage
-        ? [
-            {
-              url: post.coverImage,
-              width: 1200,
-              height: 800,
-              alt: post.title,
-            },
-          ]
-        : undefined,
-    },
-  };
+    path: `/blog/${post.slug}`,
+    image: post.coverImage || DEFAULT_OG_IMAGE,
+    imageAlt: post.title,
+    imageWidth: 1200,
+    imageHeight: 800,
+    type: "article",
+    publishedTime: post.publishedAt || post.createdAt,
+    authors: [post.author],
+  });
 }
 
 export default async function BlogPostPage({
@@ -89,7 +76,7 @@ export default async function BlogPostPage({
         publisher: {
           "@id": `${SITE_URL}/#organization`,
         },
-        image: post.coverImage ? `${SITE_URL}${post.coverImage}` : undefined,
+        image: post.coverImage ? getAbsoluteUrl(post.coverImage) : undefined,
         inLanguage: "it-IT",
         isPartOf: {
           "@id": `${SITE_URL}/blog#blog`,

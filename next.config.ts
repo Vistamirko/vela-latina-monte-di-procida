@@ -28,6 +28,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Garantisce che i tag SEO / Open Graph / Twitter generati da generateMetadata siano sempre nel <head>
+  // anche per crawler social non presenti nella lista predefinita (es. TelegramBot, iMessage, ecc.)
+  htmlLimitedBots: /.*/,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" },

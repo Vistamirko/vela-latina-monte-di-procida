@@ -7,31 +7,11 @@ import { Compass, ArrowUpRight, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { SITE_URL } from "@/lib/config";
+import { buildPageMetadata, STATIC_PAGES_SEO } from "@/lib/seo";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "I Grandi Progetti & Cantieri 2027",
-  description:
-    "Otto cantieri attivi dell'Associazione Vela Latina Monte di Procida: Progetto ROSA (equipaggio femminile verso Saint-Tropez), America's Cup Napoli, Barcolana, Quandel Lab e Breccia Museo.",
-  alternates: {
-    canonical: `${SITE_URL}/progetti`,
-  },
-  openGraph: {
-    title: "I Grandi Progetti & Cantieri 2027 | Vela Latina Monte di Procida",
-    description:
-      "Dalla formazione per Saint-Tropez alla presenza all'America's Cup, Barcolana e ricerca scientifica. Scopri i cantieri della marineria flegrea.",
-    url: `${SITE_URL}/progetti`,
-    images: [
-      {
-        url: "/images/janara-crew.jpeg",
-        width: 1200,
-        height: 800,
-        alt: "Progetti e Cantieri Vela Latina Monte di Procida",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = buildPageMetadata(STATIC_PAGES_SEO["/progetti"]);
 
 export default async function ProgettiPage() {
   await initDb();

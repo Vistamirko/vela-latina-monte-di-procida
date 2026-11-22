@@ -7,31 +7,11 @@ import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { BookOpen, Calendar, ArrowRight, User } from "lucide-react";
 import { initDb, BlogRepo } from "@/lib/db";
 import { SITE_URL } from "@/lib/config";
+import { buildPageMetadata, STATIC_PAGES_SEO } from "@/lib/seo";
 
 export const revalidate = 60; // rigenera ogni minuto
 
-export const metadata: Metadata = {
-  title: "Il Giornale di Bordo & la Memoria Flegrea",
-  description:
-    "Articoli, memorie orali e saggi di marineria: i segreti costruttivi dei maestri d'ascia montesi, la conduzione all'antenna e la lettura del vento nel Canale di Procida.",
-  alternates: {
-    canonical: `${SITE_URL}/blog`,
-  },
-  openGraph: {
-    title: "Il Giornale di Bordo & la Memoria Flegrea | Vela Latina Monte di Procida",
-    description:
-      "Racconti di mare, calafateria navale e storie di regata dall'Associazione Vela Latina Monte di Procida.",
-    url: `${SITE_URL}/blog`,
-    images: [
-      {
-        url: "/images/janara-crew.jpeg",
-        width: 1200,
-        height: 800,
-        alt: "Il Giornale di Bordo di Vela Latina Monte di Procida",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = buildPageMetadata(STATIC_PAGES_SEO["/blog"]);
 
 export default async function BlogPage() {
   await initDb();

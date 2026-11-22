@@ -11,6 +11,7 @@ export const SITE_URL: string = (
 
 export function getAbsoluteUrl(path: string = ""): string {
   if (!path) return SITE_URL;
+  if (/^https?:\/\//i.test(path)) return path;
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
   return `${SITE_URL}${cleanPath}`;
 }

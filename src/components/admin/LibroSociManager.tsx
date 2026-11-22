@@ -59,7 +59,9 @@ export default function LibroSociManager({
         const matchTessera = String(s.numeroTessera || "").toLowerCase().includes(q);
         const matchCf = s.codiceFiscale?.toLowerCase().includes(q);
         const matchEmail = s.email?.toLowerCase().includes(q);
-        if (!matchName && !matchPlace && !matchTessera && !matchCf && !matchEmail) {
+        const matchTel = s.telefono?.toLowerCase().includes(q);
+        const matchNote = s.note?.toLowerCase().includes(q);
+        if (!matchName && !matchPlace && !matchTessera && !matchCf && !matchEmail && !matchTel && !matchNote) {
           return false;
         }
       }
@@ -317,25 +319,34 @@ export default function LibroSociManager({
                 </div>
 
                 {/* Contatti Rapidi */}
-                {(item.telefono || item.email) && (
-                  <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2 text-xs font-mono">
-                    {item.telefono && (
-                      <a
-                        href={`tel:${item.telefono}`}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] inline-flex items-center gap-1.5 font-semibold border border-slate-200"
-                      >
-                        <Phone className="w-3 h-3 text-slate-500" />
-                        <span>{item.telefono}</span>
-                      </a>
+                {(item.telefono || item.email || item.note) && (
+                  <div className="pt-2 border-t border-slate-100 space-y-2 text-xs font-mono">
+                    {(item.telefono || item.email) && (
+                      <div className="flex flex-wrap gap-2">
+                        {item.telefono && (
+                          <a
+                            href={`tel:${item.telefono}`}
+                            className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] inline-flex items-center gap-1.5 font-semibold border border-slate-200"
+                          >
+                            <Phone className="w-3 h-3 text-slate-500" />
+                            <span>{item.telefono}</span>
+                          </a>
+                        )}
+                        {item.email && (
+                          <a
+                            href={`mailto:${item.email}`}
+                            className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] inline-flex items-center gap-1.5 border border-slate-200 truncate max-w-[220px]"
+                          >
+                            <Mail className="w-3 h-3 text-slate-500" />
+                            <span className="truncate">{item.email}</span>
+                          </a>
+                        )}
+                      </div>
                     )}
-                    {item.email && (
-                      <a
-                        href={`mailto:${item.email}`}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-[#0a1c2a] inline-flex items-center gap-1.5 border border-slate-200 truncate max-w-[220px]"
-                      >
-                        <Mail className="w-3 h-3 text-slate-500" />
-                        <span className="truncate">{item.email}</span>
-                      </a>
+                    {item.note && (
+                      <div className="text-[10px] text-slate-500 leading-relaxed">
+                        {item.note}
+                      </div>
                     )}
                   </div>
                 )}
@@ -412,9 +423,14 @@ export default function LibroSociManager({
                       ) : null}
                     </td>
                     <td className="py-2.5 px-4 text-[11px] text-slate-600">
-                      {item.email && <div className="truncate max-w-[150px]">{item.email}</div>}
+                      {item.email && <div className="truncate max-w-[180px]" title={item.email}>{item.email}</div>}
                       {item.telefono && <div className="text-slate-500">{item.telefono}</div>}
-                      {!item.email && !item.telefono && <span className="text-slate-300">—</span>}
+                      {item.note && (
+                        <div className="text-[10px] text-slate-400 truncate max-w-[200px]" title={item.note}>
+                          {item.note}
+                        </div>
+                      )}
+                      {!item.email && !item.telefono && !item.note && <span className="text-slate-300">—</span>}
                     </td>
                     <td className="py-2.5 px-3 text-center">
                       <div className="flex items-center justify-center gap-1">

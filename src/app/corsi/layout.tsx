@@ -1,28 +1,8 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/config";
+import { buildPageMetadata, STATIC_PAGES_SEO } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Scuola di Mare & Corsi di Voga e Vela Tradizionale",
-  description:
-    "Impara l'arte della vela latina e la voga tradizionale flegrea (in piedi). Corsi aperti ad Acquamorta per principianti, equipaggi d'altura e progetti speciali.",
-  alternates: {
-    canonical: `${SITE_URL}/corsi`,
-  },
-  openGraph: {
-    title: "Scuola di Mare & Corsi | Vela Latina Monte di Procida",
-    description:
-      "Corsi di vela latina, scuola di voga tradizionale in piedi e masterclass di marineria storica flegrea ad Acquamorta.",
-    url: `${SITE_URL}/corsi`,
-    images: [
-      {
-        url: "/images/hero-sailing.webp",
-        width: 1200,
-        height: 800,
-        alt: "Scuola di Vela Latina e Voga Monte di Procida",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = buildPageMetadata(STATIC_PAGES_SEO["/corsi"]);
 
 const CORSI_SCHEMA = {
   "@context": "https://schema.org",

@@ -1,28 +1,8 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/config";
+import { buildPageMetadata, STATIC_PAGES_SEO } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "L'Associazione & la Memoria Flegrea",
-  description:
-    "Fondata nel 2008 ad Acquamorta, l'Associazione Vela Latina Monte di Procida custodisce i saperi della marineria storica, il restauro dei gozzi e lance, e la scuola di voga.",
-  alternates: {
-    canonical: `${SITE_URL}/associazione`,
-  },
-  openGraph: {
-    title: "L'Associazione & la Memoria Flegrea | Vela Latina Monte di Procida",
-    description:
-      "Fondata nel 2008 ad Acquamorta, l'Associazione Vela Latina Monte di Procida custodisce i saperi della marineria storica e il restauro dei gozzi tradizionali.",
-    url: `${SITE_URL}/associazione`,
-    images: [
-      {
-        url: "/images/janara-crew.jpeg",
-        width: 1200,
-        height: 800,
-        alt: "Equipaggio Associazione Vela Latina Monte di Procida",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = buildPageMetadata(STATIC_PAGES_SEO["/associazione"]);
 
 const ASSOCIAZIONE_SCHEMA = {
   "@context": "https://schema.org",

@@ -769,29 +769,87 @@ export async function initDb(): Promise<void> {
         );
       `;
 
-      // Seed Soci da file seed locale se tabella vuota
-      try {
-        const existingSoci = await sql`SELECT count(*) FROM soci;`;
-        if (parseInt(existingSoci[0].count) === 0) {
-          const seedSoci = readLocalJson<SocioItem[]>("soci.json", []);
-          for (const s of seedSoci) {
-            await sql`
-              INSERT INTO soci (id, anno, progressivo, nome, data_luogo_nascita, codice_fiscale, numero_tessera, quota_contanti, quota_bonifico, socio_onorario, tipologia, email, telefono, data_iscrizione, metodo_pagamento, note, created_at, updated_at)
-              VALUES (${s.id}, ${s.anno}, ${s.progressivo || null}, ${s.nome}, ${s.dataLuogoNascita || null}, ${s.codiceFiscale || null}, ${s.numeroTessera ? String(s.numeroTessera) : null}, ${s.quotaContanti ? String(s.quotaContanti) : null}, ${s.quotaBonifico ? String(s.quotaBonifico) : null}, ${Boolean(s.socioOnorario)}, ${s.tipologia || 'Socio Ordinario'}, ${s.email || null}, ${s.telefono || null}, ${s.dataIscrizione || null}, ${s.metodoPagamento || null}, ${s.note || null}, ${s.createdAt || new Date().toISOString()}, ${s.updatedAt || new Date().toISOString()})
-              ON CONFLICT (id) DO NOTHING;
-            `;
-          }
-        }
-      } catch (errSoci) {
-        console.warn("[initDb] Avviso seed soci:", errSoci);
-      }
-
       // Allineamento automatico stagione soci: la seconda lista excel corrisponde alla stagione 2026 (non 2024)
+      // e rimozione eventuali righe intestazione importate per errore ("Cognome Nome")
       try {
+        await sql`DELETE FROM soci WHERE LOWER(TRIM(nome)) = 'cognome nome';`;
         await sql`UPDATE soci SET anno = 2026 WHERE anno = 2024;`;
         await sql`UPDATE soci SET id = REPLACE(id, 'socio-2024-', 'socio-2026-') WHERE id LIKE 'socio-2024-%';`;
       } catch (errMigrate) {
         console.warn("[initDb] Avviso migrazione soci 2024 -> 2026:", errMigrate);
+      }
+
+      // Seed & sincronizzazione incrementale Soci da file seed locale (soci.json)
+      try {
+        const seedSoci = readLocalJson<SocioItem[]>("soci.json", []);
+        const statsSoci = await sql`
+          SELECT
+            count(*) FILTER (WHERE anno = 2026) AS total_2026,
+            count(*) FILTER (WHERE anno = 2026 AND NULLIF(TRIM(codice_fiscale), '') IS NOT NULL) AS with_cf_2026,
+            count(*) AS total_all
+          FROM soci;
+        `;
+        const totalAll = parseInt(statsSoci[0]?.total_all || "0", 10);
+        const total2026 = parseInt(statsSoci[0]?.total_2026 || "0", 10);
+        const withCf2026 = parseInt(statsSoci[0]?.with_cf_2026 || "0", 10);
+
+        if (totalAll === 0) {
+          for (const s of seedSoci) {
+            await sql`
+              INSERT INTO soci (id, anno, progressivo, nome, data_luogo_nascita, codice_fiscale, numero_tessera, quota_contanti, quota_bonifico, socio_onorario, tipologia, email, telefono, data_iscrizione, metodo_pagamento, importo_pagato, note, created_at, updated_at)
+              VALUES (${s.id}, ${s.anno}, ${s.progressivo || null}, ${s.nome}, ${s.dataLuogoNascita || null}, ${s.codiceFiscale || null}, ${s.numeroTessera ? String(s.numeroTessera) : null}, ${s.quotaContanti ? String(s.quotaContanti) : null}, ${s.quotaBonifico ? String(s.quotaBonifico) : null}, ${Boolean(s.socioOnorario)}, ${s.tipologia || 'Socio Ordinario'}, ${s.email || null}, ${s.telefono || null}, ${s.dataIscrizione || null}, ${s.metodoPagamento || null}, ${s.importoPagato ?? null}, ${s.note || null}, ${s.createdAt || new Date().toISOString()}, ${s.updatedAt || new Date().toISOString()})
+              ON CONFLICT (id) DO NOTHING;
+            `;
+          }
+        } else if (total2026 < 92 || withCf2026 < 22) {
+          // Sincronizza solo record mancanti o arricchiti dalle schede PDF 2026 (preservando eventuali modifiche manuali)
+          const toSync =
+            total2026 < 92
+              ? seedSoci.filter((s) => s.anno === 2026 || s.id === "socio-2023-72")
+              : seedSoci.filter(
+                  (s) =>
+                    Boolean(s.codiceFiscale || s.email || s.telefono || s.note) ||
+                    s.id === "socio-2026-72" ||
+                    s.id === "socio-2026-69" ||
+                    s.id === "socio-2023-72"
+                );
+          // Esegui in batch paralleli da 10 per minimizzare la latenza su cold start serverless
+          for (let i = 0; i < toSync.length; i += 10) {
+            const batch = toSync.slice(i, i + 10);
+            await Promise.all(
+              batch.map(
+                (s) => sql`
+                  INSERT INTO soci (id, anno, progressivo, nome, data_luogo_nascita, codice_fiscale, numero_tessera, quota_contanti, quota_bonifico, socio_onorario, tipologia, email, telefono, data_iscrizione, metodo_pagamento, importo_pagato, note, created_at, updated_at)
+                  VALUES (${s.id}, ${s.anno}, ${s.progressivo || null}, ${s.nome}, ${s.dataLuogoNascita || null}, ${s.codiceFiscale || null}, ${s.numeroTessera ? String(s.numeroTessera) : null}, ${s.quotaContanti ? String(s.quotaContanti) : null}, ${s.quotaBonifico ? String(s.quotaBonifico) : null}, ${Boolean(s.socioOnorario)}, ${s.tipologia || 'Socio Ordinario'}, ${s.email || null}, ${s.telefono || null}, ${s.dataIscrizione || null}, ${s.metodoPagamento || null}, ${s.importoPagato ?? null}, ${s.note || null}, ${s.createdAt || new Date().toISOString()}, ${s.updatedAt || new Date().toISOString()})
+                  ON CONFLICT (id) DO UPDATE SET
+                    nome = CASE
+                      WHEN soci.nome IN ('Liardo Ciro Bruno', 'Scotto di Fasano Caludio', 'Massa  Michele Pio') THEN EXCLUDED.nome
+                      ELSE soci.nome
+                    END,
+                    data_luogo_nascita = CASE
+                      WHEN NULLIF(TRIM(soci.data_luogo_nascita), '') IS NULL
+                        OR soci.data_luogo_nascita IN ('24530', '12.3.1956')
+                        OR (EXCLUDED.codice_fiscale IS NOT NULL AND NULLIF(TRIM(soci.codice_fiscale), '') IS NULL)
+                      THEN COALESCE(EXCLUDED.data_luogo_nascita, soci.data_luogo_nascita)
+                      ELSE soci.data_luogo_nascita
+                    END,
+                    codice_fiscale = COALESCE(NULLIF(TRIM(soci.codice_fiscale), ''), EXCLUDED.codice_fiscale),
+                    email = COALESCE(NULLIF(TRIM(soci.email), ''), EXCLUDED.email),
+                    telefono = COALESCE(NULLIF(TRIM(soci.telefono), ''), EXCLUDED.telefono),
+                    note = COALESCE(NULLIF(TRIM(soci.note), ''), EXCLUDED.note),
+                    importo_pagato = COALESCE(soci.importo_pagato, EXCLUDED.importo_pagato),
+                    data_iscrizione = CASE
+                      WHEN NULLIF(TRIM(soci.data_iscrizione), '') IS NULL OR soci.data_iscrizione = '2026-01-01'
+                      THEN COALESCE(EXCLUDED.data_iscrizione, soci.data_iscrizione)
+                      ELSE soci.data_iscrizione
+                    END;
+                `
+              )
+            );
+          }
+        }
+      } catch (errSoci) {
+        console.warn("[initDb] Avviso seed/sync soci:", errSoci);
       }
 
       // Assicura la presenza degli utenti per ciascun ruolo

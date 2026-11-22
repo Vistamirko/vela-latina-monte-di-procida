@@ -8,31 +8,11 @@ import Link from "next/link";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { initDb, EventsRepo } from "@/lib/db";
 import { SITE_URL } from "@/lib/config";
+import { buildPageMetadata, STATIC_PAGES_SEO } from "@/lib/seo";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Palmarès, Regate Storiche & Cinema",
-  description:
-    "Vittorie storiche e appuntamenti della flotta: 1° posto assoluto a Saint-Tropez 2024, Procida Cup, Barcolana 2026, presenza al cinema d'autore e all'America's Cup.",
-  alternates: {
-    canonical: `${SITE_URL}/eventi`,
-  },
-  openGraph: {
-    title: "Palmarès & Regate Storiche | Vela Latina Monte di Procida",
-    description:
-      "Scopri i trionfi velici dell'ammiraglia Janara, le regate storiche nel Mediterraneo e la presenza nel cinema.",
-    url: `${SITE_URL}/eventi`,
-    images: [
-      {
-        url: "/images/janara-regatta.jpeg",
-        width: 1600,
-        height: 874,
-        alt: "Janara vincitrice a Saint-Tropez",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = buildPageMetadata(STATIC_PAGES_SEO["/eventi"]);
 
 export default async function EventiPage() {
   await initDb();
