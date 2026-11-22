@@ -765,4 +765,164 @@ export async function sendCourseResponse(params: {
   });
 }
 
+export interface RenewalRequestEmailParams {
+  nome: string;
+  email: string;
+  annoRinnovo: number;
+  annoPrecedente?: number;
+  numeroTessera?: string | number;
+  quota?: string | number;
+  scadenza?: string;
+  iban?: string;
+  intestatario?: string;
+  codiceFiscaleEnte?: string;
+  oggettoPersonalizzato?: string;
+  messaggioPersonalizzato?: string;
+}
+
+/**
+ * Invia email di richiesta rinnovo quota associativa a un socio dal Libro Soci
+ */
+export async function sendRenewalRequestEmail(params: RenewalRequestEmailParams) {
+  const safeNome = escapeHtml(params.nome);
+  const safeTessera = params.numeroTessera ? escapeHtml(String(params.numeroTessera)) : "";
+  const safeQuota = escapeHtml(String(params.quota || "50,00"));
+  const safeScadenza = params.scadenza ? escapeHtml(params.scadenza) : "";
+  const safeIntestatario = escapeHtml(
+    params.intestatario || "Associazione Vela Latina Monte di Procida APS"
+  );
+  const safeIban = escapeHtml(
+    params.iban || process.env.ASSOCIATION_IBAN || "IT61P0306909606100000405783"
+  );
+  const safeCfEnte = escapeHtml(params.codiceFiscaleEnte || "96035970639");
+  const safeMessaggio = params.messaggioPersonalizzato
+    ? escapeHtml(params.messaggioPersonalizzato).replace(/\n/g, "<br>")
+    : "";
+
+  const causale = `Rinnovo Quota Sociale ${params.annoRinnovo} - ${params.nome}${
+    params.numeroTessera ? ` (Tessera #${params.numeroTessera})` : ""
+  }`;
+  const safeCausale = escapeHtml(causale);
+
+  const subject = params.oggettoPersonalizzato?.trim()
+    ? params.oggettoPersonalizzato.trim()
+    : `Rinnovo Tesseramento ${params.annoRinnovo} | Associazione Vela Latina Monte di Procida`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #fbfaf6; color: #0a1c2a; margin: 0; padding: 24px; }
+    .card { max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .header { background: #0a1c2a; color: #ffffff; padding: 32px 24px; text-align: center; border-bottom: 3px solid #c99a45; }
+    .header-logo { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #c99a45; font-weight: 700; margin-bottom: 8px; }
+    .header h1 { margin: 0; font-size: 20px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: #ffffff; }
+    .header p { margin: 8px 0 0; font-size: 12px; opacity: 0.85; letter-spacing: 1px; color: #cbd5e1; }
+    .body { padding: 32px 28px; }
+    .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .greeting { font-size: 19px; font-weight: 600; color: #0a1c2a; margin: 0 0 14px 0; }
+    .intro { font-size: 14px; line-height: 1.65; color: #334155; margin: 0 0 20px 0; }
+    .custom-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1b5b80; border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; font-size: 13.5px; line-height: 1.6; color: #1e293b; }
+    .payment-box { background: #fffbeb; border: 1px solid #fcd34d; border-left: 4px solid #b45309; border-radius: 6px; padding: 20px; margin-bottom: 24px; }
+    .payment-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: #92400e; margin-bottom: 14px; }
+    .payment-item { margin-bottom: 9px; font-size: 13px; color: #78350f; line-height: 1.5; }
+    .payment-item strong { color: #0a1c2a; }
+    .iban-code { font-family: monospace; font-size: 14px; font-weight: bold; background: #ffffff; padding: 8px 12px; border: 1px dashed #d97706; display: inline-block; margin-top: 5px; border-radius: 4px; color: #0a1c2a; letter-spacing: 0.5px; }
+    .steps-box { background: #fdfcf7; border: 1px solid #e7dfc6; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px; }
+    .steps-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: #854d0e; margin-bottom: 10px; }
+    .step-item { font-size: 13px; line-height: 1.55; color: #451a03; margin-bottom: 8px; }
+    .step-item:last-child { margin-bottom: 0; }
+    .cta-area { text-align: center; padding: 12px 0 8px; }
+    .btn-site { display: inline-block; background: #0a1c2a; color: #ffffff !important; padding: 12px 24px; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+    .signoff { font-size: 13px; color: #334155; margin-top: 24px; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+    .footer { padding: 20px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; text-align: center; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="header-logo">Vela Latina Monte di Procida APS</div>
+      <h1>Rinnovo Tesseramento ${params.annoRinnovo}</h1>
+      <p>Porticciolo di Acquamorta · Campi Flegrei</p>
+    </div>
+    <div class="body">
+      <span class="badge">Campagna Rinnovi Anno ${params.annoRinnovo}${safeTessera ? ` · Tessera #${safeTessera}` : ""}</span>
+      <h2 class="greeting">Caro/a ${safeNome},</h2>
+      <p class="intro">
+        ti scriviamo con grande piacere per invitarti a rinnovare la tua iscrizione all&apos;<strong>Associazione Vela Latina Monte di Procida APS</strong> per l&apos;anno sociale <strong>${params.annoRinnovo}</strong>${
+          params.annoPrecedente && params.annoPrecedente !== params.annoRinnovo
+            ? ` (dopo la stagione ${params.annoPrecedente})`
+            : ""
+        }. Il tuo sostegno è fondamentale per custodire i nostri gozzi storici, portare avanti la scuola di voga e vela tradizionale e preparare le prossime rotte della flotta flegrea.
+      </p>
+
+      ${
+        safeMessaggio
+          ? `<div class="custom-box">
+               <strong style="display: block; margin-bottom: 6px; color: #0a1c2a; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Comunicazione dal Consiglio Direttivo:</strong>
+               ${safeMessaggio}
+             </div>`
+          : ""
+      }
+
+      <div class="payment-box">
+        <div class="payment-title">Coordinate per il Rinnovo della Quota Associativa</div>
+        <div class="payment-item"><strong>Beneficiario:</strong> ${safeIntestatario}</div>
+        <div class="payment-item"><strong>Quota annuale ${params.annoRinnovo}:</strong> € ${safeQuota}</div>
+        ${
+          safeScadenza
+            ? `<div class="payment-item"><strong>Scadenza indicativa:</strong> ${safeScadenza}</div>`
+            : ""
+        }
+        <div class="payment-item"><strong>Causale:</strong> ${safeCausale}</div>
+        <div class="payment-item">
+          <strong>IBAN:</strong><br>
+          <span class="iban-code">${safeIban}</span>
+        </div>
+        <div style="margin-top: 10px; font-size: 12px; color: #78350f; font-style: italic;">
+          In alternativa è possibile rinnovare la quota in contanti direttamente presso la sede al Porticciolo di Acquamorta.
+        </div>
+      </div>
+
+      <div class="steps-box">
+        <div class="steps-title">Come completare il rinnovo</div>
+        <div class="step-item"><strong>1. Versamento:</strong> effettua il bonifico con la causale sopra indicata (o salda in sede).</div>
+        <div class="step-item"><strong>2. Conferma:</strong> rispondi a questa email allegando la ricevuta/contabile del bonifico per velocizzare la registrazione nel Libro Soci ${params.annoRinnovo}.</div>
+        <div class="step-item"><strong>3. Aggiornamento dati:</strong> se hai cambiato numero di telefono, email o residenza, segnalacelo rispondendo a questo messaggio.</div>
+      </div>
+
+      <div class="cta-area">
+        <a href="${SITE_URL}/diventa-socio" class="btn-site" target="_blank">Scopri le Attività ${params.annoRinnovo}</a>
+      </div>
+
+      <div class="signoff">
+        Grazie di cuore per continuare a navigare insieme a noi.<br>
+        Buon Vento,<br>
+        <strong>Il Consiglio Direttivo</strong><br>
+        <em>Associazione Vela Latina Monte di Procida APS</em>
+      </div>
+    </div>
+
+    <div class="footer">
+      Associazione Vela Latina Monte di Procida APS · C.F. ${safeCfEnte}<br>
+      Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
+      Email segreteria: <a href="mailto:velalatinamontediprocida@gmail.com" style="color: #64748b;">velalatinamontediprocida@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, "")}</a>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  return sendEmailMessage({
+    to: params.email,
+    replyTo: "velalatinamontediprocida@gmail.com",
+    subject,
+    html,
+    tag: "MEMBERSHIP_RENEWAL",
+  });
+}
+
 
