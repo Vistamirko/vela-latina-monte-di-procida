@@ -8,6 +8,14 @@
     "createdAt": "2026-10-07T10:32:32.491Z"
   },
   {
+    "id": "user-superadmin-maria",
+    "email": "mariacianniello@gmail.com",
+    "passwordHash": "80fbdf4a0b5159767733bda5cca23401:624ff493f22a07cef0e8a84ba5c8235cf34e663b6ad453773354f2231f40fe25494d1de03d7e3fc59328cda45d6088e67893ee6f5067d81d038ac4539acf7415",
+    "name": "Maria Cianniello",
+    "role": "superadmin",
+    "createdAt": "2026-11-25T19:12:00.000Z"
+  },
+  {
     "id": "user-segreteria",
     "email": "segreteria@velalatinamontediprocida.it",
     "passwordHash": "e6db716998c1efa8557abe40bad7f8d1:4ee3c9ab00790d65ee2faa681a62a50c1822d30d866f4eaaa4d6803a19144a009c7ffeb71fbc78375dc27f7f31df1ec264326957fed3d225f3de123058ea381d",
