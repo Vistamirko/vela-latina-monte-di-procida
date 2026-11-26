@@ -12,6 +12,7 @@ export async function proxy(req: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/images") ||
+    pathname.startsWith("/fonts") ||
     pathname.startsWith("/docs") ||
     pathname.startsWith("/uploads") ||
     pathname.startsWith("/api/") ||

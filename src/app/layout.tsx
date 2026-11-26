@@ -1,29 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Cinzel, Plus_Jakarta_Sans } from "next/font/google";
 import { SITE_URL, getAbsoluteUrl } from "@/lib/config";
 import "./globals.css";
-
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -172,10 +149,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="it"
-      className={`${cormorant.variable} ${cinzel.variable} ${plusJakarta.variable} scroll-smooth`}
-    >
+    <html lang="it" className="scroll-smooth">
       <body className="min-h-screen bg-white text-[#0a1c2a] font-sans antialiased selection:bg-[#0a1c2a] selection:text-white">
         <script
           type="application/ld+json"
