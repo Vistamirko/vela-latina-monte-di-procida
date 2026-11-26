@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { initDb, ProjectsRepo } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
@@ -67,6 +68,10 @@ export async function POST(req: NextRequest) {
       referente: body.referente || undefined,
     });
 
+    revalidatePath("/progetti");
+    revalidatePath(`/progetti/${saved.slug}`);
+    revalidatePath("/sitemap.xml");
+
     return NextResponse.json({ success: true, data: saved }, { status: 201 });
   } catch (error: unknown) {
     console.error("POST /api/progetti error:", error);
@@ -121,6 +126,10 @@ export async function PUT(req: NextRequest) {
       referente: body.referente || undefined,
     });
 
+    revalidatePath("/progetti");
+    revalidatePath(`/progetti/${saved.slug}`);
+    revalidatePath("/sitemap.xml");
+
     return NextResponse.json({ success: true, data: saved });
   } catch (error: unknown) {
     console.error("PUT /api/progetti error:", error);
@@ -147,6 +156,8 @@ export async function DELETE(req: NextRequest) {
     }
 
     const success = await ProjectsRepo.delete(id);
+    revalidatePath("/progetti");
+    revalidatePath("/sitemap.xml");
     return NextResponse.json({ success });
   } catch (error: unknown) {
     console.error("DELETE /api/progetti error:", error);

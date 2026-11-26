@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { initDb, EventsRepo } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
@@ -55,6 +56,9 @@ export async function POST(req: NextRequest) {
       published: body.published !== false,
     });
 
+    revalidatePath("/eventi");
+    revalidatePath("/sitemap.xml");
+
     return NextResponse.json({ success: true, data: saved }, { status: 201 });
   } catch (error: unknown) {
     console.error("POST /api/eventi error:", error);
@@ -96,6 +100,9 @@ export async function PUT(req: NextRequest) {
       published: Boolean(body.published),
     });
 
+    revalidatePath("/eventi");
+    revalidatePath("/sitemap.xml");
+
     return NextResponse.json({ success: true, data: saved });
   } catch (error: unknown) {
     console.error("PUT /api/eventi error:", error);
@@ -122,6 +129,8 @@ export async function DELETE(req: NextRequest) {
     }
 
     await EventsRepo.delete(id);
+    revalidatePath("/eventi");
+    revalidatePath("/sitemap.xml");
     return NextResponse.json({ success: true, message: "Evento eliminato" });
   } catch (error: unknown) {
     console.error("DELETE /api/eventi error:", error);
