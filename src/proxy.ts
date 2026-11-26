@@ -25,8 +25,8 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2. Controllo se la protezione è disabilitata da env
-  if (process.env.SITE_PROTECTION_ENABLED === "false") {
+  // 2. Il sito è pubblico di default; la protezione anteprima si attiva solo se SITE_PROTECTION_ENABLED="true"
+  if (process.env.SITE_PROTECTION_ENABLED !== "true") {
     return NextResponse.next();
   }
 

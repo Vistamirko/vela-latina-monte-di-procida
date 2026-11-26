@@ -152,7 +152,7 @@ function AccessForm() {
 
       {/* Footer minimale */}
       <footer className="p-6 sm:p-10 text-center border-t border-white/5 relative z-10 text-[10px] font-mono text-slate-400">
-        Associazione Vela Latina Monte di Procida APS · C.F. 96024970634 · D.D. n. 239/2020 Patrimonio Immateriale
+        Associazione Vela Latina Monte di Procida APS · C.F. 96035970639 · D.D. n. 239/2020 Patrimonio Immateriale
       </footer>
     </div>
   );

@@ -569,7 +569,7 @@ export async function sendUserConfirmation(
     </div>
 
     <div class="footer">
-      Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
+      Associazione Vela Latina Monte di Procida APS · C.F. 96035970639<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
       Email di contatto: <a href="mailto:velalatinamontediprocida@gmail.com" style="color: #64748b;">velalatinamontediprocida@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
     </div>
@@ -686,7 +686,7 @@ export async function sendMembershipApprovedNotification(params: {
       </div>
     </div>
     <div class="footer">
-      Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
+      Associazione Vela Latina Monte di Procida APS · C.F. 96035970639<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)
     </div>
   </div>
@@ -785,7 +785,7 @@ export async function sendCourseResponse(params: {
       </div>
     </div>
     <div class="footer">
-      Associazione Vela Latina Monte di Procida APS · C.F. 96024970634<br>
+      Associazione Vela Latina Monte di Procida APS · C.F. 96035970639<br>
       Porticciolo di Acquamorta, 80070 Monte di Procida (NA)<br>
       Email: <a href="mailto:velalatinamontediprocida@gmail.com" style="color: #64748b;">velalatinamontediprocida@gmail.com</a> · <a href="${SITE_URL}" style="color: #64748b;">${SITE_URL.replace(/^https?:\/\//, '')}</a>
     </div>
